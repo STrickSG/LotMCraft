@@ -2,6 +2,7 @@ package de.jakob.lotm.attachments;
 
 import de.jakob.lotm.network.PacketHandler;
 import de.jakob.lotm.network.packets.toClient.DisableAbilityUsageForTimePacket;
+import de.jakob.lotm.util.scheduling.ClientScheduler;
 import de.jakob.lotm.util.scheduling.ServerScheduler;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -40,12 +41,21 @@ public class DisabledAbilitiesComponent implements INBTSerializable<CompoundTag>
     public void disableAbilityUsageForTime(String cause, int ticks, LivingEntity entity) {
         hasAllAbilitiesDisabled.put(cause, hasAllAbilitiesDisabled.getOrDefault(cause, 0) + 1);
 
-        ServerScheduler.scheduleDelayed(ticks, () -> {
+        Runnable release = () -> {
             hasAllAbilitiesDisabled.put(cause, hasAllAbilitiesDisabled.getOrDefault(cause, 1) - 1);
             if (hasAllAbilitiesDisabled.getOrDefault(cause, 0) <= 0) {
                 hasAllAbilitiesDisabled.remove(cause);
             }
-        });
+        };
+
+        // No cliente (via DisableAbilityUsageForTimePacket) a liberação precisa do agendador do cliente:
+        // o ServerScheduler não roda num cliente conectado a servidor, então a tarefa nunca executava
+        // (a contagem não baixava e as tarefas se acumulavam na memória, uma por pacote).
+        if (entity.level().isClientSide) {
+            ClientScheduler.scheduleDelayed(ticks, release);
+        } else {
+            ServerScheduler.scheduleDelayed(ticks, release);
+        }
 
         if(entity instanceof ServerPlayer player) {
             PacketHandler.sendToPlayer(player, new DisableAbilityUsageForTimePacket(entity.getId(), cause, ticks));
@@ -94,6 +104,11 @@ public class DisabledAbilitiesComponent implements INBTSerializable<CompoundTag>
 
     public boolean isAbilityUsageDisabled() {
         return !hasAllAbilitiesDisabled.isEmpty();
+    }
+
+    /** Indica se esta causa específica está desativando as habilidades no momento. */
+    public boolean isAbilityUsageDisabledBy(String cause) {
+        return hasAllAbilitiesDisabled.containsKey(cause);
     }
 
     public boolean isSpecificAbilityDisabled(String ability) {

@@ -32,6 +32,11 @@ import java.util.UUID;
 public class MarionetteUtils {
 
     public static boolean isMarionette(LivingEntity entity) {
+        // Chamado para toda entidade viva quase todo tick (onSanityDrop); sem componente não é marionete,
+        // e assim não se cria um componente de marionete para cada mob do mundo
+        if (!entity.hasData(ModAttachments.MARIONETTE_COMPONENT)) {
+            return false;
+        }
         MarionetteComponent component = entity.getData(ModAttachments.MARIONETTE_COMPONENT);
         return component.isMarionette();
     }

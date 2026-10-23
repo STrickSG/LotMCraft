@@ -59,12 +59,20 @@ public class PureIdealism extends PassiveAbility {
     @SubscribeEvent
     public static void multiplierClean(EntityTickEvent.Post event) {
         if (event.getEntity() instanceof LivingEntity entity) {
+            // Roda para toda entidade, todo tick, nos dois lados: só segue adiante se a entidade realmente
+            // tem o multiplicador (antes criava o componente e calculava caminho/sequência de todo mob).
+            if (!entity.hasData(ModAttachments.MULTIPLIER_MODIFIER_COMPONENT)) {
+                return;
+            }
 
             MultiplierModifierComponent component = entity.getData(ModAttachments.MULTIPLIER_MODIFIER_COMPONENT);
+            if (!component.hasMultiplier("pure_idealism")) {
+                return;
+            }
 
             String path = BeyonderData.getPathway(entity);
             int seq = BeyonderData.getSequence(entity);
-            if (component.hasMultiplier("pure_idealism") && (!path.equals("visionary") || seq > 2)) {
+            if (!path.equals("visionary") || seq > 2) {
                 component.removeMultiplier("pure_idealism");
             }
         }

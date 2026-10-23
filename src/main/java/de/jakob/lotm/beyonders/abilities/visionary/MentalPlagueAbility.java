@@ -239,6 +239,8 @@ public class MentalPlagueAbility extends SelectableAbility {
         var entity = event.getEntity();
         if(!(entity instanceof LivingEntity livingEntity)) return;
         if(!(livingEntity.level() instanceof ServerLevel level)) return;
+        // Sem componente não há praga (padrão); evita criar o componente para todo mob a cada tick
+        if(!livingEntity.hasData(ModAttachments.MENTAL_PLAGUE)) return;
 
         var component = livingEntity.getData(ModAttachments.MENTAL_PLAGUE.get());
         if(!component.hasMentalPlague()) return;

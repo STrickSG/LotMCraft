@@ -93,14 +93,20 @@ public class BroodHiveEventHandler {
         }
 
         // Disable griefing
-        if (entity instanceof Player player) {
+        // (só quando ainda está ligado: setGriefingEnabled envia um pacote de sync, e isto roda todo tick)
+        if (entity instanceof Player player && player.getData(ModAttachments.BEYONDER_COMPONENT).isGriefingEnabled()) {
             BeyonderData.setGriefingEnabled(player, false);
         }
 
         // Disable ability use
         if(!(entity instanceof ServerPlayer player) || !SefirahHandler.getClaimedSefirot(player).equalsIgnoreCase("brood_hive")) {
             DisabledAbilitiesComponent component = entity.getData(ModAttachments.DISABLED_ABILITIES_COMPONENT);
-            component.disableAbilityUsageForTime("brood_hive", 20 * 20, entity);
+            // Renova a cada segundo em vez de todo tick (e na hora, se ainda não estiver ativo). Cada chamada
+            // agenda uma tarefa de 20 s e envia um pacote, então antes cada entidade acumulava ~400 tarefas
+            // no agendador. O bloqueio continua contínuo enquanto a entidade estiver na dimensão.
+            if (!component.isAbilityUsageDisabledBy("brood_hive") || entity.tickCount % 20 == 0) {
+                component.disableAbilityUsageForTime("brood_hive", 20 * 20, entity);
+            }
         }
     }
 
