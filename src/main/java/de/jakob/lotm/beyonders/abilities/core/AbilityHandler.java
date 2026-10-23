@@ -24,9 +24,14 @@ public class AbilityHandler {
 
     private final HashSet<Ability> abilities = new HashSet<>();
     private final HashSet<Ability> disabledAbilities = new HashSet<>();
+    // getById is called from tick handlers, packet handlers and renderers; avoid scanning ~300 abilities each time
+    private final Map<String, Ability> abilitiesById = new HashMap<>();
 
     public AbilityHandler() {
         registerAbilities();
+        for (Ability ability : abilities) {
+            abilitiesById.putIfAbsent(ability.getId(), ability);
+        }
     }
 
     private void registerAbilities() {
@@ -359,7 +364,7 @@ public class AbilityHandler {
     }
 
     public Ability getById(String id) {
-        return abilities.stream().filter(ability -> ability.getId().equals(id)).findFirst().orElse(null);
+        return id == null ? null : abilitiesById.get(id);
     }
 
     public HashSet<Ability> getByPathwayAndSequenceExact(String pathway, int sequence) {
