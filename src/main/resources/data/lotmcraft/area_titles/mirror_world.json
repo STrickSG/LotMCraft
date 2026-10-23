@@ -1,6 +1,6 @@
 {
   "trigger": "dimension",
   "target": "lotmcraft:mirror_world",
-  "title": { "text": "Mirror World", "color": "light_gray", "bold": true },
+  "title": { "text": "Mirror World", "color": "gray", "bold": true },
   "frequency": "once"
 }
