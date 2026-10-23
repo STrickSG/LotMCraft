@@ -7,13 +7,15 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
-import java.util.HashMap;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class SelectableAbility extends Ability {
 
-    protected final HashMap<UUID, Integer> selectedAbilities = new HashMap<>();
-    protected final HashMap<UUID, Integer> castedSubAbility = new HashMap<>();
+    // Written by the client (next/previous ability) and by the server (selection packet); in singleplayer
+    // both run in the same JVM on different threads, so these must be concurrent maps.
+    protected final ConcurrentHashMap<UUID, Integer> selectedAbilities = new ConcurrentHashMap<>();
+    protected final ConcurrentHashMap<UUID, Integer> castedSubAbility = new ConcurrentHashMap<>();
 
     public SelectableAbility(String id, float cooldown, String... interactionFlags) {
         super(id, cooldown, interactionFlags);
