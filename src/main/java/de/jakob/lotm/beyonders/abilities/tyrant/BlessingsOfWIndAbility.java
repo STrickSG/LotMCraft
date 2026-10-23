@@ -97,7 +97,8 @@ public class BlessingsOfWIndAbility extends SelectableAbility {
         if(level.isClientSide) return;
 
         BeyonderData.addModifier(entity, "blessings_of_wind_strength", 1.3f);
-        PhysicalEnhancementsAbility.addEnhancementBoost(entity, PhysicalEnhancementsAbility.EnhancementType.STRENGTH, "blessings_of_wind", 2);
+        // Same id as the removal below; "blessings_of_wind" is speedOfWind's boost and was never removed here
+        PhysicalEnhancementsAbility.addEnhancementBoost(entity, PhysicalEnhancementsAbility.EnhancementType.STRENGTH, "blessings_of_wind_strength", 2);
         UUID entityId = entity.getUUID();
 
         ServerScheduler.scheduleForDuration(0, 1, 20 * 8, () -> {
