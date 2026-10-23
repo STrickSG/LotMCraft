@@ -51,9 +51,13 @@ public record WanderingSelectedPacket(String dimensionId) implements CustomPacke
                 return;
             }
 
+            // Client-provided id: tryParse so malformed input is ignored instead of throwing
+            ResourceLocation dimensionLocation = ResourceLocation.tryParse(packet.dimensionId());
+            if (dimensionLocation == null) return;
+
             ResourceKey<Level> targetKey = ResourceKey.create(
                     net.minecraft.core.registries.Registries.DIMENSION,
-                    ResourceLocation.parse(packet.dimensionId())
+                    dimensionLocation
             );
 
             // Validate the target is not a forbidden dimension

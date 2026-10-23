@@ -11,6 +11,7 @@ import de.jakob.lotm.network.packets.toClient.ResetClientEffectsPacket;
 import de.jakob.lotm.network.packets.toServer.InventoryOpenedPacket;
 import de.jakob.lotm.util.BeyonderData;
 import de.jakob.lotm.util.data.PathwayInfos;
+import de.jakob.lotm.util.scheduling.ClientScheduler;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -191,5 +192,6 @@ public class ClientEvents {
     public static void onLoggingOut(ClientPlayerNetworkEvent.LoggingOut event) {
         // Don't carry cached beyonder data / overlay states into the next world or server
         ResetClientEffectsPacket.resetClientCaches();
+        ClientScheduler.clearAll();
     }
 }

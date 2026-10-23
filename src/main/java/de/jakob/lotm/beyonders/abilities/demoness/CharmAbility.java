@@ -171,7 +171,7 @@ public class CharmAbility extends Ability {
             return;
 
         Entity damager = event.getSource().getEntity();
-        if(!charmed.containsKey(damager.getUUID()) || charmed.get(damager.getUUID()) != event.getEntity().getUUID())
+        if(!charmed.containsKey(damager.getUUID()) || !event.getEntity().getUUID().equals(charmed.get(damager.getUUID())))
             return;
 
         charmed.remove(damager.getUUID());

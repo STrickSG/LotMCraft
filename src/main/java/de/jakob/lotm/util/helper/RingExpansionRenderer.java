@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import de.jakob.lotm.LOTMCraft;
 import de.jakob.lotm.network.packets.toClient.RingEffectPacket;
+import de.jakob.lotm.util.scheduling.ClientScheduler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.world.entity.player.Player;
@@ -194,15 +195,11 @@ public class RingExpansionRenderer {
     private static void scheduleDelayedRing(Vec3 center, float maxRadius, int duration,
                                             float red, float green, float blue, float alpha,
                                             float ringThickness, float ringHeight, int delay) {
-        new Thread(() -> {
-            try {
-                Thread.sleep(delay * 50L); // Convert ticks to milliseconds (50ms per tick)
+        // Delay in client ticks on the client thread: the ring list is iterated by the renderer,
+        // and adding to it from a separate sleeping thread could throw ConcurrentModificationException.
+        ClientScheduler.scheduleDelayed(delay, () ->
                 createRingClientOnly(center, maxRadius, duration, red, green, blue, alpha,
-                        ringThickness, ringHeight);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-        }).start();
+                        ringThickness, ringHeight));
     }
 
     @SubscribeEvent

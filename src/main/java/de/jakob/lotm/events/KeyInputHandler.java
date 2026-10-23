@@ -69,8 +69,9 @@ public class KeyInputHandler {
                 }
                 if (stack.has(ModDataComponents.SEALED_ARTIFACT_DATA)) {
                     SealedArtifactData data = stack.get(ModDataComponents.SEALED_ARTIFACT_DATA);
-                    if (data != null || !data.abilities().isEmpty()) {
-                        int selectedIndex = stack.getOrDefault(ModDataComponents.SEALED_ARTIFACT_SELECTED, 0);
+                    // was "||": a null/empty artifact or a stale index threw here and crashed the client
+                    int selectedIndex = stack.getOrDefault(ModDataComponents.SEALED_ARTIFACT_SELECTED, 0);
+                    if (data != null && selectedIndex >= 0 && selectedIndex < data.abilities().size()) {
                         Ability artifactAbility = data.abilities().get(selectedIndex);
                         if(artifactAbility instanceof SelectableAbility artifactSelectableAbility) {
                             artifactSelectableAbility.nextAbility(player);
@@ -111,9 +112,8 @@ public class KeyInputHandler {
                 }
                 if (stack.has(ModDataComponents.SEALED_ARTIFACT_DATA)) {
                     SealedArtifactData data = stack.get(ModDataComponents.SEALED_ARTIFACT_DATA);
-                    if (data != null || !data.abilities().isEmpty()) {
-                        int selectedIndex = stack.getOrDefault(ModDataComponents.SEALED_ARTIFACT_SELECTED, 0);
-
+                    int selectedIndex = stack.getOrDefault(ModDataComponents.SEALED_ARTIFACT_SELECTED, 0);
+                    if (data != null && selectedIndex >= 0 && selectedIndex < data.abilities().size()) {
                         Ability artifactAbility = data.abilities().get(selectedIndex);
                         if(artifactAbility instanceof SelectableAbility artifactSelectableAbility) {
                             artifactSelectableAbility.previousAbility(player);
