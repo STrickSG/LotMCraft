@@ -213,7 +213,8 @@ public class AdvancementUtil {
 
     private static void scheduleAdvancementEffects(LivingEntity entity, String pathway, int duration, int sequence) {
         scheduleAdvancementParticles(entity, pathway, duration);
-        scheduleFloating(entity, duration);
+        // o jogador só levita na apoteose (avanço para a Sequência 0)
+        if (sequence == 0 && getSequence(entity) > 0) scheduleFloating(entity, duration);
         scheduleThirdPerson(entity, duration);
         scheduleFog(entity, duration, pathway);
         scheduleRandomDamage(entity, duration, sequence);
