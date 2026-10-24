@@ -7,6 +7,9 @@ import de.jakob.lotm.damage.ModDamageTypes;
 import de.jakob.lotm.util.BeyonderData;
 import de.jakob.lotm.util.helper.ParticleUtil;
 import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
@@ -24,6 +27,9 @@ public class SteelSkinAbility extends ToggleAbility {
     public static HashSet<UUID> set = new HashSet<>();
 
     private final static DustParticleOptions dust = new DustParticleOptions(new Vector3f(0.3f, 0.3f, 0.3f), 2.25f);
+    // Efeito visual enquanto ativa, no mesmo estilo das Escamas Ilusórias do Tirano, mas metálico
+    private final static DustParticleOptions steelDust = new DustParticleOptions(new Vector3f(0.55f, 0.58f, 0.62f), 1.4f);
+    private final static DustParticleOptions silverDust = new DustParticleOptions(new Vector3f(0.85f, 0.88f, 0.92f), 0.9f);
 
 
     public SteelSkinAbility(String id) {
@@ -54,10 +60,23 @@ public class SteelSkinAbility extends ToggleAbility {
         if(level.isClientSide) return;
 
         set.add(entity.getUUID());
+        level.playSound(null, entity.blockPosition(), SoundEvents.ARMOR_EQUIP_NETHERITE.value(), SoundSource.PLAYERS, 1.0f, 0.8f);
+        level.playSound(null, entity.blockPosition(), SoundEvents.ANVIL_PLACE, SoundSource.PLAYERS, 0.35f, 1.6f);
+        if (!VisionaryHandler.isInvisible(entity))
+            ParticleUtil.spawnParticles((ServerLevel) level, silverDust, entity.position().add(0, entity.getEyeHeight() / 2, 0), 40, .5, entity.getEyeHeight() / 2, .5, 0);
     }
 
     @Override
     public void tick(Level level, LivingEntity entity) {
+        if (level.isClientSide || VisionaryHandler.isInvisible(entity)) return;
+
+        ServerLevel serverLevel = (ServerLevel) level;
+        var center = entity.position().add(0, entity.getEyeHeight() / 2, 0);
+        ParticleUtil.spawnParticles(serverLevel, steelDust, center, 5, .4, entity.getEyeHeight() / 2, .4, 0);
+        ParticleUtil.spawnParticles(serverLevel, silverDust, center, 2, .35, entity.getEyeHeight() / 2, .35, 0);
+        // brilho metálico de vez em quando
+        if (entity.tickCount % 8 == 0)
+            ParticleUtil.spawnParticles(serverLevel, ParticleTypes.WAX_OFF, center, 2, .4, entity.getEyeHeight() / 2, .4, 0);
     }
 
     @Override
@@ -98,8 +117,12 @@ public class SteelSkinAbility extends ToggleAbility {
 
             event.setAmount(damage);
 
-            if(!VisionaryHandler.isInvisible(entity))
+            if(!VisionaryHandler.isInvisible(entity)) {
                 ParticleUtil.spawnParticles((ServerLevel) entity.level(), dust, entity.getEyePosition(), 5, .45f, .8, .45f, 0);
+                ParticleUtil.spawnParticles((ServerLevel) entity.level(), ParticleTypes.ELECTRIC_SPARK, entity.getEyePosition(), 6, .4f, .6, .4f, .05);
+            }
+            // "clang" metálico quando o aço segura o golpe
+            entity.level().playSound(null, entity.blockPosition(), SoundEvents.ANVIL_PLACE, SoundSource.PLAYERS, 0.25f, 1.8f);
         }
     }
 }
