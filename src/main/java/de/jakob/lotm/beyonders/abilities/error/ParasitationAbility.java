@@ -102,7 +102,7 @@ public class ParasitationAbility extends SelectableAbility {
         target.hurt(ModDamageTypes.source(serverLevel, ModDamageTypes.BEYONDER_GENERIC, player), 0.1f);
 
         if (!target.isAlive() || target.isRemoved()) {
-            AbilityUtil.sendActionBar(player, Component.literal("§cTarget evaded!"));
+            AbilityUtil.sendActionBar(player, Component.translatable("lotmcraft.msg.ability.parasitation.evaded"));
             return;
         }
 

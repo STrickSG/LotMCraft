@@ -98,7 +98,7 @@ public class ConjureAbility extends SelectableAbility {
 
         if(BeyonderData.getSpirituality(entity) < SP_COST) return;
         if(!hasEmptyHotbarSlot(entity)) {
-            entity.sendSystemMessage(Component.literal("You need empty slot in your hotbar").withStyle(ChatFormatting.RED));
+            entity.sendSystemMessage(Component.translatable("lotmcraft.msg.ability.conjure.no_slot").withStyle(ChatFormatting.RED));
             return;
         }
 

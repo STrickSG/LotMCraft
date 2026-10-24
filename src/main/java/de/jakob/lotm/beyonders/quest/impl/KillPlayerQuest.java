@@ -37,7 +37,7 @@ public class KillPlayerQuest extends Quest {
 
         if (possibleTargets.isEmpty()) {
             QuestManager.discardQuest(player, id);
-            player.sendSystemMessage(Component.literal("No valid player target found for this mission."));
+            player.sendSystemMessage(Component.translatable("lotmcraft.msg.quest.no_player_target"));
             return;
         }
 
@@ -46,11 +46,11 @@ public class KillPlayerQuest extends Quest {
 
         ServerPlayer targetOnline = player.server.getPlayerList().getPlayer(targetUuid);
         if (targetOnline != null) {
-            player.sendSystemMessage(Component.literal("Target selected: " + targetOnline.getName().getString()));
+            player.sendSystemMessage(Component.translatable("lotmcraft.msg.quest.target_selected", targetOnline.getName().getString()));
         } else {
             Optional<StoredData> data = BeyonderData.playerMap.get(targetUuid);
             String name = data.isPresent() ? data.get().trueName() : targetUuid.toString();
-            player.sendSystemMessage(Component.literal("Target selected: " + name + " (offline)"));
+            player.sendSystemMessage(Component.translatable("lotmcraft.msg.quest.target_selected_offline", name));
         }
     }
 

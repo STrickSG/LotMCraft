@@ -48,7 +48,7 @@ public class StructureMapItem extends Item {
 
         // Tell the player we're searching so the use doesn't feel broken
         player.displayClientMessage(
-                Component.literal("§SSearching location..."), true);
+                Component.translatable("lotmcraft.msg.map.searching"), true);
 
         CompletableFuture.runAsync(() -> {
             BlockPos structurePos = serverLevel.findNearestMapStructure(

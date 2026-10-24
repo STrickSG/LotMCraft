@@ -22,7 +22,7 @@ public class LuckCheckCommand {
                         var targetEntity = EntityArgument.getEntity(context, "target");
 
                         if (!(targetEntity instanceof LivingEntity livingEntity)) {
-                            source.sendFailure(Component.literal("Target must be a living entity!"));
+                            source.sendFailure(Component.translatable("lotmcraft.msg.cmd.target_living"));
                             return 0;
                         }
 
@@ -35,11 +35,11 @@ public class LuckCheckCommand {
     private static int executeCommand(CommandSourceStack source, LivingEntity target) {
         try {
             LuckComponent component = target.getData(ModAttachments.LUCK_COMPONENT);
-            source.sendSuccess(() -> Component.literal("Luck of " + target.getName().getString() + " is " + component.getLuck()), true);
+            source.sendSuccess(() -> Component.translatable("lotmcraft.msg.cmd.luck_of", target.getName().getString(), component.getLuck()), true);
             return 1;
 
         } catch (Exception e) {
-            source.sendFailure(Component.literal("Failed to get luck: " + e.getMessage()));
+            source.sendFailure(Component.translatable("lotmcraft.msg.cmd.luck_failed", e.getMessage()));
             return 0;
         }
     }

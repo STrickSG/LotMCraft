@@ -59,7 +59,7 @@ public class SubordinateControllerItem extends Item {
                 entity = searchInOtherLevels(player, entityUUID);
             }
             if (!(entity instanceof LivingEntity livingEntity)) {
-                player.sendSystemMessage(Component.literal("Subordinate not found!"));
+                player.sendSystemMessage(Component.translatable("lotmcraft.msg.subordinate.not_found"));
                 stack.shrink(1);
                 return InteractionResultHolder.fail(stack);
             }
@@ -83,7 +83,7 @@ public class SubordinateControllerItem extends Item {
 
                 Level entityLevel = livingEntity.level();
                 if(!(entityLevel instanceof ServerLevel entityServerLevel)) {
-                    player.sendSystemMessage(Component.literal("Subordinate not in a valid dimension!"));
+                    player.sendSystemMessage(Component.translatable("lotmcraft.msg.subordinate.invalid_dimension"));
                     return InteractionResultHolder.fail(stack);
                 }
 
@@ -175,7 +175,7 @@ public class SubordinateControllerItem extends Item {
             entity = searchInOtherLevels(player, entityUUID);
         }
         if (!(entity instanceof LivingEntity livingEntity)) {
-            player.sendSystemMessage(Component.literal("Subordinate not found!"));
+            player.sendSystemMessage(Component.translatable("lotmcraft.msg.subordinate.not_found"));
             itemStack.shrink(1);
             return;
         }
@@ -224,11 +224,11 @@ public class SubordinateControllerItem extends Item {
         if (customData != null) {
             String entityName = customData.copyTag().getString("SubordinateType");
             tooltip.add(Component.literal("--------------------------").withColor(0xFFa742f5));
-            tooltip.add(Component.literal("Controls: " + entityName).withStyle(ChatFormatting.GRAY));
-            tooltip.add(Component.literal("Right-click on Block: Set Position").withStyle(ChatFormatting.GRAY));
-            tooltip.add(Component.literal("Shift-Right-click on Block: Set Should Attack").withStyle(ChatFormatting.GRAY));
-            tooltip.add(Component.literal("Right-click: Toggle Follow Mode").withStyle(ChatFormatting.GRAY));
-            tooltip.add(Component.literal("Shift-Right-click: Release").withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.translatable("lotmcraft.msg.subordinate.controls", entityName).withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.translatable("lotmcraft.msg.subordinate.help.set_position").withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.translatable("lotmcraft.msg.subordinate.help.set_attack").withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.translatable("lotmcraft.msg.subordinate.help.follow").withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.translatable("lotmcraft.msg.subordinate.help.release").withStyle(ChatFormatting.GRAY));
         }
     }
 }

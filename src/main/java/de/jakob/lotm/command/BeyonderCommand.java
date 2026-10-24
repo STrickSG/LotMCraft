@@ -33,7 +33,7 @@ public class BeyonderCommand {
                         // Execute on the command source (self)
                         CommandSourceStack source = context.getSource();
                         if (!(source.getEntity() instanceof LivingEntity livingEntity)) {
-                            source.sendFailure(Component.literal("Only living entities can use this command!"));
+                            source.sendFailure(Component.translatable("lotmcraft.msg.cmd.only_living"));
                             return 0;
                         }
                         
@@ -49,7 +49,7 @@ public class BeyonderCommand {
                             var targetEntity = EntityArgument.getEntity(context, "target");
                             
                             if (!(targetEntity instanceof LivingEntity livingEntity)) {
-                                source.sendFailure(Component.literal("Target must be a living entity!"));
+                                source.sendFailure(Component.translatable("lotmcraft.msg.cmd.target_living"));
                                 return 0;
                             }
                             
@@ -68,7 +68,7 @@ public class BeyonderCommand {
         try {
             // Validate pathway exists in the list
             if (!BeyonderData.pathways.contains(pathway)) {
-                source.sendFailure(Component.literal("Invalid pathway: " + pathway));
+                source.sendFailure(Component.translatable("lotmcraft.msg.cmd.invalid_pathway", pathway));
                 return 0;
             }
             
@@ -100,7 +100,7 @@ public class BeyonderCommand {
 
             // Send success message
             String targetName = target instanceof Player player ? player.getGameProfile().getName() : target.getDisplayName().getString();
-            source.sendSuccess(() -> Component.literal("Set " + targetName + " to " + pathway + " sequence " + sequence), true);
+            source.sendSuccess(() -> Component.translatable("lotmcraft.msg.cmd.set_beyonder", targetName, pathway, sequence), true);
 
             // Audit log
             String executorName = source.getTextName();
@@ -112,7 +112,7 @@ public class BeyonderCommand {
 
             return 1; // Success
         } catch (Exception e) {
-            source.sendFailure(Component.literal("Failed to set beyonder data: " + e.getMessage()));
+            source.sendFailure(Component.translatable("lotmcraft.msg.cmd.set_beyonder_failed", e.getMessage()));
             return 0;
         }
     }

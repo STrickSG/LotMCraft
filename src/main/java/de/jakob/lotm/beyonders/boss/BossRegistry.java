@@ -67,7 +67,7 @@ public final class BossRegistry {
                 ModEntities.FORS_WALL.get(),
                 BossDefinition.builder()
                         .hostility(BossDefinition.Hostility.RETALIATE)
-                        .alert(Component.literal("Fors Wall").withColor(0x8cdeff), Component.literal("The Angel of Stars"), 6, 15, 5)
+                        .alert(Component.literal("Fors Wall").withColor(0x8cdeff), Component.translatable("lotmcraft.msg.boss.fors_wall_title"), 6, 15, 5)
                         .barTitle(Component.literal("Fors Wall"))
                         .barColor(BossEvent.BossBarColor.BLUE)
                         .barOverlay(BossEvent.BossBarOverlay.NOTCHED_10)

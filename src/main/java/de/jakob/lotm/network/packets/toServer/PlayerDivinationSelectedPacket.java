@@ -70,7 +70,7 @@ public record PlayerDivinationSelectedPacket(UUID selectedPlayerUuid, PlayerSele
                 .getPlayer(packet.selectedPlayerUuid);
 
         if (targetPlayer == null || !(player.level().dimension() == targetPlayer.level().dimension())) {
-            player.sendSystemMessage(Component.literal("§cPlayer not found"));
+            player.sendSystemMessage(Component.translatable("lotmcraft.msg.divination.player_not_found"));
             return;
         }
 
@@ -105,7 +105,7 @@ public record PlayerDivinationSelectedPacket(UUID selectedPlayerUuid, PlayerSele
         MetaAwarenessAbility.onDivined(player, targetPlayer);
 
         if (targetPlayer == null || !(player.level().dimension() == targetPlayer.level().dimension())) {
-            player.sendSystemMessage(Component.literal("§cPlayer not found"));
+            player.sendSystemMessage(Component.translatable("lotmcraft.msg.divination.player_not_found"));
             return;
         }
 
@@ -114,7 +114,7 @@ public record PlayerDivinationSelectedPacket(UUID selectedPlayerUuid, PlayerSele
 
         int divinationDifference = 3 + DivinationUtil.getDivinationPower(player) - DivinationUtil.getConcealmentPower(targetPlayer);
         if (divinationDifference <= 0){
-            player.sendSystemMessage(Component.literal("§cDivination failed"));
+            player.sendSystemMessage(Component.translatable("lotmcraft.msg.divination.failed"));
             if(playerSequence < 4 && targetSequence > 3){
                 player.addEffect(new MobEffectInstance(ModEffects.LOOSING_CONTROL, 200, 2));
             }
@@ -140,13 +140,13 @@ public record PlayerDivinationSelectedPacket(UUID selectedPlayerUuid, PlayerSele
             };
 
         if (distance >= maxDistance) {
-            player.sendSystemMessage(Component.literal("§cPlayer is very far from you"));
+            player.sendSystemMessage(Component.translatable("lotmcraft.msg.divination.too_far"));
             return;
         }
 
         if (divinationDifference < 4){
             if(playerSequence < 4 && targetSequence > 3){
-                player.sendSystemMessage(Component.literal("§cDivination failed"));
+                player.sendSystemMessage(Component.translatable("lotmcraft.msg.divination.failed"));
                 return;
             }
             player.sendSystemMessage(Component.literal(String.format(

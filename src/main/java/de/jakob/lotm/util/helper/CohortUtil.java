@@ -10,6 +10,7 @@ import de.jakob.lotm.util.helper.subordinates.SubordinateComponent;
 import de.jakob.lotm.util.helper.subordinates.SubordinateUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -33,7 +34,7 @@ public class CohortUtil {
 
     public static boolean checkEligible(ServerPlayer player) {
         if (!TeamUtils.isEligibleLeader(player)) {
-            player.sendSystemMessage(Component.literal("Only Red Priest Beyonders at sequence 3 or higher can use this command.").withStyle(ChatFormatting.RED));
+            player.sendSystemMessage(Component.translatable("lotmcraft.team.not_eligible").withStyle(ChatFormatting.RED));
 
             return false;
         }
@@ -43,7 +44,7 @@ public class CohortUtil {
     public static int addMember(ServerPlayer leader, ServerPlayer target) {
         if (!checkEligible(leader)) return 0;
         if (leader.equals(target)) {
-            leader.sendSystemMessage(Component.literal("You cannot invite yourself.").withStyle(ChatFormatting.RED));
+            leader.sendSystemMessage(Component.translatable("lotmcraft.team.invite_self").withStyle(ChatFormatting.RED));
             return 0;
         }
 
@@ -51,7 +52,7 @@ public class CohortUtil {
         int maxSize = TeamUtils.getMaxTeamSize(BeyonderData.getSequence(leader));
 
         if (leaderTeam.memberCount() >= maxSize) {
-            leader.sendSystemMessage(Component.literal("Your team is full (" + maxSize + " members max at your sequence).").withStyle(ChatFormatting.RED));
+            leader.sendSystemMessage(Component.translatable("lotmcraft.team.full", maxSize).withStyle(ChatFormatting.RED));
             return 0;
         }
         TeamComponent targetTeam = target.getData(ModAttachments.TEAM_COMPONENT.get());
@@ -62,7 +63,7 @@ public class CohortUtil {
                 leader.setData(ModAttachments.TEAM_COMPONENT.get(), leaderTeam.removeMember(target.getStringUUID()));
                 leaderTeam = leader.getData(ModAttachments.TEAM_COMPONENT.get());
             } else {
-                leader.sendSystemMessage(Component.literal(target.getName().getString() + " is already in your team.").withStyle(ChatFormatting.RED));
+                leader.sendSystemMessage(Component.translatable("lotmcraft.team.already_in_your_team", target.getName()).withStyle(ChatFormatting.RED));
                 return 0;
             }
         }
@@ -76,7 +77,7 @@ public class CohortUtil {
             if (stale) {
                 target.setData(ModAttachments.TEAM_COMPONENT.get(), targetTeam.clearAll());
             } else {
-                leader.sendSystemMessage(Component.literal(target.getName().getString() + " is already in another team.").withStyle(ChatFormatting.RED));
+                leader.sendSystemMessage(Component.translatable("lotmcraft.team.already_in_other_team", target.getName()).withStyle(ChatFormatting.RED));
                 return 0;
             }
         }
@@ -85,14 +86,14 @@ public class CohortUtil {
         if (hasPendingInvite(target.getUUID(), leader.getUUID())) {
             removePendingInvite(target.getUUID(), leader.getUUID());
             TeamUtils.addMember(leader, target);
-            leader.sendSystemMessage(Component.literal("You and " + target.getName().getString() + " are now in the same team.").withStyle(s -> s.withColor(0x4CAF50)));
-            target.sendSystemMessage(Component.literal("You joined " + leader.getName().getString() + "'s team.").withStyle(s -> s.withColor(0x4CAF50)));
+            leader.sendSystemMessage(Component.translatable("lotmcraft.team.now_same_team", target.getName()).withStyle(s -> s.withColor(0x4CAF50)));
+            target.sendSystemMessage(Component.translatable("lotmcraft.team.joined", leader.getName()).withStyle(s -> s.withColor(0x4CAF50)));
             return 1;
         }
 
         addPendingInvite(leader.getUUID(), target.getUUID());
         PacketHandler.sendToPlayer(target, new PendingTeamInvitePacket(leader.getUUID(), leader.getName().getString()));
-        leader.sendSystemMessage(Component.literal("Team invite sent to " + target.getName().getString() + ".").withStyle(s -> s.withColor(0x2196F3)));
+        leader.sendSystemMessage(Component.translatable("lotmcraft.team.invite_sent", target.getName()).withStyle(s -> s.withColor(0x2196F3)));
         return 1;
     }
 
@@ -103,12 +104,12 @@ public class CohortUtil {
         // Allow the leader to remove a member
         if (senderTeam.hasMember(target.getStringUUID())) {
             TeamUtils.removeMember(sender, target);
-            sender.sendSystemMessage(Component.literal("Removed " + target.getName().getString() + " from your team.").withStyle(s -> s.withColor(0xFF9800)), false);
-            target.sendSystemMessage(Component.literal("You were removed from " + sender.getName().getString() + "'s team.").withStyle(s -> s.withColor(0xFF9800)));
+            sender.sendSystemMessage(Component.translatable("lotmcraft.team.removed", target.getName()).withStyle(s -> s.withColor(0xFF9800)), false);
+            target.sendSystemMessage(Component.translatable("lotmcraft.team.you_were_removed", sender.getName()).withStyle(s -> s.withColor(0xFF9800)));
             return 1;
         }
 
-        sender.sendSystemMessage(Component.literal(target.getName().getString() + " is not in your team.").withStyle(ChatFormatting.RED));
+        sender.sendSystemMessage(Component.translatable("lotmcraft.team.not_in_your_team", target.getName()).withStyle(ChatFormatting.RED));
         return 0;
     }
     public static int removeMember(ServerPlayer sender, GameProfile target) {
@@ -118,18 +119,18 @@ public class CohortUtil {
         // Allow the leader to remove a member
         if (senderTeam.hasMember(String.valueOf(target.getId()))) {
 //            TeamUtils.removeMember(sender, String.valueOf(target.getId()));
-            sender.sendSystemMessage(Component.literal("Removed " + target.getName() + " from your team.").withStyle(s -> s.withColor(0xFF9800)), false);
+            sender.sendSystemMessage(Component.translatable("lotmcraft.team.removed", target.getName()).withStyle(s -> s.withColor(0xFF9800)), false);
             return 1;
         }
 
-        sender.sendSystemMessage(Component.literal(target.getName() + " is not in your team.").withStyle(ChatFormatting.RED));
+        sender.sendSystemMessage(Component.translatable("lotmcraft.team.not_in_your_team", target.getName()).withStyle(ChatFormatting.RED));
         return 0;
     }
 
     public static int leave(ServerPlayer sender) {
         TeamComponent senderTeam = sender.getData(ModAttachments.TEAM_COMPONENT.get());
         if (!senderTeam.isInTeam()) {
-            sender.sendSystemMessage(Component.literal("You are not in a team.").withStyle(ChatFormatting.RED));
+            sender.sendSystemMessage(Component.translatable("lotmcraft.team.not_in_team").withStyle(ChatFormatting.RED));
             return 0;
         }
 
@@ -138,7 +139,7 @@ public class CohortUtil {
 
         if (leader != null) {
             TeamUtils.removeMember(leader, sender);
-            leader.sendSystemMessage(Component.literal(sender.getName().getString() + " left your team.").withStyle(s -> s.withColor(0xFF9800)));
+            leader.sendSystemMessage(Component.translatable("lotmcraft.team.member_left", sender.getName()).withStyle(s -> s.withColor(0xFF9800)));
         } else {
             // Leader is offline — clean up manually and clear client data
             sender.setData(ModAttachments.TEAM_COMPONENT.get(), senderTeam.clearAll());
@@ -146,7 +147,7 @@ public class CohortUtil {
                     "", new java.util.ArrayList<>(), new java.util.ArrayList<>(), new java.util.HashMap<>(), 0, 0));
         }
 
-        sender.sendSystemMessage(Component.literal("You left the team.").withStyle(s -> s.withColor(0xFF9800)), false);
+        sender.sendSystemMessage(Component.translatable("lotmcraft.team.you_left").withStyle(s -> s.withColor(0xFF9800)), false);
         return 1;
     }
 
@@ -154,16 +155,16 @@ public class CohortUtil {
         if (!checkEligible(sender)) return 0;
         TeamComponent senderTeam = sender.getData(ModAttachments.TEAM_COMPONENT.get());
         if (senderTeam.memberCount() == 0 && !senderTeam.isInTeam()) {
-            sender.sendSystemMessage(Component.literal("You do not have a team to disband.").withStyle(ChatFormatting.RED));
+            sender.sendSystemMessage(Component.translatable("lotmcraft.team.nothing_to_disband").withStyle(ChatFormatting.RED));
             return 0;
         }
         if (senderTeam.isInTeam()) {
-            sender.sendSystemMessage(Component.literal("Only the team leader can disband the team. Use /team leave to leave.").withStyle(ChatFormatting.RED));
+            sender.sendSystemMessage(Component.translatable("lotmcraft.team.only_leader_disband").withStyle(ChatFormatting.RED));
             return 0;
         }
 
         TeamUtils.disbandTeam(sender, sender.getServer());
-        sender.sendSystemMessage(Component.literal("Your team has been disbanded.").withStyle(s -> s.withColor(0xF44336)), false);
+        sender.sendSystemMessage(Component.translatable("lotmcraft.team.disbanded").withStyle(s -> s.withColor(0xF44336)), false);
         return 1;
     }
 
@@ -257,8 +258,8 @@ public class CohortUtil {
         PacketHandler.sendToPlayer(target, new de.jakob.lotm.network.packets.toClient.SyncSharedAbilitiesDataPacket(
                 "", new java.util.ArrayList<>(), new java.util.ArrayList<>(), new java.util.HashMap<>(), 0, 0));
 
-        source.sendSystemMessage(Component.literal("Reset team data for " + target.getName().getString() + ".").withStyle(s -> s.withColor(0x4CAF50)), true);
-        target.sendSystemMessage(Component.literal("An admin has reset your team status.").withStyle(s -> s.withColor(0xFF9800)));
+        source.sendSystemMessage(Component.translatable("lotmcraft.team.admin_reset", target.getName()).withStyle(s -> s.withColor(0x4CAF50)), true);
+        target.sendSystemMessage(Component.translatable("lotmcraft.team.admin_reset_target").withStyle(s -> s.withColor(0xFF9800)));
         return 1;
     }
 
@@ -267,23 +268,26 @@ public class CohortUtil {
         String name = target.getName().getString();
 
         if (!team.isInTeam() && team.memberCount() == 0) {
-            source.sendSystemMessage(Component.literal(name + " is not in any team."), false);
+            source.sendSystemMessage(Component.translatable("lotmcraft.team.info.no_team", name), false);
             return 1;
         }
 
         if (team.isInTeam()) {
             String leaderUUID = team.leaderUUID();
             ServerPlayer leader = source.getServer().getPlayerList().getPlayer(UUID.fromString(leaderUUID));
-            String leaderName = leader != null ? leader.getName().getString() : "offline (" + leaderUUID + ")";
-            source.sendSystemMessage(Component.literal(name + " is a member of " + leaderName + "'s team."), false);
+            Component leaderName = leader != null ? leader.getName() : Component.translatable("lotmcraft.team.info.offline", leaderUUID);
+            source.sendSystemMessage(Component.translatable("lotmcraft.team.info.member_of", name, leaderName), false);
         } else {
-            StringBuilder sb = new StringBuilder(name + " is a leader with " + team.memberCount() + " member(s): ");
+            // A lista é montada como Component para que "offline" também seja traduzido no cliente
+            MutableComponent members = Component.empty();
+            boolean first = true;
             for (String uuid : team.memberUUIDs()) {
                 ServerPlayer member = source.getServer().getPlayerList().getPlayer(UUID.fromString(uuid));
-                sb.append(member != null ? member.getName().getString() : "offline(" + uuid + ")").append(", ");
+                if (!first) members.append(", ");
+                members.append(member != null ? member.getName() : Component.translatable("lotmcraft.team.info.offline", uuid));
+                first = false;
             }
-            String msg = sb.toString().replaceAll(", $", "");
-            source.sendSystemMessage(Component.literal(msg), false);
+            source.sendSystemMessage(Component.translatable("lotmcraft.team.info.leader_of", name, team.memberCount(), members), false);
         }
         return 1;
     }
@@ -292,34 +296,34 @@ public class CohortUtil {
 
     public static void acceptInvite(ServerPlayer accepter, UUID leaderUUID) {
         if (!hasPendingInvite(leaderUUID, accepter.getUUID())) {
-            accepter.sendSystemMessage(Component.literal("No pending invite from that player.").withStyle(s -> s.withColor(0xF44336)));
+            accepter.sendSystemMessage(Component.translatable("lotmcraft.team.no_pending_invite").withStyle(s -> s.withColor(0xF44336)));
             return;
         }
         removePendingInvite(leaderUUID, accepter.getUUID());
 
         ServerPlayer leader = accepter.getServer().getPlayerList().getPlayer(leaderUUID);
         if (leader == null) {
-            accepter.sendSystemMessage(Component.literal("The leader is no longer online.").withStyle(s -> s.withColor(0xF44336)));
+            accepter.sendSystemMessage(Component.translatable("lotmcraft.team.leader_offline").withStyle(s -> s.withColor(0xF44336)));
             return;
         }
 
         boolean added = TeamUtils.addMember(leader, accepter);
         if (!added) {
-            accepter.sendSystemMessage(Component.literal("Could not join the team (it may be full or you are already in one).").withStyle(s -> s.withColor(0xF44336)));
+            accepter.sendSystemMessage(Component.translatable("lotmcraft.team.could_not_join").withStyle(s -> s.withColor(0xF44336)));
             return;
         }
 
-        accepter.sendSystemMessage(Component.literal("You joined " + leader.getName().getString() + "'s team.").withStyle(s -> s.withColor(0x4CAF50)));
-        leader.sendSystemMessage(Component.literal(accepter.getName().getString() + " joined your team.").withStyle(s -> s.withColor(0x4CAF50)));
+        accepter.sendSystemMessage(Component.translatable("lotmcraft.team.joined", leader.getName()).withStyle(s -> s.withColor(0x4CAF50)));
+        leader.sendSystemMessage(Component.translatable("lotmcraft.team.member_joined", accepter.getName()).withStyle(s -> s.withColor(0x4CAF50)));
     }
 
     public static void declineInvite(ServerPlayer decliner, UUID leaderUUID) {
         removePendingInvite(leaderUUID, decliner.getUUID());
-        decliner.sendSystemMessage(Component.literal("Team invite declined.").withStyle(s -> s.withColor(0xFF9800)));
+        decliner.sendSystemMessage(Component.translatable("lotmcraft.team.invite_declined").withStyle(s -> s.withColor(0xFF9800)));
 
         ServerPlayer leader = decliner.getServer().getPlayerList().getPlayer(leaderUUID);
         if (leader != null) {
-            leader.sendSystemMessage(Component.literal(decliner.getName().getString() + " declined your team invite.").withStyle(s -> s.withColor(0xFF9800)));
+            leader.sendSystemMessage(Component.translatable("lotmcraft.team.invite_declined_by", decliner.getName()).withStyle(s -> s.withColor(0xFF9800)));
         }
     }
 
@@ -429,12 +433,12 @@ public class CohortUtil {
     public static void removeSubordinate(Player player, int s) {
         Entity entity = CohortUtil.getAllSubordinates(player).get(s);
         if (!(entity instanceof LivingEntity livingEntity)) {
-            player.sendSystemMessage(Component.literal("Subordinate not found!").withStyle(ChatFormatting.RED));
+            player.sendSystemMessage(Component.translatable("lotmcraft.team.subordinate_not_found").withStyle(ChatFormatting.RED));
             return;
         }
         SubordinateComponent component = livingEntity.getData(ModAttachments.SUBORDINATE_COMPONENT.get());
         if(!Objects.equals(component.getControllerUUID(), player.getStringUUID())) {
-            player.sendSystemMessage(Component.literal("This subordinate does not belong to you!").withStyle(ChatFormatting.RED));
+            player.sendSystemMessage(Component.translatable("lotmcraft.team.subordinate_not_yours").withStyle(ChatFormatting.RED));
             return;
         }
         if(!component.isSubordinate()) return;
@@ -447,12 +451,12 @@ public class CohortUtil {
     public static void obtainController(Player player, int s) {
         LivingEntity entity = CohortUtil.getAllSubordinates(player).get(s);
         if (!(entity instanceof LivingEntity livingEntity)) {
-            player.sendSystemMessage(Component.literal("Subordinate not found!").withStyle(ChatFormatting.RED));
+            player.sendSystemMessage(Component.translatable("lotmcraft.team.subordinate_not_found").withStyle(ChatFormatting.RED));
             return;
         }
         SubordinateComponent component = livingEntity.getData(ModAttachments.SUBORDINATE_COMPONENT.get());
         if(!Objects.equals(component.getControllerUUID(), player.getStringUUID())) {
-            player.sendSystemMessage(Component.literal("This subordinate does not belong to you!").withStyle(ChatFormatting.RED));
+            player.sendSystemMessage(Component.translatable("lotmcraft.team.subordinate_not_yours").withStyle(ChatFormatting.RED));
             return;
         }
         if(!component.isSubordinate()) return;

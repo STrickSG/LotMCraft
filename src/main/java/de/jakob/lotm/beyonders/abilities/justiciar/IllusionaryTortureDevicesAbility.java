@@ -90,7 +90,7 @@ public class IllusionaryTortureDevicesAbility extends SelectableAbility {
         if (!(level instanceof ServerLevel serverLevel)) return;
 
         ItemStack brandingIron = new ItemStack(Items.IRON_SWORD);
-        brandingIron.set(DataComponents.CUSTOM_NAME, Component.literal("Branding Iron").withColor(0xFFAFA3));
+        brandingIron.set(DataComponents.CUSTOM_NAME, Component.translatable("lotmcraft.msg.ability.torture.branding_iron").withColor(0xFFAFA3));
         player.setItemInHand(player.getUsedItemHand(), brandingIron);
 
         int seq = BeyonderData.getSequence(entity);
@@ -98,7 +98,7 @@ public class IllusionaryTortureDevicesAbility extends SelectableAbility {
 
         serverLevel.playSound(null, player.blockPosition(), SoundEvents.BLAZE_SHOOT, SoundSource.PLAYERS, 0.8f, 0.5f);
         serverLevel.playSound(null, player.blockPosition(), SoundEvents.FIRE_AMBIENT, SoundSource.PLAYERS, 0.5f, 0.7f);
-        AbilityUtil.sendActionBar(entity, Component.literal("§6⚖ §eBranding Iron §fconjured §6⚖"));
+        AbilityUtil.sendActionBar(entity, Component.translatable("lotmcraft.msg.ability.torture.branding_conjured"));
 
         ParticleUtil.spawnSphereParticles(serverLevel, GOLD_DUST, player.position().add(0, 1, 0), 0.8, 20);
         ParticleUtil.spawnSphereParticles(serverLevel, EMBER_DUST, player.position().add(0, 1, 0), 0.6, 14);
@@ -153,7 +153,7 @@ public class IllusionaryTortureDevicesAbility extends SelectableAbility {
 
         ItemStack weapon = player.getMainHandItem();
         if (weapon.isEmpty()) {
-            AbilityUtil.sendActionBar(entity, Component.literal("§c✗ §fRequires an item in your main hand"));
+            AbilityUtil.sendActionBar(entity, Component.translatable("lotmcraft.msg.ability.torture.need_item"));
             return;
         }
 
@@ -172,7 +172,7 @@ public class IllusionaryTortureDevicesAbility extends SelectableAbility {
         ParticleUtil.spawnCircleParticles(serverLevel, PALE_GOLD_DUST, player.position().add(0, 0.05, 0), 0.6, 14);
         serverLevel.sendParticles(ParticleTypes.ENCHANT, center.x, center.y, center.z, 40, 0.5, 0.5, 0.5, 0.15);
 
-        AbilityUtil.sendActionBar(entity, Component.literal("§6⚖ §eWeapon §fimbued with §ePsychic Lashing §6⚖"));
+        AbilityUtil.sendActionBar(entity, Component.translatable("lotmcraft.msg.ability.torture.lashing"));
     }
 
     private void psychicPiercing(Level level, LivingEntity entity) {

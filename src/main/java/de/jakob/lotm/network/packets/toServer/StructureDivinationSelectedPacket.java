@@ -41,7 +41,7 @@ public record StructureDivinationSelectedPacket(String structureId) implements C
         ResourceLocation structureKey = ResourceLocation.tryParse(packet.structureId());
 
         if (structureKey == null) {
-            player.sendSystemMessage(Component.literal("§cInvalid structure id"));
+            player.sendSystemMessage(Component.translatable("lotmcraft.msg.divination.invalid_structure"));
             return;
         }
 
@@ -75,7 +75,7 @@ public record StructureDivinationSelectedPacket(String structureId) implements C
 
             context.enqueueWork(() -> {
                 if (result == null) {
-                    player.sendSystemMessage(Component.literal("§cNo structure nearby in 5000 blocks"));
+                    player.sendSystemMessage(Component.translatable("lotmcraft.msg.divination.no_structure"));
                     return;
                 }
 

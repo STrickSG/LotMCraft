@@ -8,7 +8,7 @@ import java.util.List;
 
 public class BiomeSelectionGui extends ButtonListGui<String> {
     public BiomeSelectionGui(List<String> biomeIds) {
-        super(Component.literal("Select a Biome"), biomeIds);
+        super(Component.translatable("lotmcraft.msg.gui.select.biome"), biomeIds);
     }
 
     @Override

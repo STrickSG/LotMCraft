@@ -34,7 +34,7 @@ public class SpawnBeyonderCommand {
                         // Execute on the command source (self)
                         CommandSourceStack source = context.getSource();
                         if (!(source.getEntity() instanceof LivingEntity livingEntity)) {
-                            source.sendFailure(Component.literal("Only living entities can use this command!"));
+                            source.sendFailure(Component.translatable("lotmcraft.msg.cmd.only_living"));
                             return 0;
                         }
                         
@@ -51,7 +51,7 @@ public class SpawnBeyonderCommand {
                             CommandSourceStack source = context.getSource();
 
                             if (!(source.getEntity() instanceof LivingEntity livingEntity)) {
-                                source.sendFailure(Component.literal("Only living entities can use this command!"));
+                                source.sendFailure(Component.translatable("lotmcraft.msg.cmd.only_living"));
                                 return 0;
                             }
                             
@@ -68,7 +68,7 @@ public class SpawnBeyonderCommand {
                                 CommandSourceStack source = context.getSource();
 
                                 if (!(source.getEntity() instanceof LivingEntity livingEntity)) {
-                                    source.sendFailure(Component.literal("Only living entities can use this command!"));
+                                    source.sendFailure(Component.translatable("lotmcraft.msg.cmd.only_living"));
                                     return 0;
                                 }
 
@@ -78,7 +78,7 @@ public class SpawnBeyonderCommand {
                                 boolean hasTrades = BoolArgumentType.getBool(context, "hasTrades");
 
                                 if(hasQuest && hasTrades) {
-                                    source.sendFailure(Component.literal("Cannot have both quests and trades!"));
+                                    source.sendFailure(Component.translatable("lotmcraft.msg.cmd.quests_and_trades"));
                                     return 0;
                                 }
 
@@ -94,7 +94,7 @@ public class SpawnBeyonderCommand {
     private static int executeBeyonderCommand(CommandSourceStack source, LivingEntity target, String pathway, int sequence, boolean hasQuest, boolean hasTrades) {
         try {
             if (!BeyonderData.pathways.contains(pathway)) {
-                source.sendFailure(Component.literal("Invalid pathway: " + pathway));
+                source.sendFailure(Component.translatable("lotmcraft.msg.cmd.invalid_pathway", pathway));
                 return 0;
             }
 
@@ -102,11 +102,11 @@ public class SpawnBeyonderCommand {
             beyonder.setPos(target.getX(), target.getY(), target.getZ());
             target.level().addFreshEntity(beyonder);
 
-            source.sendSuccess(() -> Component.literal("Spawned Beyonder with pathway: " + pathway + " and sequence: " + sequence), false);
+            source.sendSuccess(() -> Component.translatable("lotmcraft.msg.cmd.spawned_beyonder", pathway, sequence), false);
 
             return 1;
         } catch (Exception e) {
-            source.sendFailure(Component.literal("Failed to spawn Beyonder: " + e.getMessage()));
+            source.sendFailure(Component.translatable("lotmcraft.msg.cmd.spawn_failed", e.getMessage()));
             return 0;
         }
     }

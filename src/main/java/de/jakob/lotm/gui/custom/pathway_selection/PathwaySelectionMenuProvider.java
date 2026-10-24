@@ -20,7 +20,7 @@ public class PathwaySelectionMenuProvider implements MenuProvider {
 
     @Override
     public @NotNull Component getDisplayName() {
-        return Component.literal("Choose Your Path");
+        return Component.translatable("lotmcraft.msg.gui.choose_path");
     }
 
     @Nullable

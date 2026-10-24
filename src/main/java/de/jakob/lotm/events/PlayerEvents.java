@@ -184,7 +184,7 @@ public class PlayerEvents {
                         BeyonderData.reduceSpirituality(source, 100);
                         event.setCanceled(true);
                         if (event.getEntity() instanceof ServerPlayer player) {
-                            Component actionBarText = Component.literal("Dodged Attack").withStyle(ChatFormatting.DARK_PURPLE);
+                            Component actionBarText = Component.translatable("lotmcraft.msg.dodged_attack").withStyle(ChatFormatting.DARK_PURPLE);
                             sendActionBar(player, actionBarText);
                         }
                     }
