@@ -315,9 +315,9 @@ public class BeyonderData {
         return hasRitual(getPathway(entity), getSequence(entity) - 1);
     }
 
-    // Por enquanto só um ritual está ligado (teste): Sol, para virar Sequência 5 (ver RitualChecks)
+    // Os rituais ligados ficam em AdvancementRituals (por enquanto só o do Sol, para virar Sequência 5)
     public static boolean hasRitual(String pathway, int seq){
-        return "sun".equals(pathway) && seq == 5;
+        return de.jakob.lotm.addons.rituals.AdvancementRituals.get(pathway, seq) != null;
     }
 
     public static int getMaxWormAmount(int sequence) {

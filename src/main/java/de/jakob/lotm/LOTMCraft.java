@@ -233,6 +233,7 @@ public class LOTMCraft
         ModDataComponents.register(modEventBus);
         PotionRecipeItemHandler.registerRecipes(modEventBus);
         BlasphemyCardItemHandler.registerCards(modEventBus);
+        de.jakob.lotm.beyonders.potions.RitualRecipeItemHandler.registerRituals(modEventBus);
         // Curios é opcional: só registra as regras de equipar se ele estiver instalado
         if (net.neoforged.fml.ModList.get().isLoaded("curios")) {
             de.jakob.lotm.compat.curios.CuriosSetup.register(modEventBus);

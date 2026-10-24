@@ -81,7 +81,7 @@ public class BlasphemyCardItem extends Item {
         }
 
         if (level.isClientSide) {
-            PacketHandler.sendToServer(new OpenRecipeMenuPacket(selected, pathway));
+            PacketHandler.sendToServer(new OpenRecipeMenuPacket(selected, pathway, OpenRecipeMenuPacket.VIEW_CARD));
         }
         return InteractionResultHolder.sidedSuccess(stack, level.isClientSide);
     }

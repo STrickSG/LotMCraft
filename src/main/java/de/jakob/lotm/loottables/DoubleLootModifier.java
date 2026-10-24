@@ -80,9 +80,9 @@ public class DoubleLootModifier extends LootModifier {
                 }
             }
 
-            // na grande Igreja da Noite Eterna o bônus também é só do Caminho do Insone
+            // na grande Igreja da Noite Eterna o bônus também é só dos Caminhos dela (Insone e Morte)
             String pathway = ChestLootModifier.pathwayFor(context.getQueriedLootTableId());
-            boolean anyPathway = ChestLootModifier.fixedPathway(context.getQueriedLootTableId()) == null;
+            boolean anyPathway = ChestLootModifier.allowedPathways(context.getQueriedLootTableId()) == null;
             int sequence = ChestLootModifier.getWeightedHighSequence();
 
             if(sequence >= 7) {

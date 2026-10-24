@@ -83,6 +83,10 @@ public class ModCreativeModTabs {
                         PotionRecipeItemHandler.ITEMS.getEntries().forEach(itemHolder -> {
                             output.accept(itemHolder.get());
                         });
+                        // Pergaminhos de ritual de avanço
+                        de.jakob.lotm.beyonders.potions.RitualRecipeItemHandler.ITEMS.getEntries().forEach(itemHolder -> {
+                            output.accept(itemHolder.get());
+                        });
                         // Cartas da Blasfêmia: receita universal de cada Caminho
                         BlasphemyCardItemHandler.ITEMS.getEntries().forEach(itemHolder -> {
                             output.accept(itemHolder.get());

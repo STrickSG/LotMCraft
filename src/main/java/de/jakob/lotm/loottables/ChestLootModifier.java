@@ -21,6 +21,7 @@ import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
 import net.neoforged.neoforge.common.loot.LootModifier;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.Random;
 import java.util.function.Supplier;
 
@@ -37,28 +38,30 @@ public class ChestLootModifier extends LootModifier {
 
     // Barris da grande Igreja da Noite Eterna
     private static final ResourceLocation EVERNIGHT_CHURCH = ResourceLocation.fromNamespaceAndPath(LOTMCraft.MOD_ID, "chests/evernight_church");
+    // A igreja guarda os Caminhos do Insone (Escuridão) e da Morte, que ainda não tem estrutura própria
+    private static final List<String> EVERNIGHT_PATHWAYS = List.of("darkness", "death");
 
-    /** Caminho fixo dos itens Beyonder deste baú, ou null quando pode ser qualquer um. */
-    public static String fixedPathway(ResourceLocation lootTable) {
-        // Na grande Igreja da Noite Eterna só aparecem itens do Caminho do Insone (Escuridão)
-        return EVERNIGHT_CHURCH.equals(lootTable) ? "darkness" : null;
+    /** Caminhos permitidos para os itens Beyonder deste baú, ou null quando pode ser qualquer um. */
+    public static List<String> allowedPathways(ResourceLocation lootTable) {
+        return EVERNIGHT_CHURCH.equals(lootTable) ? EVERNIGHT_PATHWAYS : null;
     }
 
     /** Caminho dos itens Beyonder sorteados para este baú. */
     public static String pathwayFor(ResourceLocation lootTable) {
-        String fixed = fixedPathway(lootTable);
-        return fixed != null ? fixed : BeyonderData.implementedPathways.get(random.nextInt(BeyonderData.implementedPathways.size()));
+        List<String> allowed = allowedPathways(lootTable);
+        List<String> pathways = allowed != null ? allowed : BeyonderData.implementedPathways;
+        return pathways.get(random.nextInt(pathways.size()));
     }
 
     @Override
     protected @NotNull ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
         ResourceLocation lootTable = context.getQueriedLootTableId();
         if (lootTable.getPath().contains("chests/")) {
-            String fixed = fixedPathway(lootTable);
+            boolean anyPathway = allowedPathways(lootTable) == null;
             if (context.getRandom().nextFloat() < 0.45f) {
                 String pathway = pathwayFor(lootTable);
                 int sequence = getWeightedHighSequence();
-                ItemStack item = getRandomLoot(pathway, sequence, fixed == null);
+                ItemStack item = getRandomLoot(pathway, sequence, anyPathway);
 
                 if (item != null && (sequence >= 5)) {
                     generatedLoot.add(item);
@@ -66,7 +69,7 @@ public class ChestLootModifier extends LootModifier {
             }
             // Carta da Blasfêmia: muito rara (1% dos baús), pois vale como receita do Caminho inteiro
             if (context.getRandom().nextFloat() < 0.01f) {
-                ItemStack card = fixed != null ? BlasphemyCardItemHandler.cardOf(fixed) : BlasphemyCardItemHandler.randomCard(random);
+                ItemStack card = anyPathway ? BlasphemyCardItemHandler.randomCard(random) : BlasphemyCardItemHandler.cardOf(pathwayFor(lootTable));
                 if (!card.isEmpty()) generatedLoot.add(card);
             }
         }

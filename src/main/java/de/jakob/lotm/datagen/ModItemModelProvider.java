@@ -76,6 +76,12 @@ public class ModItemModelProvider extends ItemModelProvider {
             potionRecipeItem(i.get());
         });
 
+        // Pergaminhos de ritual: mesmo desenho da receita de poção, em roxo
+        de.jakob.lotm.beyonders.potions.RitualRecipeItemHandler.ITEMS.getEntries().forEach(i -> {
+            withExistingParent(BuiltInRegistries.ITEM.getKey(i.get()).getPath(), "item/generated")
+                    .texture("layer0", modLoc("item/ritual_recipe"));
+        });
+
         BeyonderCharacteristicItemHandler.ITEMS.getEntries().forEach(i -> {
             if(!(i.get() instanceof BeyonderCharacteristicItem characteristicItem)) {
                 return;
