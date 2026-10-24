@@ -126,7 +126,7 @@ public class ClientEvents {
                 return MiniatureCreatureRenderer.instance();
             }
         }, ModItems.MINIATURE_CREATURE.get());
-        // Foice da Escuridão: arma de duas mãos
+        // Foice da Escuridão: pose do braço que segura (mão no alto do cabo)
         event.registerItem(new IClientItemExtensions() {
             @Override
             public HumanoidModel.ArmPose getArmPose(LivingEntity entity, InteractionHand hand, ItemStack stack) {

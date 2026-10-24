@@ -101,11 +101,15 @@ public class ModItemModelProvider extends ItemModelProvider {
             return;
         }
         if (pathway.equals("darkness")) {
-            // Foice da Escuridão: pixel art 48x48, segurada pelo meio do cabo com as duas mãos (pose em ScytheArmPose)
-            withExistingParent(itemName, mcLoc("item/generated")).texture("layer0", modLoc("item/singularity/darkness_scythe"))
-                    .transforms()
-                    .transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND).rotation(-143.61f, -71.54f, -139.48f).translation(-0.01f, 6.21f, 4.62f).scale(2.4f).end()
-                    .transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND).rotation(-12.13f, -23.75f, 62.32f).translation(-1.14f, 2.97f, -1.15f).scale(1.05f).end();
+            // Foice da Escuridão: desenho plano no inventário e modelo 3D com espessura na mão (como a luneta do Minecraft)
+            getBuilder(itemName)
+                    .customLoader(net.neoforged.neoforge.client.model.generators.loaders.SeparateTransformsModelBuilder::begin)
+                    .base(nested().parent(new net.neoforged.neoforge.client.model.generators.ModelFile.UncheckedModelFile(modLoc("item/singularity/darkness_scythe_3d"))))
+                    .perspective(ItemDisplayContext.GUI, nested().parent(new net.neoforged.neoforge.client.model.generators.ModelFile.UncheckedModelFile(modLoc("item/singularity/darkness_scythe_flat"))))
+                    .perspective(ItemDisplayContext.FIXED, nested().parent(new net.neoforged.neoforge.client.model.generators.ModelFile.UncheckedModelFile(modLoc("item/singularity/darkness_scythe_flat"))))
+                    .perspective(ItemDisplayContext.GROUND, nested().parent(new net.neoforged.neoforge.client.model.generators.ModelFile.UncheckedModelFile(modLoc("item/singularity/darkness_scythe_flat"))))
+                    .end()
+                    .texture("particle", modLoc("item/singularity/darkness_scythe"));
             return;
         }
         var builder = getBuilder(itemName)

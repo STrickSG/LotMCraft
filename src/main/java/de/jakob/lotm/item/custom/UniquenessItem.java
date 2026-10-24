@@ -26,11 +26,6 @@ public class UniquenessItem extends Item {
         return pathway;
     }
 
-    @Override
-    public boolean isFoil(@NotNull ItemStack stack) {
-        return true;
-    }
-
     // Singularidades não são armas nem ferramentas comuns: não aceitam encantamentos (mesa, bigorna ou livro)
     @Override
     public boolean isEnchantable(@NotNull ItemStack stack) {
