@@ -135,7 +135,8 @@ public class SetHonorificNameScreen extends Screen {
         if (!requiredWords.isEmpty()) {
             int maxWidth = Math.min(this.width - 40, 400);
             gfx.drawCenteredString(font, Component.translatable("lotmcraft.msg.gui.honorific.required_words"), centerX, divY + 17, COL_HINT);
-            String wordsStr = String.join(", ", requiredWords);
+            String wordsStr = String.join(", ", requiredWords.stream()
+                    .map(w -> Component.translatable(HonorificName.wordTranslationKey(w)).getString()).toList());
             if (font.width(wordsStr) > maxWidth) {
                 int truncIndex = Math.max(0, Math.min(
                         wordsStr.length() * maxWidth / font.width(wordsStr) - 3,

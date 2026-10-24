@@ -105,7 +105,9 @@ public record SetHonorificNamePacket(LinkedList<String> lines) implements Custom
 
                 String pathway = BeyonderData.getPathway(player);
                 if (!HonorificName.validate(pathway, lines)) {
-                    player.sendSystemMessage(Component.translatable("lotmcraft.msg.honorific.must_have_words", HonorificName.getMustHaveWords(pathway))
+                    player.sendSystemMessage(Component.translatable("lotmcraft.msg.honorific.must_have_words", HonorificName.getMustHaveWords(pathway).stream()
+                            .map(w -> (Component) Component.translatable(HonorificName.wordTranslationKey(w)))
+                            .reduce((a, b) -> Component.empty().append(a).append(", ").append(b)).orElse(Component.empty()))
                             .withStyle(ChatFormatting.RED));
                     return;
                 }
