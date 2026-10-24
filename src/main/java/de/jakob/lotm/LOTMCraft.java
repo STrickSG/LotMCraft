@@ -233,6 +233,10 @@ public class LOTMCraft
         ModDataComponents.register(modEventBus);
         PotionRecipeItemHandler.registerRecipes(modEventBus);
         BlasphemyCardItemHandler.registerCards(modEventBus);
+        // Curios é opcional: só registra as regras de equipar se ele estiver instalado
+        if (net.neoforged.fml.ModList.get().isLoaded("curios")) {
+            de.jakob.lotm.compat.curios.CuriosSetup.register(modEventBus);
+        }
         BeyonderCharacteristicItemHandler.registerCharacteristics(modEventBus);
         ModAttachments.register(modEventBus);
         ModDimensions.register(modEventBus);
@@ -288,6 +292,10 @@ public class LOTMCraft
     public static class ClientModEvents {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
+            // Singularidades aparecem no corpo quando equipadas (só com o Curios instalado)
+            if (net.neoforged.fml.ModList.get().isLoaded("curios")) {
+                event.enqueueWork(de.jakob.lotm.compat.curios.client.CuriosClientSetup::registerRenderers);
+            }
             EntityRenderers.register(ModEntities.FLAMING_SPEAR.get(), FlamingSpearProjectileRenderer::new);
             EntityRenderers.register(ModEntities.FIRE_PLATE.get(), FirePlateRenderer::new);
             EntityRenderers.register(ModEntities.UNSHADOWED_SPEAR.get(), UnshadowedSpearProjectileRenderer::new);
