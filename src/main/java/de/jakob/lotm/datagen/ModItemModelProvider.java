@@ -100,7 +100,14 @@ public class ModItemModelProvider extends ItemModelProvider {
             withExistingParent(itemName, mcLoc("item/generated")).texture("layer0", modLoc("item/singularity/fool_mask"));
             return;
         }
-        boolean scythe = pathway.equals("darkness");
+        if (pathway.equals("darkness")) {
+            // Foice da Escuridão: pixel art 48x48, segurada pelo meio do cabo com as duas mãos (pose em ScytheArmPose)
+            withExistingParent(itemName, mcLoc("item/generated")).texture("layer0", modLoc("item/singularity/darkness_scythe"))
+                    .transforms()
+                    .transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND).rotation(-143.61f, -71.54f, -139.48f).translation(-0.01f, 6.21f, 4.62f).scale(2.4f).end()
+                    .transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND).rotation(-12.13f, -23.75f, 62.32f).translation(-1.14f, 2.97f, -1.15f).scale(1.05f).end();
+            return;
+        }
         var builder = getBuilder(itemName)
                 .parent(new net.neoforged.neoforge.client.model.generators.ModelFile.UncheckedModelFile("neoforge:item/default"))
                 .customLoader(net.neoforged.neoforge.client.model.generators.loaders.ObjModelBuilder::begin)
@@ -113,18 +120,10 @@ public class ModItemModelProvider extends ItemModelProvider {
                 .transform(ItemDisplayContext.GROUND).translation(0, 3, 0).scale(0.5f).end()
                 .transform(ItemDisplayContext.FIXED).scale(1f).end()
                 .transform(ItemDisplayContext.HEAD).scale(1f).end();
-        if (scythe) {
-            // A foice é segurada como arma
-            builder.transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND).rotation(0, 90, -15).translation(0, 9, 1).scale(1.6f).end()
-                    .transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND).rotation(0, -90, 15).translation(0, 9, 1).scale(1.6f).end()
-                    .transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND).rotation(0, 90, -10).translation(1.5f, 6, 0).scale(1.2f).end()
-                    .transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND).rotation(0, -90, 10).translation(1.5f, 6, 0).scale(1.2f).end();
-        } else {
-            builder.transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND).translation(0, 3, 1).scale(0.55f).end()
-                    .transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND).translation(0, 3, 1).scale(0.55f).end()
-                    .transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND).rotation(0, -25, 0).translation(1, 3, 1).scale(0.5f).end()
-                    .transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND).rotation(0, 25, 0).translation(1, 3, 1).scale(0.5f).end();
-        }
+        builder.transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND).translation(0, 3, 1).scale(0.55f).end()
+                .transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND).translation(0, 3, 1).scale(0.55f).end()
+                .transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND).rotation(0, -25, 0).translation(1, 3, 1).scale(0.5f).end()
+                .transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND).rotation(0, 25, 0).translation(1, 3, 1).scale(0.5f).end();
     }
 
     // Helper method for items that need custom display properties (auto-detects texture name)

@@ -3,10 +3,12 @@ package de.jakob.lotm.item.custom;
 import de.jakob.lotm.beyonders.singularity.SingularityData;
 import de.jakob.lotm.util.BeyonderData;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.enchantment.Enchantment;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -27,6 +29,32 @@ public class UniquenessItem extends Item {
     @Override
     public boolean isFoil(@NotNull ItemStack stack) {
         return true;
+    }
+
+    // Singularidades não são armas nem ferramentas comuns: não aceitam encantamentos (mesa, bigorna ou livro)
+    @Override
+    public boolean isEnchantable(@NotNull ItemStack stack) {
+        return false;
+    }
+
+    @Override
+    public int getEnchantmentValue(@NotNull ItemStack stack) {
+        return 0;
+    }
+
+    @Override
+    public boolean isBookEnchantable(@NotNull ItemStack stack, @NotNull ItemStack book) {
+        return false;
+    }
+
+    @Override
+    public boolean supportsEnchantment(@NotNull ItemStack stack, @NotNull Holder<Enchantment> enchantment) {
+        return false;
+    }
+
+    @Override
+    public boolean isPrimaryItemFor(@NotNull ItemStack stack, @NotNull Holder<Enchantment> enchantment) {
+        return false;
     }
 
     // Descrição da Singularidade equipável: Caminho, domínio e efeitos

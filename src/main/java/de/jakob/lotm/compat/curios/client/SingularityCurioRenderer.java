@@ -27,7 +27,7 @@ public class SingularityCurioRenderer implements ICurioRenderer {
         return switch (pathway) {
             case "fool" -> Placement.FACE;               // Máscara do Tolo
             case "error" -> Placement.MONOCLE;           // Monóculo de Cristal
-            case "red_priest", "darkness" -> Placement.BACK; // Estandarte de Salinger e a Foice da Escuridão
+            case "red_priest" -> Placement.BACK;            // Estandarte de Salinger
             case "wheel_of_fortune", "justiciar" -> Placement.HIP;
             default -> Placement.HALO;                   // flutua atrás da cabeça
         };
@@ -51,7 +51,6 @@ public class SingularityCurioRenderer implements ICurioRenderer {
         poseStack.pushPose();
         // Espaço do modelo do jogador: Y aponta para baixo e a frente do rosto/corpo é -Z.
         // Os modelos 3D têm a frente em +Z, então escalamos com Y e Z negativos para virá-los.
-        String pathway = SingularityData.pathwayOf(stack);
         switch (placement) {
             case FACE -> { }
             case MONOCLE -> {
@@ -71,14 +70,8 @@ public class SingularityCurioRenderer implements ICurioRenderer {
                 ICurioRenderer.rotateIfSneaking(poseStack, entity);
                 model.body.translateAndRotate(poseStack);
                 poseStack.translate(0, 0.35, 0.22);
-                if (pathway.equals("darkness")) {
-                    // a foice fica atravessada nas costas
-                    poseStack.mulPose(Axis.ZP.rotationDegrees(35));
-                    poseStack.scale(1.1f, -1.1f, -1.1f);
-                } else {
-                    poseStack.mulPose(Axis.YP.rotationDegrees(180));
-                    poseStack.scale(0.8f, -0.8f, -0.8f);
-                }
+                poseStack.mulPose(Axis.YP.rotationDegrees(180));
+                poseStack.scale(0.8f, -0.8f, -0.8f);
             }
             case HIP -> {
                 ICurioRenderer.translateIfSneaking(poseStack, entity);

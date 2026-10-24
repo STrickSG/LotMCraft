@@ -10,6 +10,7 @@ public final class CuriosClientSetup {
 
     public static void registerRenderers() {
         for (Item item : SingularityItems.all()) {
+            if (item instanceof de.jakob.lotm.item.custom.DarknessScytheItem) continue; // a foice é arma, não Curio
             CuriosRendererRegistry.register(item, SingularityCurioRenderer::new);
         }
     }

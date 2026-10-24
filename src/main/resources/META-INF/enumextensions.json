@@ -1,0 +1,13 @@
+{
+  "entries": [
+    {
+      "enum": "net/minecraft/client/model/HumanoidModel$ArmPose",
+      "name": "LOTMCRAFT_DARKNESS_SCYTHE",
+      "constructor": "(ZLnet/neoforged/neoforge/client/IArmPoseTransformer;)V",
+      "parameters": {
+        "class": "de/jakob/lotm/item/client/ScytheArmPose",
+        "field": "POSE"
+      }
+    }
+  ]
+}

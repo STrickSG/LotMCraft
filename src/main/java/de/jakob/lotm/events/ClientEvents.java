@@ -13,6 +13,9 @@ import de.jakob.lotm.util.BeyonderData;
 import de.jakob.lotm.util.data.PathwayInfos;
 import de.jakob.lotm.util.scheduling.ClientScheduler;
 import net.minecraft.ChatFormatting;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
@@ -123,6 +126,13 @@ public class ClientEvents {
                 return MiniatureCreatureRenderer.instance();
             }
         }, ModItems.MINIATURE_CREATURE.get());
+        // Foice da Escuridão: arma de duas mãos
+        event.registerItem(new IClientItemExtensions() {
+            @Override
+            public HumanoidModel.ArmPose getArmPose(LivingEntity entity, InteractionHand hand, ItemStack stack) {
+                return de.jakob.lotm.item.client.ScytheArmPose.POSE.getValue();
+            }
+        }, ModItems.DARKNESS_UNIQUENESS.get());
     }
 
     @SubscribeEvent
