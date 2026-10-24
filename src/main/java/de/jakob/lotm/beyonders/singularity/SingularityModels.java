@@ -10,7 +10,6 @@ public final class SingularityModels {
     private SingularityModels() {}
 
     public static final ModelResourceLocation FOOL_WORN = standalone("item/singularity/fool_worn");
-    public static final ModelResourceLocation FOOL_RIBBON = standalone("item/singularity/fool_ribbon");
 
     private static ModelResourceLocation standalone(String path) {
         return ModelResourceLocation.standalone(ResourceLocation.fromNamespaceAndPath(LOTMCraft.MOD_ID, path));
@@ -18,6 +17,5 @@ public final class SingularityModels {
 
     public static void register(ModelEvent.RegisterAdditional event) {
         event.register(FOOL_WORN);
-        event.register(FOOL_RIBBON);
     }
 }

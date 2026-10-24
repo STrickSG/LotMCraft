@@ -93,30 +93,19 @@ public class SingularityCurioRenderer implements ICurioRenderer {
         poseStack.popPose();
     }
 
-    /**
-     * Máscara do Tolo no rosto: a placa em pixel art (12 px de largura em 3/4 de pixel da pele) logo à frente
-     * da segunda camada da pele, e as fitas contornando a cabeça com o laço atrás.
-     */
+    /** Máscara do Tolo no rosto: placa com as bordas curvadas para trás e fitas com laço atrás da cabeça. */
     private static void renderFoolMask(ItemStack stack, HumanoidModel<?> model, PoseStack poseStack, MultiBufferSource buffer, int light) {
         var minecraft = Minecraft.getInstance();
-        var models = minecraft.getModelManager();
-        var itemRenderer = minecraft.getItemRenderer();
         VertexConsumer consumer = buffer.getBuffer(Sheets.cutoutBlockSheet());
 
         poseStack.pushPose();
         model.head.translateAndRotate(poseStack);
-
-        poseStack.pushPose();
-        poseStack.translate(-0.375, 0.15625, 0.065625);
-        poseStack.scale(0.75f, -0.75f, -0.75f);
-        itemRenderer.renderModelLists(models.getModel(SingularityModels.FOOL_WORN), stack, light, OverlayTexture.NO_OVERLAY, poseStack, consumer);
-        poseStack.popPose();
-
+        // o modelo tem o centro da cabeça em (8, 8, 8), Y para cima e frente em +Z
         poseStack.translate(0, -0.25, 0);
         poseStack.scale(1f, -1f, -1f);
         poseStack.translate(-0.5, -0.5, -0.5);
-        itemRenderer.renderModelLists(models.getModel(SingularityModels.FOOL_RIBBON), stack, light, OverlayTexture.NO_OVERLAY, poseStack, consumer);
-
+        minecraft.getItemRenderer().renderModelLists(minecraft.getModelManager().getModel(SingularityModels.FOOL_WORN),
+                stack, light, OverlayTexture.NO_OVERLAY, poseStack, consumer);
         poseStack.popPose();
     }
 }
