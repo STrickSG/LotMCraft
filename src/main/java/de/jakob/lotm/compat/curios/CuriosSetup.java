@@ -21,7 +21,6 @@ public final class CuriosSetup {
 
     private static void registerCapabilities(RegisterCapabilitiesEvent event) {
         for (Item item : SingularityItems.all()) {
-            if (item instanceof de.jakob.lotm.item.custom.DarknessScytheItem) continue; // a foice é arma, não Curio
             event.registerItem(CuriosCapability.ITEM, (stack, context) -> new ICurio() {
                 @Override
                 public ItemStack getStack() {

@@ -140,8 +140,7 @@ public class ModItems {
             () -> new UniquenessItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC), "door")
     );
     public static final DeferredItem<Item> DARKNESS_UNIQUENESS = ITEMS.register("darkness_uniqueness",
-            // A Singularidade da Escuridão é uma foice: também funciona como arma
-            () -> new DarknessScytheItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC))
+            () -> new UniquenessItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC), "darkness")
     );
     public static final DeferredItem<Item> WHEEL_OF_FORTUNE_UNIQUENESS = ITEMS.register("wheel_of_fortune_uniqueness",
             () -> new UniquenessItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC), "wheel_of_fortune")

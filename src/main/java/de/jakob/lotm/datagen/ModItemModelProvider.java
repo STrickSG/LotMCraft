@@ -101,15 +101,19 @@ public class ModItemModelProvider extends ItemModelProvider {
             return;
         }
         if (pathway.equals("darkness")) {
-            // Foice da Escuridão: desenho plano no inventário e modelo 3D com espessura na mão (como a luneta do Minecraft)
+            // Singularidade da Escuridão: sem modelo 3D por enquanto, usa a textura original
             getBuilder(itemName)
-                    .customLoader(net.neoforged.neoforge.client.model.generators.loaders.SeparateTransformsModelBuilder::begin)
-                    .base(nested().parent(new net.neoforged.neoforge.client.model.generators.ModelFile.UncheckedModelFile(modLoc("item/singularity/darkness_scythe_3d"))))
-                    .perspective(ItemDisplayContext.GUI, nested().parent(new net.neoforged.neoforge.client.model.generators.ModelFile.UncheckedModelFile(modLoc("item/singularity/darkness_scythe_flat"))))
-                    .perspective(ItemDisplayContext.FIXED, nested().parent(new net.neoforged.neoforge.client.model.generators.ModelFile.UncheckedModelFile(modLoc("item/singularity/darkness_scythe_flat"))))
-                    .perspective(ItemDisplayContext.GROUND, nested().parent(new net.neoforged.neoforge.client.model.generators.ModelFile.UncheckedModelFile(modLoc("item/singularity/darkness_scythe_flat"))))
-                    .end()
-                    .texture("particle", modLoc("item/singularity/darkness_scythe"));
+                    .parent(getExistingFile(mcLoc("item/generated")))
+                    .texture("layer0", modLoc("item/" + itemName))
+                    .transforms()
+                    .transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND).rotation(0, -90, 0).translation(0, 8, 2).scale(1f, 1f, 1f).end()
+                    .transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND).rotation(0, 90, 0).translation(0, 8, 2).scale(1f, 1f, 1f).end()
+                    .transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND).rotation(0, -90, 0).translation(1.13f, 4f, 1.13f).scale(0.68f, 0.68f, 0.68f).end()
+                    .transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND).rotation(0, 90, 0).translation(1.13f, 4f, 1.13f).scale(0.68f, 0.68f, 0.68f).end()
+                    .transform(ItemDisplayContext.GUI).rotation(0, 0, 0).translation(0, 0, 0).scale(1.25f, 1.25f, 1.25f).end()
+                    .transform(ItemDisplayContext.GROUND).translation(0, 5, 0).scale(2.5f, 2.5f, 2.5f).end()
+                    .transform(ItemDisplayContext.FIXED).scale(1, 1, 1).end()
+                    .end();
             return;
         }
         var builder = getBuilder(itemName)

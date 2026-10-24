@@ -1,20 +1,85 @@
 {
-  "loader": "neoforge:separate_transforms",
-  "base": {
-    "parent": "lotmcraft:item/singularity/darkness_scythe_3d"
-  },
-  "perspectives": {
-    "gui": {
-      "parent": "lotmcraft:item/singularity/darkness_scythe_flat"
+  "parent": "minecraft:item/generated",
+  "display": {
+    "firstperson_lefthand": {
+      "rotation": [
+        0,
+        90,
+        0
+      ],
+      "scale": [
+        0.68,
+        0.68,
+        0.68
+      ],
+      "translation": [
+        1.13,
+        4,
+        1.13
+      ]
     },
-    "fixed": {
-      "parent": "lotmcraft:item/singularity/darkness_scythe_flat"
+    "firstperson_righthand": {
+      "rotation": [
+        0,
+        -90,
+        0
+      ],
+      "scale": [
+        0.68,
+        0.68,
+        0.68
+      ],
+      "translation": [
+        1.13,
+        4,
+        1.13
+      ]
     },
     "ground": {
-      "parent": "lotmcraft:item/singularity/darkness_scythe_flat"
+      "scale": [
+        2.5,
+        2.5,
+        2.5
+      ],
+      "translation": [
+        0,
+        5,
+        0
+      ]
+    },
+    "gui": {
+      "scale": [
+        1.25,
+        1.25,
+        1.25
+      ]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [
+        0,
+        90,
+        0
+      ],
+      "translation": [
+        0,
+        8,
+        2
+      ]
+    },
+    "thirdperson_righthand": {
+      "rotation": [
+        0,
+        -90,
+        0
+      ],
+      "translation": [
+        0,
+        8,
+        2
+      ]
     }
   },
   "textures": {
-    "particle": "lotmcraft:item/singularity/darkness_scythe"
+    "layer0": "lotmcraft:item/darkness_uniqueness"
   }
 }
