@@ -1,0 +1,17 @@
+
+newmtl abismo
+Kd 0.094118 0.039216 0.047059
+map_Kd lotmcraft:item/singularity/grain
+
+newmtl brasa
+Kd 1.000000 0.235294 0.078431
+map_Kd lotmcraft:item/singularity/grain
+
+newmtl chifre
+Kd 0.235294 0.156863 0.117647
+map_Kd lotmcraft:item/singularity/grain
+
+newmtl olho
+Kd 1.000000 0.823529 0.156863
+map_Kd lotmcraft:item/singularity/grain
+

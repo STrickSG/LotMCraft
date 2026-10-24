@@ -41,35 +41,40 @@ public class SingularityCurioRenderer implements ICurioRenderer {
         Placement placement = placementFor(SingularityData.pathwayOf(stack));
 
         poseStack.pushPose();
+        // Espaço do modelo do jogador: Y aponta para baixo e a frente do rosto/corpo é -Z.
+        // Os modelos 3D têm a frente em +Z, então escalamos com Y e Z negativos para virá-los.
+        String pathway = SingularityData.pathwayOf(stack);
         switch (placement) {
-            case FACE, MONOCLE -> {
+            case FACE -> {
                 model.head.translateAndRotate(poseStack);
-                // Mesmo posicionamento usado pelo Minecraft para itens na cabeça (fica na frente do rosto)
-                poseStack.translate(0, -0.25, 0);
-                poseStack.mulPose(Axis.YP.rotationDegrees(180));
-                if (placement == Placement.MONOCLE) {
-                    poseStack.translate(0.12, 0.06, 0.02);
-                    poseStack.scale(0.28f, -0.28f, -0.28f);
-                } else {
-                    poseStack.scale(0.6f, -0.6f, -0.6f);
-                }
-                itemRenderer.renderStatic(stack, ItemDisplayContext.HEAD, light, OverlayTexture.NO_OVERLAY, poseStack, buffer, entity.level(), entity.getId());
+                poseStack.translate(0, -0.26, -0.3);
+                poseStack.scale(0.5f, -0.5f, -0.5f);
+            }
+            case MONOCLE -> {
+                model.head.translateAndRotate(poseStack);
+                poseStack.translate(-0.12, -0.26, -0.3);
+                poseStack.scale(0.2f, -0.2f, -0.2f);
             }
             case HALO -> {
                 model.head.translateAndRotate(poseStack);
                 float bob = (float) Math.sin((ageInTicks + partialTicks) * 0.08f) * 0.05f;
-                poseStack.translate(0, -0.72 + bob, 0.28);
+                poseStack.translate(0, -0.78 + bob, 0.3);
                 poseStack.mulPose(Axis.YP.rotationDegrees((ageInTicks + partialTicks) * 2f));
                 poseStack.scale(0.42f, -0.42f, -0.42f);
-                itemRenderer.renderStatic(stack, ItemDisplayContext.FIXED, light, OverlayTexture.NO_OVERLAY, poseStack, buffer, entity.level(), entity.getId());
             }
             case BACK -> {
                 ICurioRenderer.translateIfSneaking(poseStack, entity);
                 ICurioRenderer.rotateIfSneaking(poseStack, entity);
                 model.body.translateAndRotate(poseStack);
-                poseStack.translate(0, 0.32, 0.2);
-                poseStack.scale(0.75f, -0.75f, -0.75f);
-                itemRenderer.renderStatic(stack, ItemDisplayContext.FIXED, light, OverlayTexture.NO_OVERLAY, poseStack, buffer, entity.level(), entity.getId());
+                poseStack.translate(0, 0.35, 0.22);
+                if (pathway.equals("darkness")) {
+                    // a foice fica atravessada nas costas
+                    poseStack.mulPose(Axis.ZP.rotationDegrees(35));
+                    poseStack.scale(1.1f, -1.1f, -1.1f);
+                } else {
+                    poseStack.mulPose(Axis.YP.rotationDegrees(180));
+                    poseStack.scale(0.8f, -0.8f, -0.8f);
+                }
             }
             case HIP -> {
                 ICurioRenderer.translateIfSneaking(poseStack, entity);
@@ -77,10 +82,10 @@ public class SingularityCurioRenderer implements ICurioRenderer {
                 model.body.translateAndRotate(poseStack);
                 poseStack.translate(0.3, 0.62, 0);
                 poseStack.mulPose(Axis.YP.rotationDegrees(90));
-                poseStack.scale(0.3f, -0.3f, -0.3f);
-                itemRenderer.renderStatic(stack, ItemDisplayContext.FIXED, light, OverlayTexture.NO_OVERLAY, poseStack, buffer, entity.level(), entity.getId());
+                poseStack.scale(0.26f, -0.26f, -0.26f);
             }
         }
+        itemRenderer.renderStatic(stack, ItemDisplayContext.FIXED, light, OverlayTexture.NO_OVERLAY, poseStack, buffer, entity.level(), entity.getId());
         poseStack.popPose();
     }
 }

@@ -1,0 +1,13 @@
+
+newmtl cerebro
+Kd 0.803922 0.647059 0.686275
+map_Kd lotmcraft:item/singularity/grain
+
+newmtl olho_mente
+Kd 0.470588 0.901961 1.000000
+map_Kd lotmcraft:item/singularity/grain
+
+newmtl ouro
+Kd 0.870588 0.690196 0.250980
+map_Kd lotmcraft:item/singularity/grain
+

@@ -91,45 +91,35 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.MOD_ICON.get());
     }
 
+    // Singularidades: modelos 3D em OBJ (feitos no Blender), em models/item/singularity/
     private void uniqueness(Item item) {
         String itemName = getItemName(item);
-        getBuilder(itemName)
-                .parent(getExistingFile(mcLoc("item/generated")))
-                .texture("layer0", modLoc("item/" + itemName))
+        String pathway = itemName.replace("_uniqueness", "");
+        boolean scythe = pathway.equals("darkness");
+        var builder = getBuilder(itemName)
+                .parent(new net.neoforged.neoforge.client.model.generators.ModelFile.UncheckedModelFile("neoforge:item/default"))
+                .customLoader(net.neoforged.neoforge.client.model.generators.loaders.ObjModelBuilder::begin)
+                .modelLocation(modLoc("models/item/singularity/" + pathway + ".obj"))
+                .flipV(true)
+                .end()
+                .texture("particle", modLoc("item/" + itemName))
                 .transforms()
-                .transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND)
-                .rotation(0, -90, 0)
-                .translation(0, 8, 2)
-                .scale(1f, 1f, 1f)
-                .end()
-                .transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND)
-                .rotation(0, 90, 0)
-                .translation(0, 8, 2)
-                .scale(1f, 1f, 1f)
-                .end()
-                .transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND)
-                .rotation(0, -90, 0)
-                .translation(1.13f, 4f, 1.13f)
-                .scale(0.68f, 0.68f, 0.68f)
-                .end()
-                .transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND)
-                .rotation(0, 90, 0)
-                .translation(1.13f, 4f, 1.13f)
-                .scale(0.68f, 0.68f, 0.68f)
-                .end()
-                .transform(ItemDisplayContext.GUI)
-                .rotation(0, 0, 0)
-                .translation(0, 0, 0)
-                .scale(1.25f, 1.25f, 1.25f)
-                .end()
-                .transform(ItemDisplayContext.GROUND)
-                .translation(0, 5, 0)
-                .scale(2.5f, 2.5f, 2.5f)
-                .end()
-                .transform(ItemDisplayContext.FIXED)
-                .scale(1, 1, 1)
-                .end()
-                .end();
+                .transform(ItemDisplayContext.GUI).rotation(20, -30, 0).scale(0.95f).end()
+                .transform(ItemDisplayContext.GROUND).translation(0, 3, 0).scale(0.5f).end()
+                .transform(ItemDisplayContext.FIXED).scale(1f).end()
+                .transform(ItemDisplayContext.HEAD).scale(1f).end();
+        if (scythe) {
+            // A foice é segurada como arma
+            builder.transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND).rotation(0, 90, -15).translation(0, 9, 1).scale(1.6f).end()
+                    .transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND).rotation(0, -90, 15).translation(0, 9, 1).scale(1.6f).end()
+                    .transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND).rotation(0, 90, -10).translation(1.5f, 6, 0).scale(1.2f).end()
+                    .transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND).rotation(0, -90, 10).translation(1.5f, 6, 0).scale(1.2f).end();
+        } else {
+            builder.transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND).translation(0, 3, 1).scale(0.55f).end()
+                    .transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND).translation(0, 3, 1).scale(0.55f).end()
+                    .transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND).rotation(0, -25, 0).translation(1, 3, 1).scale(0.5f).end()
+                    .transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND).rotation(0, 25, 0).translation(1, 3, 1).scale(0.5f).end();
+        }
     }
 
     // Helper method for items that need custom display properties (auto-detects texture name)

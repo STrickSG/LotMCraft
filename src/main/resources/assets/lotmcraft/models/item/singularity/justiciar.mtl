@@ -1,0 +1,13 @@
+
+newmtl capa_ouro
+Kd 0.839216 0.658824 0.235294
+map_Kd lotmcraft:item/singularity/grain
+
+newmtl ordem
+Kd 0.980392 0.980392 1.000000
+map_Kd lotmcraft:item/singularity/grain
+
+newmtl paginas
+Kd 0.941176 0.901961 0.803922
+map_Kd lotmcraft:item/singularity/grain
+

@@ -1,0 +1,17 @@
+
+newmtl cabo
+Kd 0.133333 0.101961 0.164706
+map_Kd lotmcraft:item/singularity/grain
+
+newmtl fio
+Kd 0.843137 0.803922 0.960784
+map_Kd lotmcraft:item/singularity/grain
+
+newmtl lamina
+Kd 0.188235 0.101961 0.321569
+map_Kd lotmcraft:item/singularity/grain
+
+newmtl lua
+Kd 0.666667 0.509804 1.000000
+map_Kd lotmcraft:item/singularity/grain
+

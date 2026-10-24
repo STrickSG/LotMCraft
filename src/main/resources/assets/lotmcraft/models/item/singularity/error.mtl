@@ -1,0 +1,13 @@
+
+newmtl aco_escuro
+Kd 0.352941 0.372549 0.431373
+map_Kd lotmcraft:item/singularity/grain
+
+newmtl cristal
+Kd 0.666667 0.803922 0.921569
+map_Kd lotmcraft:item/singularity/grain
+
+newmtl prata
+Kd 0.803922 0.823529 0.862745
+map_Kd lotmcraft:item/singularity/grain
+

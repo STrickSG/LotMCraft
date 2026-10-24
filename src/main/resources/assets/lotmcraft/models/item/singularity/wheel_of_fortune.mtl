@@ -1,0 +1,13 @@
+
+newmtl dado
+Kd 0.960784 0.960784 0.941176
+map_Kd lotmcraft:item/singularity/grain
+
+newmtl pinta
+Kd 0.705882 0.078431 0.117647
+map_Kd lotmcraft:item/singularity/grain
+
+newmtl prata
+Kd 0.803922 0.823529 0.862745
+map_Kd lotmcraft:item/singularity/grain
+

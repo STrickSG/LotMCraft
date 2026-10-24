@@ -1,0 +1,13 @@
+
+newmtl espelho
+Kd 0.784314 0.745098 0.882353
+map_Kd lotmcraft:item/singularity/grain
+
+newmtl gema
+Kd 0.862745 0.156863 0.627451
+map_Kd lotmcraft:item/singularity/grain
+
+newmtl moldura
+Kd 0.274510 0.078431 0.352941
+map_Kd lotmcraft:item/singularity/grain
+
