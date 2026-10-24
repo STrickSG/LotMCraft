@@ -1,5 +1,6 @@
 package de.jakob.lotm.beyonders.abilities.red_priest;
 
+import de.jakob.lotm.LOTMCraft;
 import de.jakob.lotm.beyonders.abilities.core.ToggleAbility;
 import de.jakob.lotm.beyonders.abilities.visionary.handlers.VisionaryHandler;
 import de.jakob.lotm.damage.ModDamageTypes;
@@ -11,11 +12,14 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import org.joml.Vector3f;
 
 import java.util.*;
 
+// O handler de dano abaixo nunca era registrado, então a Pele de Aço não reduzia nada
+@EventBusSubscriber(modid = LOTMCraft.MOD_ID)
 public class SteelSkinAbility extends ToggleAbility {
     public static HashSet<UUID> set = new HashSet<>();
 
@@ -64,8 +68,9 @@ public class SteelSkinAbility extends ToggleAbility {
     }
 
     public static boolean canBlock(DamageSource source){
-        return   !source.is(ModDamageTypes.MIND)
-                || !source.is(ModDamageTypes.SOUL);
+        // Aço não protege contra dano mental nem de alma (antes era "||", que sempre dava true)
+        return !source.is(ModDamageTypes.MIND)
+                && !source.is(ModDamageTypes.SOUL);
     }
 
     public static float getDamageReductionPerSeq(int seq){
@@ -83,7 +88,7 @@ public class SteelSkinAbility extends ToggleAbility {
     public static void onDamage(LivingIncomingDamageEvent event) {
         var entity = event.getEntity();
 
-        if(!set.contains(entity.getUUID())) return;
+        if(entity.level().isClientSide || !set.contains(entity.getUUID())) return;
 
         if(canBlock(event.getSource())){
             float damage = event.getAmount();

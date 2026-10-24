@@ -109,5 +109,11 @@ public class BlasphemyCardItem extends Item {
         tooltip.add(Component.translatable("item.lotmcraft.blasphemy_card.showing", selected, sequenceName(selected)).withStyle(ChatFormatting.GOLD));
         tooltip.add(Component.translatable("item.lotmcraft.blasphemy_card.use").withStyle(ChatFormatting.DARK_GRAY));
         tooltip.add(Component.translatable("item.lotmcraft.blasphemy_card.cycle").withStyle(ChatFormatting.DARK_GRAY));
+        if (net.neoforged.fml.ModList.get().isLoaded("curios")) {
+            tooltip.add(Component.empty());
+            tooltip.add(Component.translatable("item.lotmcraft.blasphemy_card.curio").withStyle(ChatFormatting.LIGHT_PURPLE));
+            tooltip.add(Component.translatable("item.lotmcraft.blasphemy_card.curio_same").withStyle(ChatFormatting.BLUE));
+            tooltip.add(Component.translatable("item.lotmcraft.blasphemy_card.curio_other").withStyle(ChatFormatting.RED));
+        }
     }
 }
