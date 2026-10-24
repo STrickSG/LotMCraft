@@ -53,7 +53,11 @@ public class SingularityHandler {
     }
 
     public static List<ItemStack> equipped(LivingEntity entity) {
-        return curiosLoaded() ? CuriosCompat.findEquippedSingularities(entity) : List.of();
+        List<ItemStack> stacks = new ArrayList<>(curiosLoaded() ? CuriosCompat.findEquippedSingularities(entity) : List.of());
+        // A Foice da Escuridão também conta quando está na mão (é uma arma)
+        ItemStack hand = entity.getMainHandItem();
+        if (hand.getItem() instanceof de.jakob.lotm.item.custom.DarknessScytheItem && !stacks.contains(hand)) stacks.add(hand);
+        return stacks;
     }
 
     @SubscribeEvent
@@ -151,7 +155,8 @@ public class SingularityHandler {
         List<ItemStack> stacks = new ArrayList<>();
         for (ItemStack stack : player.getInventory().items) if (SingularityData.isSingularity(stack)) stacks.add(stack);
         for (ItemStack stack : player.getInventory().offhand) if (SingularityData.isSingularity(stack)) stacks.add(stack);
-        stacks.addAll(equipped(player));
+        // equipped() pode incluir a foice da mão, que já está na lista: evita duplicar
+        for (ItemStack stack : equipped(player)) if (stacks.stream().noneMatch(s -> s == stack)) stacks.add(stack);
         return stacks;
     }
 

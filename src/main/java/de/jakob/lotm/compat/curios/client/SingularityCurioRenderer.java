@@ -24,7 +24,7 @@ public class SingularityCurioRenderer implements ICurioRenderer {
         return switch (pathway) {
             case "fool" -> Placement.FACE;               // Máscara do Tolo
             case "error" -> Placement.MONOCLE;           // Monóculo de Cristal
-            case "red_priest" -> Placement.BACK;         // Estandarte de Sangue de Salinger
+            case "red_priest", "darkness" -> Placement.BACK; // Estandarte de Salinger e a Foice da Escuridão
             case "wheel_of_fortune", "justiciar" -> Placement.HIP;
             default -> Placement.HALO;                   // flutua atrás da cabeça
         };
