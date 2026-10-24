@@ -2,6 +2,7 @@ package de.jakob.lotm.util.helper;
 
 import com.zigythebird.playeranimcore.math.Vec3f;
 import de.jakob.lotm.LOTMCraft;
+import de.jakob.lotm.addons.rituals.RitualChecks;
 import de.jakob.lotm.addons.rituals.RitualEffectHandlerEvent;
 import de.jakob.lotm.attachments.FogComponent;
 import de.jakob.lotm.attachments.ModAttachments;
@@ -158,8 +159,11 @@ public class AdvancementUtil {
 
 
         if(entity instanceof ServerPlayer player) {
-            if (hasRitual(sequence)) {
+            if (hasRitual(pathway, sequence)) {
                 var component = player.getData(ModAttachments.RITUALS.get());
+
+                // rituais feitos na hora de beber a poção são conferidos agora
+                if (RitualChecks.completedWhileDrinking(player, pathway, sequence)) component.setCompleted(true);
 
                 if(entity.level() instanceof ServerLevel level) {
                     if(level.getGameRules().getBoolean(ModGameRules.APPLY_RITUALS)) {

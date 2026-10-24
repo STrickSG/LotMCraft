@@ -312,11 +312,12 @@ public class BeyonderData {
     }
 
     public static boolean hasRitual(LivingEntity entity){
-        return hasRitual(getSequence(entity) - 1);
+        return hasRitual(getPathway(entity), getSequence(entity) - 1);
     }
 
-    public static boolean hasRitual(int seq){
-        return false;
+    // Por enquanto só um ritual está ligado (teste): Sol, para virar Sequência 5 (ver RitualChecks)
+    public static boolean hasRitual(String pathway, int seq){
+        return "sun".equals(pathway) && seq == 5;
     }
 
     public static int getMaxWormAmount(int sequence) {
