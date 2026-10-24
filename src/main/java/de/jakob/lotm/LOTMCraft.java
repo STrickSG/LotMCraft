@@ -120,6 +120,7 @@ import de.jakob.lotm.particle.*;
 import de.jakob.lotm.beyonders.potions.BeyonderCharacteristicItemHandler;
 import de.jakob.lotm.beyonders.potions.PotionItemHandler;
 import de.jakob.lotm.beyonders.potions.PotionRecipeItemHandler;
+import de.jakob.lotm.beyonders.potions.BlasphemyCardItemHandler;
 import de.jakob.lotm.beyonders.quest.QuestRegistry;
 import de.jakob.lotm.rendering.GuidingBookRenderer;
 import de.jakob.lotm.beyonders.rituals.RitualManager;
@@ -231,6 +232,7 @@ public class LOTMCraft
         ModStructures.register(modEventBus);
         ModDataComponents.register(modEventBus);
         PotionRecipeItemHandler.registerRecipes(modEventBus);
+        BlasphemyCardItemHandler.registerCards(modEventBus);
         BeyonderCharacteristicItemHandler.registerCharacteristics(modEventBus);
         ModAttachments.register(modEventBus);
         ModDimensions.register(modEventBus);

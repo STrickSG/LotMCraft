@@ -6,6 +6,7 @@ import de.jakob.lotm.block.ModBlocks;
 import de.jakob.lotm.beyonders.potions.BeyonderCharacteristicItemHandler;
 import de.jakob.lotm.beyonders.potions.PotionItemHandler;
 import de.jakob.lotm.beyonders.potions.PotionRecipeItemHandler;
+import de.jakob.lotm.beyonders.potions.BlasphemyCardItemHandler;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -80,6 +81,10 @@ public class ModCreativeModTabs {
                     .title(Component.translatable("creativetab.lotmcraft.beyonder_recipes_tab"))
                     .displayItems((parameters, output) -> {
                         PotionRecipeItemHandler.ITEMS.getEntries().forEach(itemHolder -> {
+                            output.accept(itemHolder.get());
+                        });
+                        // Cartas da Blasfêmia: receita universal de cada Caminho
+                        BlasphemyCardItemHandler.ITEMS.getEntries().forEach(itemHolder -> {
                             output.accept(itemHolder.get());
                         });
                     })

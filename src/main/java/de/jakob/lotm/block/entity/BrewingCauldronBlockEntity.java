@@ -214,11 +214,20 @@ public class BrewingCauldronBlockEntity extends BlockEntity implements MenuProvi
             return false;
 
         ItemStack recipeItem = itemHandler.getStackInSlot(INPUT_SLOT_RECIPE);
-        if(recipeItem.isEmpty() || !(recipeItem.getItem() instanceof PotionRecipeItem recipe)) {
+        if(recipeItem.isEmpty()) {
             return false;
         }
 
-        if(recipe.getRecipe().potion().getSequence() != potion.getSequence() || !recipe.getRecipe().potion().getPathway().equals(potion.getPathway())) {
+        // A Carta da Blasfêmia vale como receita de qualquer Sequência do seu Caminho
+        if(recipeItem.getItem() instanceof BlasphemyCardItem card) {
+            if(!card.getPathway().equals(potion.getPathway()) || !card.coversSequence(potion.getSequence())) {
+                return false;
+            }
+        } else if(recipeItem.getItem() instanceof PotionRecipeItem recipe) {
+            if(recipe.getRecipe() == null || recipe.getRecipe().potion().getSequence() != potion.getSequence() || !recipe.getRecipe().potion().getPathway().equals(potion.getPathway())) {
+                return false;
+            }
+        } else {
             return false;
         }
 

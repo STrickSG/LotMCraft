@@ -8,6 +8,7 @@ import de.jakob.lotm.item.ModIngredients;
 import de.jakob.lotm.beyonders.potions.BeyonderCharacteristicItemHandler;
 import de.jakob.lotm.beyonders.potions.PotionItemHandler;
 import de.jakob.lotm.beyonders.potions.PotionRecipeItemHandler;
+import de.jakob.lotm.beyonders.potions.BlasphemyCardItemHandler;
 import de.jakob.lotm.util.BeyonderData;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.world.item.Item;
@@ -43,6 +44,11 @@ public class ChestLootModifier extends LootModifier {
                 if (item != null && (sequence >= 5)) {
                     generatedLoot.add(item);
                 }
+            }
+            // Carta da Blasfêmia: muito rara (1% dos baús), pois vale como receita do Caminho inteiro
+            if (context.getRandom().nextFloat() < 0.01f) {
+                ItemStack card = BlasphemyCardItemHandler.randomCard(random);
+                if (!card.isEmpty()) generatedLoot.add(card);
             }
         }
 
