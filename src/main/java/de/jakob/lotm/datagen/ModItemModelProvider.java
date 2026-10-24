@@ -95,6 +95,11 @@ public class ModItemModelProvider extends ItemModelProvider {
     private void uniqueness(Item item) {
         String itemName = getItemName(item);
         String pathway = itemName.replace("_uniqueness", "");
+        if (pathway.equals("fool")) {
+            // Máscara do Tolo: ícone em pixel art (o modelo no rosto fica em item/singularity/fool_worn)
+            withExistingParent(itemName, mcLoc("item/generated")).texture("layer0", modLoc("item/singularity/fool_mask"));
+            return;
+        }
         boolean scythe = pathway.equals("darkness");
         var builder = getBuilder(itemName)
                 .parent(new net.neoforged.neoforge.client.model.generators.ModelFile.UncheckedModelFile("neoforge:item/default"))

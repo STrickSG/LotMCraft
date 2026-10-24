@@ -291,6 +291,11 @@ public class LOTMCraft
     @EventBusSubscriber(modid = MOD_ID, value = Dist.CLIENT)
     public static class ClientModEvents {
         @SubscribeEvent
+        public static void onRegisterAdditionalModels(net.neoforged.neoforge.client.event.ModelEvent.RegisterAdditional event) {
+            de.jakob.lotm.beyonders.singularity.SingularityModels.register(event);
+        }
+
+        @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
             // Singularidades aparecem no corpo quando equipadas (só com o Curios instalado)
             if (net.neoforged.fml.ModList.get().isLoaded("curios")) {
