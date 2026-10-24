@@ -113,9 +113,9 @@ public class ParasitationAbility extends SelectableAbility {
         // 55% vs lower seq, 15% against same, 0% chance against higher sequence
         float chance = lowerSeq ? 0.55f : 0.15f;
         if (random.nextFloat() >= chance || userSeq > targetSeq) {
-            AbilityUtil.sendActionBar(player, Component.literal(lowerSeq
-                    ? "§cControl failed!"
-                    : "§cControl failed — resistance too strong!"));
+            AbilityUtil.sendActionBar(player, Component.translatable(lowerSeq
+                    ? "lotmcraft.msg.ability.parasitation.control_failed"
+                    : "lotmcraft.msg.ability.parasitation.control_resisted"));
             return;
         }
 

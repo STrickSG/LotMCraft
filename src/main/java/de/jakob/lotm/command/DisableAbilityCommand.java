@@ -66,8 +66,7 @@ public class DisableAbilityCommand {
 
                     if (data.sequence() != sequence || (!data.pathway().equals(pathway)
                             && !data.pathway().equals("none"))) {
-                        source.sendFailure(Component.literal(
-                                "Failed to advance due to insufficient amount of characteristics"));
+                        source.sendFailure(Component.translatable("lotmcraft.msg.cmd.advance_failed"));
                         return 0;
                     }
                 }

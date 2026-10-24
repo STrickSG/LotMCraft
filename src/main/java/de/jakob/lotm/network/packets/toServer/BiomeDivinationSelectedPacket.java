@@ -91,12 +91,11 @@ public record BiomeDivinationSelectedPacket(String biomeId) implements CustomPac
                 }
                 biomeName = biomeName.replace('_', ' ');
 
-                player.sendSystemMessage(Component.literal(String.format(
-                        "§5You sense §d%s§5 to the §d%s§5, about §d%d blocks §5away...",
+                player.sendSystemMessage(Component.translatable("lotmcraft.msg.divination.sense_distance",
                         biomeName,
-                        direction,
+                        Component.translatable("lotmcraft.msg.direction." + direction.toLowerCase(java.util.Locale.ROOT).replace('-', '_')),
                         distance
-                )));
+                ));
             });
         });
     }

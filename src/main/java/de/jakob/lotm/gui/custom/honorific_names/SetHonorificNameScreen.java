@@ -123,7 +123,7 @@ public class SetHonorificNameScreen extends Screen {
         gfx.vLine(panelLeft,      panelTop,        panelBottom,     COL_DIVIDER);
         gfx.vLine(panelRight - 1, panelTop,        panelBottom,     COL_DIVIDER);
 
-        gfx.drawCenteredString(font, "Set Honorific Name", centerX, panelTop + 8, COL_TITLE);
+        gfx.drawCenteredString(font, Component.translatable("lotmcraft.msg.gui.honorific.set_title"), centerX, panelTop + 8, COL_TITLE);
 
         int divY = panelTop + 20;
         gfx.hLine(centerX - 80, centerX + 80, divY, COL_DIVIDER);
@@ -134,7 +134,7 @@ public class SetHonorificNameScreen extends Screen {
         List<String> requiredWords = HonorificName.getMustHaveWords(pathway);
         if (!requiredWords.isEmpty()) {
             int maxWidth = Math.min(this.width - 40, 400);
-            gfx.drawCenteredString(font, "Required words (at least one per line):", centerX, divY + 17, COL_HINT);
+            gfx.drawCenteredString(font, Component.translatable("lotmcraft.msg.gui.honorific.required_words"), centerX, divY + 17, COL_HINT);
             String wordsStr = String.join(", ", requiredWords);
             if (font.width(wordsStr) > maxWidth) {
                 int truncIndex = Math.max(0, Math.min(

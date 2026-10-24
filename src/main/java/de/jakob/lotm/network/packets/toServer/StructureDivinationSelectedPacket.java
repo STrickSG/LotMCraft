@@ -95,12 +95,11 @@ public record StructureDivinationSelectedPacket(String structureId) implements C
                 }
                 structureName = structureName.replace('_', ' ');
 
-                player.sendSystemMessage(Component.literal(String.format(
-                        "§5You sense §d%s§5 to the §d%s§5, about §d%d blocks §5away...",
+                player.sendSystemMessage(Component.translatable("lotmcraft.msg.divination.sense_distance",
                         structureName,
-                        direction,
+                        Component.translatable("lotmcraft.msg.direction." + direction.toLowerCase(java.util.Locale.ROOT).replace('-', '_')),
                         distance
-                )));
+                ));
             });
         });
     }

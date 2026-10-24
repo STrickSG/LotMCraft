@@ -313,7 +313,7 @@ public class HonorificNamesScreen extends AbstractContainerScreen<HonorificNames
 
     private void renderOwnNameSection(GuiGraphics gfx) {
         int sectionY = TITLE_H + 6;
-        gfx.drawString(font, "Your Honorific Name:", PADDING, sectionY, COL_LABEL, false);
+        gfx.drawString(font, Component.translatable("lotmcraft.msg.gui.honorific.your_name"), PADDING, sectionY, COL_LABEL, false);
 
         HonorificName name = menu.getOwnName();
         if (name.isEmpty()) {
@@ -339,7 +339,7 @@ public class HonorificNamesScreen extends AbstractContainerScreen<HonorificNames
 
     private void renderPendingPrayersSection(GuiGraphics gfx) {
         int sectionLabelY = TITLE_H + OWN_NAME_H + DIVIDER_H;
-        gfx.drawString(font, "Pending Prayers:", PADDING, sectionLabelY, COL_LABEL, false);
+        gfx.drawString(font, Component.translatable("lotmcraft.msg.gui.honorific.pending"), PADDING, sectionLabelY, COL_LABEL, false);
 
         List<PendingPrayer> prayers = menu.getPendingPrayers();
 

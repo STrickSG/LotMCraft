@@ -57,8 +57,7 @@ Available commands:
             return 0;
         }
 
-        source.sendSystemMessage(Component.literal(
-                        "---- Players: " + data.size() + " ----" ));
+        source.sendSystemMessage(Component.translatable("lotmcraft.msg.cmd.map_players", data.size()));
 
         for (var obj : data){
             source.sendSystemMessage(Component.literal(obj.getValue().getShortInfo()));

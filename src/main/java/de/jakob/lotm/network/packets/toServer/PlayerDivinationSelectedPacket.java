@@ -149,30 +149,27 @@ public record PlayerDivinationSelectedPacket(UUID selectedPlayerUuid, PlayerSele
                 player.sendSystemMessage(Component.translatable("lotmcraft.msg.divination.failed"));
                 return;
             }
-            player.sendSystemMessage(Component.literal(String.format(
-                    "§5You sense §d%s§5 to the §d%s§5",
+            player.sendSystemMessage(Component.translatable("lotmcraft.msg.divination.sense",
                     targetPlayer.getGameProfile().getName(),
-                    getDirection(dx, dz)
-            )));
+                    Component.translatable("lotmcraft.msg.direction." + getDirection(dx, dz).toLowerCase(java.util.Locale.ROOT).replace('-', '_'))
+            ));
 
         } else if(divinationDifference < 10) {
-            player.sendSystemMessage(Component.literal(String.format(
-                    "§5You sense §d%s§5 to the §d%s§5, about §d%d blocks §5away...",
+            player.sendSystemMessage(Component.translatable("lotmcraft.msg.divination.sense_distance",
                     targetPlayer.getGameProfile().getName(),
-                    getDirection(dx, dz),
+                    Component.translatable("lotmcraft.msg.direction." + getDirection(dx, dz).toLowerCase(java.util.Locale.ROOT).replace('-', '_')),
                     distance
-            )));
+            ));
         }
         else if (divinationDifference >= 10) {
-            player.sendSystemMessage(Component.literal(String.format(
-                    "§5You sense §d%s§5 to the §d%s§5 at cords §d%d, %d, %d§5, about §d%d blocks §5away...",
+            player.sendSystemMessage(Component.translatable("lotmcraft.msg.divination.sense_coords",
                     targetPlayer.getGameProfile().getName(),
-                    getDirection(dx, dz),
+                    Component.translatable("lotmcraft.msg.direction." + getDirection(dx, dz).toLowerCase(java.util.Locale.ROOT).replace('-', '_')),
                     targetPlayer.blockPosition().getX(),
                     targetPlayer.blockPosition().getY(),
                     targetPlayer.blockPosition().getZ(),
                     distance
-            )));
+            ));
         }     // Trigger MetaAwareness passive if target has it
     }
 

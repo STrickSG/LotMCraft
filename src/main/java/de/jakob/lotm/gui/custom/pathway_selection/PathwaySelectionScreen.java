@@ -412,7 +412,7 @@ public class PathwaySelectionScreen extends AbstractContainerScreen<PathwaySelec
 
         drawCentered(g, fit(label, CONFIRM_W - 12), CONFIRM_X + CONFIRM_W / 2, CONFIRM_Y + 6, color, true);
 
-        g.drawString(this.font, "Esc to cancel", 16, CONFIRM_Y + 6, TEXT_DIM, false);
+        g.drawString(this.font, Component.translatable("lotmcraft.msg.gui.esc_cancel"), 16, CONFIRM_Y + 6, TEXT_DIM, false);
     }
 
     @Override

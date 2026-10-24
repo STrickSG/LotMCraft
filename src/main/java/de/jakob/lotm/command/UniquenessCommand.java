@@ -100,9 +100,7 @@ public class UniquenessCommand {
         } else {
             for (ServerPlayer holder : holders) {
                 int killCount = holder.getData(ModAttachments.UNIQUENESS_COMPONENT).getKillCount();
-                source.sendSuccess(() -> Component.literal(
-                        holder.getName().getString() + " holds the " + pathway + " uniqueness. Kill count: " + killCount
-                ), false);
+                source.sendSuccess(() -> Component.translatable("lotmcraft.msg.cmd.uniqueness_holder", holder.getName().getString(), pathway, killCount), false);
             }
         }
 

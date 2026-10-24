@@ -399,7 +399,7 @@ public class BrewingCauldronScreen extends AbstractContainerScreen<BrewingCauldr
 
         List<Component> lines = List.of(
                 Component.translatable("lotmcraft.msg.gui.brewing.progress", pct).withStyle(ChatFormatting.LIGHT_PURPLE),
-                Component.literal(String.format(Locale.ROOT, "%.1fs remaining", secondsLeft)).withStyle(ChatFormatting.GRAY)
+                Component.translatable("lotmcraft.msg.gui.brewing.remaining", String.format(Locale.ROOT, "%.1f", secondsLeft)).withStyle(ChatFormatting.GRAY)
         );
         g.renderComponentTooltip(this.font, lines, mouseX, mouseY);
     }
