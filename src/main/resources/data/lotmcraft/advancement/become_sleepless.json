@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:sleepless_potion"
     },
-    "title": "No Rest for the Wicked",
-    "description": "Consume a Potion and advance to Sleepless.",
+    "title": {"translate": "advancements.lotmcraft.become_sleepless.title", "fallback": "No Rest for the Wicked"},
+    "description": {"translate": "advancements.lotmcraft.become_sleepless.description", "fallback": "Consume a Potion and advance to Sleepless."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

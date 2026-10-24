@@ -4,8 +4,8 @@
     "icon": {
       "id": "minecraft:blue_candle"
     },
-    "title": "Into the Night",
-    "description": "Enter the Evernight Church.",
+    "title": {"translate": "advancements.lotmcraft.enter_evernight_church.title", "fallback": "Into the Night"},
+    "description": {"translate": "advancements.lotmcraft.enter_evernight_church.description", "fallback": "Enter the Evernight Church."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": true,

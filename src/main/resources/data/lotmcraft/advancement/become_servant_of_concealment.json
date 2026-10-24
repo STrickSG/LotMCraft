@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:servant_of_concealment_potion"
     },
-    "title": "Hidden in Plain Sight",
-    "description": "Consume a Potion and advance to Servant of Concealment.",
+    "title": {"translate": "advancements.lotmcraft.become_servant_of_concealment.title", "fallback": "Hidden in Plain Sight"},
+    "description": {"translate": "advancements.lotmcraft.become_servant_of_concealment.description", "fallback": "Consume a Potion and advance to Servant of Concealment."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

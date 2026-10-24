@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:witch_potion"
     },
-    "title": "Brewing Trouble",
-    "description": "Consume a Potion and advance to Witch.",
+    "title": {"translate": "advancements.lotmcraft.become_witch.title", "fallback": "Brewing Trouble"},
+    "description": {"translate": "advancements.lotmcraft.become_witch.description", "fallback": "Consume a Potion and advance to Witch."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

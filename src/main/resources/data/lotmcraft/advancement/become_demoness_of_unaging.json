@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:demoness_of_unaging_potion"
     },
-    "title": "Eternal Beauty",
-    "description": "Consume a Potion and advance to Demoness of Unaging.",
+    "title": {"translate": "advancements.lotmcraft.become_demoness_of_unaging.title", "fallback": "Eternal Beauty"},
+    "description": {"translate": "advancements.lotmcraft.become_demoness_of_unaging.description", "fallback": "Consume a Potion and advance to Demoness of Unaging."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

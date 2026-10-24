@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:chaoswalker_potion"
     },
-    "title": "Into the Chaos",
-    "description": "Consume a Potion and advance to Chaoswalker.",
+    "title": {"translate": "advancements.lotmcraft.become_chaoswalker.title", "fallback": "Into the Chaos"},
+    "description": {"translate": "advancements.lotmcraft.become_chaoswalker.description", "fallback": "Consume a Potion and advance to Chaoswalker."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:thunder_god_potion"
     },
-    "title": "Wrath of the Heavens",
-    "description": "Consume a Potion and advance to Thunder God.",
+    "title": {"translate": "advancements.lotmcraft.become_thunder_god.title", "fallback": "Wrath of the Heavens"},
+    "description": {"translate": "advancements.lotmcraft.become_thunder_god.description", "fallback": "Consume a Potion and advance to Thunder God."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

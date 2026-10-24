@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:marionettist_potion"
     },
-    "title": "I'm the Puppeteer",
-    "description": "Consume a Potion and advance to Marionettist.",
+    "title": {"translate": "advancements.lotmcraft.become_marionettist.title", "fallback": "I'm the Puppeteer"},
+    "description": {"translate": "advancements.lotmcraft.become_marionettist.description", "fallback": "Consume a Potion and advance to Marionettist."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:planeswalker_potion"
     },
-    "title": "Walking the Planes",
-    "description": "Consume a Potion and advance to Planeswalker.",
+    "title": {"translate": "advancements.lotmcraft.become_planeswalker.title", "fallback": "Walking the Planes"},
+    "description": {"translate": "advancements.lotmcraft.become_planeswalker.description", "fallback": "Consume a Potion and advance to Planeswalker."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

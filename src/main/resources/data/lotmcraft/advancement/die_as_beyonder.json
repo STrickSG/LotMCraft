@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:blood"
     },
-    "title": "Losing Yourself",
-    "description": "Die while being a Beyonder.",
+    "title": {"translate": "advancements.lotmcraft.die_as_beyonder.title", "fallback": "Losing Yourself"},
+    "description": {"translate": "advancements.lotmcraft.die_as_beyonder.description", "fallback": "Die while being a Beyonder."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

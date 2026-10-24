@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:notary_potion"
     },
-    "title": "Keeper of Oaths",
-    "description": "Consume a Potion and advance to Notary.",
+    "title": {"translate": "advancements.lotmcraft.become_notary.title", "fallback": "Keeper of Oaths"},
+    "description": {"translate": "advancements.lotmcraft.become_notary.description", "fallback": "Consume a Potion and advance to Notary."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

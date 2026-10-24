@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:unshadowed_potion"
     },
-    "title": "No Shadow follows Me",
-    "description": "Consume a Potion and advance to Unshadowed.",
+    "title": {"translate": "advancements.lotmcraft.become_unshadowed.title", "fallback": "No Shadow follows Me"},
+    "description": {"translate": "advancements.lotmcraft.become_unshadowed.description", "fallback": "Consume a Potion and advance to Unshadowed."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

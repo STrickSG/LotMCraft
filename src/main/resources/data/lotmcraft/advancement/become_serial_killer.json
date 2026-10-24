@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:serial_killer_potion"
     },
-    "title": "Blood on My Hands",
-    "description": "Consume a Potion and advance to Serial Killer.",
+    "title": {"translate": "advancements.lotmcraft.become_serial_killer.title", "fallback": "Blood on My Hands"},
+    "description": {"translate": "advancements.lotmcraft.become_serial_killer.description", "fallback": "Consume a Potion and advance to Serial Killer."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,
