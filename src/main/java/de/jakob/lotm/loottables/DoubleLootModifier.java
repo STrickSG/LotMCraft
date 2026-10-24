@@ -5,7 +5,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import de.jakob.lotm.attachments.LuckComponent;
 import de.jakob.lotm.attachments.ModAttachments;
 import de.jakob.lotm.effect.ModEffects;
-import de.jakob.lotm.util.BeyonderData;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -20,7 +19,6 @@ import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
 import net.neoforged.neoforge.common.loot.LootModifier;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Random;
 
 public class DoubleLootModifier extends LootModifier {
     public static final MapCodec<DoubleLootModifier> CODEC = RecordCodecBuilder.mapCodec(inst ->
@@ -82,12 +80,14 @@ public class DoubleLootModifier extends LootModifier {
                 }
             }
 
-            String pathway = BeyonderData.implementedPathways.get((new Random()).nextInt(BeyonderData.implementedPathways.size()));
+            // na grande Igreja da Noite Eterna o bônus também é só do Caminho do Insone
+            String pathway = ChestLootModifier.pathwayFor(context.getQueriedLootTableId());
+            boolean anyPathway = ChestLootModifier.fixedPathway(context.getQueriedLootTableId()) == null;
             int sequence = ChestLootModifier.getWeightedHighSequence();
 
             if(sequence >= 7) {
                 // getRandomLoot can return null; a null entry in the loot list crashes chest filling
-                ItemStack bonus = ChestLootModifier.getRandomLoot(pathway, sequence);
+                ItemStack bonus = ChestLootModifier.getRandomLoot(pathway, sequence, anyPathway);
                 if (bonus != null && !bonus.isEmpty())
                     generatedLoot.add(bonus);
             }

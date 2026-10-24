@@ -2,6 +2,7 @@ package de.jakob.lotm.loottables;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import de.jakob.lotm.LOTMCraft;
 import de.jakob.lotm.beyonders.rituals.RitualManager;
 import de.jakob.lotm.gui.custom.ritualistic_table.RitualMenu;
 import de.jakob.lotm.item.ModIngredients;
@@ -11,6 +12,7 @@ import de.jakob.lotm.beyonders.potions.PotionRecipeItemHandler;
 import de.jakob.lotm.beyonders.potions.BlasphemyCardItemHandler;
 import de.jakob.lotm.util.BeyonderData;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -33,13 +35,30 @@ public class ChestLootModifier extends LootModifier {
 
     private static final Random random = new Random();
 
+    // Barris da grande Igreja da Noite Eterna
+    private static final ResourceLocation EVERNIGHT_CHURCH = ResourceLocation.fromNamespaceAndPath(LOTMCraft.MOD_ID, "chests/evernight_church");
+
+    /** Caminho fixo dos itens Beyonder deste baú, ou null quando pode ser qualquer um. */
+    public static String fixedPathway(ResourceLocation lootTable) {
+        // Na grande Igreja da Noite Eterna só aparecem itens do Caminho do Insone (Escuridão)
+        return EVERNIGHT_CHURCH.equals(lootTable) ? "darkness" : null;
+    }
+
+    /** Caminho dos itens Beyonder sorteados para este baú. */
+    public static String pathwayFor(ResourceLocation lootTable) {
+        String fixed = fixedPathway(lootTable);
+        return fixed != null ? fixed : BeyonderData.implementedPathways.get(random.nextInt(BeyonderData.implementedPathways.size()));
+    }
+
     @Override
     protected @NotNull ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
-        if (context.getQueriedLootTableId().getPath().contains("chests/")) {
+        ResourceLocation lootTable = context.getQueriedLootTableId();
+        if (lootTable.getPath().contains("chests/")) {
+            String fixed = fixedPathway(lootTable);
             if (context.getRandom().nextFloat() < 0.45f) {
-                String pathway = BeyonderData.implementedPathways.get(random.nextInt(BeyonderData.implementedPathways.size()));
+                String pathway = pathwayFor(lootTable);
                 int sequence = getWeightedHighSequence();
-                ItemStack item = getRandomLoot(pathway, sequence);
+                ItemStack item = getRandomLoot(pathway, sequence, fixed == null);
 
                 if (item != null && (sequence >= 5)) {
                     generatedLoot.add(item);
@@ -47,7 +66,7 @@ public class ChestLootModifier extends LootModifier {
             }
             // Carta da Blasfêmia: muito rara (1% dos baús), pois vale como receita do Caminho inteiro
             if (context.getRandom().nextFloat() < 0.01f) {
-                ItemStack card = BlasphemyCardItemHandler.randomCard(random);
+                ItemStack card = fixed != null ? BlasphemyCardItemHandler.cardOf(fixed) : BlasphemyCardItemHandler.randomCard(random);
                 if (!card.isEmpty()) generatedLoot.add(card);
             }
         }
@@ -66,7 +85,12 @@ public class ChestLootModifier extends LootModifier {
     }
 
     public static ItemStack getRandomLoot(String pathway, int sequence) {
-        return switch(random.nextInt(8)) {
+        return getRandomLoot(pathway, sequence, true);
+    }
+
+    // Os livros de ritual não são de nenhum Caminho: ficam de fora onde só um Caminho pode aparecer
+    public static ItemStack getRandomLoot(String pathway, int sequence, boolean ritualBooks) {
+        return switch(random.nextInt(ritualBooks ? 8 : 7)) {
             case 1,2 -> {
                 Item item = ModIngredients.selectRandomIngredientOfPathwayAndSequence(random, pathway, sequence);
                 yield item != null ? new ItemStack(item) : null;

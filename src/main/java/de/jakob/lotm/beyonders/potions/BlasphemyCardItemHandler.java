@@ -34,6 +34,12 @@ public class BlasphemyCardItemHandler {
                 .toList();
     }
 
+    /** Carta da Blasfêmia de um Caminho (vazio se ele não tiver carta). */
+    public static ItemStack cardOf(String pathway) {
+        return getAllCards().stream().filter(card -> card.getPathway().equals(pathway)).findFirst()
+                .map(ItemStack::new).orElse(ItemStack.EMPTY);
+    }
+
     public static ItemStack randomCard(Random random) {
         List<BlasphemyCardItem> cards = getAllCards();
         if (cards.isEmpty()) return ItemStack.EMPTY;
