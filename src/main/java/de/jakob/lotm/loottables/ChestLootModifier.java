@@ -36,14 +36,18 @@ public class ChestLootModifier extends LootModifier {
 
     private static final Random random = new Random();
 
-    // Barris da grande Igreja da Noite Eterna
+    // Barris da grande Igreja da Noite Eterna e da Igreja do Sol
     private static final ResourceLocation EVERNIGHT_CHURCH = ResourceLocation.fromNamespaceAndPath(LOTMCraft.MOD_ID, "chests/evernight_church");
-    // A igreja guarda os Caminhos do Insone (Escuridão) e da Morte, que ainda não tem estrutura própria
+    private static final ResourceLocation SUN_CHURCH = ResourceLocation.fromNamespaceAndPath(LOTMCraft.MOD_ID, "chests/blazing_sun_church");
+    // A Igreja da Noite Eterna guarda os Caminhos do Insone (Escuridão) e da Morte, que ainda não tem estrutura própria
     private static final List<String> EVERNIGHT_PATHWAYS = List.of("darkness", "death");
+    private static final List<String> SUN_PATHWAYS = List.of("sun");
 
     /** Caminhos permitidos para os itens Beyonder deste baú, ou null quando pode ser qualquer um. */
     public static List<String> allowedPathways(ResourceLocation lootTable) {
-        return EVERNIGHT_CHURCH.equals(lootTable) ? EVERNIGHT_PATHWAYS : null;
+        if (EVERNIGHT_CHURCH.equals(lootTable)) return EVERNIGHT_PATHWAYS;
+        if (SUN_CHURCH.equals(lootTable)) return SUN_PATHWAYS;
+        return null;
     }
 
     /** Caminho dos itens Beyonder sorteados para este baú. */
