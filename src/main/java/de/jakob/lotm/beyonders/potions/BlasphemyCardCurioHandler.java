@@ -20,7 +20,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 /**
- * Efeitos da Carta da Blasfêmia equipada num espaço do Curios (como o Klein faz com as cartas):
+ * Efeitos da Carta da Blasfêmia equipada num espaço do Curios:
  * - mesmo Caminho do jogador: as habilidades do Caminho ficam mais fortes;
  * - outro Caminho (ou sem Caminho): reforço físico, mas da Sequência 9 até a 5 a carta
  *   cobra 1% de Sanidade a cada 5 segundos. Da Sequência 4 para cima o corpo já resiste.
