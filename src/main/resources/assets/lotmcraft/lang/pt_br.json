@@ -3791,5 +3791,18 @@
   "lotmcraft.singularity.effect.wheel_of_fortune.positive": "+ Grande sorte",
   "lotmcraft.singularity.effect.wheel_of_fortune.negative": "- Às vezes o destino vira contra você",
   "lotmcraft.singularity.effect.justiciar.positive": "+ A ordem te protege: resistência forte",
-  "lotmcraft.singularity.effect.justiciar.negative": "- As leis prendem seus movimentos"
+  "lotmcraft.singularity.effect.justiciar.negative": "- As leis prendem seus movimentos",
+
+  "painting.lotmcraft.god_evernight_goddess.title": "Deusa da Noite Eterna",
+  "painting.lotmcraft.god_evernight_goddess.author": "Lord of the Mysteries",
+  "painting.lotmcraft.god_earth_mother.title": "Mãe Terra",
+  "painting.lotmcraft.god_earth_mother.author": "Lord of the Mysteries",
+  "painting.lotmcraft.god_lord_of_storms.title": "Senhor das Tempestades",
+  "painting.lotmcraft.god_lord_of_storms.author": "Lord of the Mysteries",
+  "painting.lotmcraft.god_eternal_blazing_sun.title": "Sol Eterno Ardente",
+  "painting.lotmcraft.god_eternal_blazing_sun.author": "Lord of the Mysteries",
+  "painting.lotmcraft.god_of_combat.title": "Deus do Combate",
+  "painting.lotmcraft.god_of_combat.author": "Lord of the Mysteries",
+  "painting.lotmcraft.god_of_knowledge_and_wisdom.title": "Deus do Conhecimento e da Sabedoria",
+  "painting.lotmcraft.god_of_knowledge_and_wisdom.author": "Lord of the Mysteries"
 }

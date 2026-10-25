@@ -3982,5 +3982,18 @@
   "lotmcraft.singularity.effect.wheel_of_fortune.positive": "+ Great luck",
   "lotmcraft.singularity.effect.wheel_of_fortune.negative": "- Fate sometimes turns against you",
   "lotmcraft.singularity.effect.justiciar.positive": "+ Order protects you: strong resistance",
-  "lotmcraft.singularity.effect.justiciar.negative": "- Laws bind your movements"
+  "lotmcraft.singularity.effect.justiciar.negative": "- Laws bind your movements",
+
+  "painting.lotmcraft.god_evernight_goddess.title": "Evernight Goddess",
+  "painting.lotmcraft.god_evernight_goddess.author": "Lord of the Mysteries",
+  "painting.lotmcraft.god_earth_mother.title": "Earth Mother",
+  "painting.lotmcraft.god_earth_mother.author": "Lord of the Mysteries",
+  "painting.lotmcraft.god_lord_of_storms.title": "Lord of Storms",
+  "painting.lotmcraft.god_lord_of_storms.author": "Lord of the Mysteries",
+  "painting.lotmcraft.god_eternal_blazing_sun.title": "Eternal Blazing Sun",
+  "painting.lotmcraft.god_eternal_blazing_sun.author": "Lord of the Mysteries",
+  "painting.lotmcraft.god_of_combat.title": "God of Combat",
+  "painting.lotmcraft.god_of_combat.author": "Lord of the Mysteries",
+  "painting.lotmcraft.god_of_knowledge_and_wisdom.title": "God of Knowledge and Wisdom",
+  "painting.lotmcraft.god_of_knowledge_and_wisdom.author": "Lord of the Mysteries"
 }
