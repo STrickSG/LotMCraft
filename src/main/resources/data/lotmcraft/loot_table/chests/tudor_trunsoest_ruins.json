@@ -1,0 +1,141 @@
+{
+  "type": "minecraft:chest",
+  "random_sequence": "lotmcraft:chests/tudor_trunsoest_ruins",
+  "pools": [
+    {
+      "comment": "--- POÇÕES (só do Caminho do Caçador / Sacerdote Vermelho) ---",
+      "rolls": {
+        "type": "minecraft:uniform",
+        "min": 1,
+        "max": 2
+      },
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "lotmcraft:hunter_potion",
+          "weight": 14
+        },
+        {
+          "type": "minecraft:item",
+          "name": "lotmcraft:provoker_potion",
+          "weight": 11
+        },
+        {
+          "type": "minecraft:item",
+          "name": "lotmcraft:pyromaniac_potion",
+          "weight": 8
+        },
+        {
+          "type": "minecraft:item",
+          "name": "lotmcraft:conspirer_potion",
+          "weight": 6
+        },
+        {
+          "type": "minecraft:item",
+          "name": "lotmcraft:reaper_potion",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "lotmcraft:iron_blooded_knight_potion",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 40
+        }
+      ]
+    },
+    {
+      "comment": "--- CARACTERÍSTICAS ---",
+      "rolls": {
+        "type": "minecraft:uniform",
+        "min": 0,
+        "max": 2
+      },
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "lotmcraft:hunter_characteristic",
+          "weight": 18
+        },
+        {
+          "type": "minecraft:item",
+          "name": "lotmcraft:provoker_characteristic",
+          "weight": 15
+        },
+        {
+          "type": "minecraft:item",
+          "name": "lotmcraft:pyromaniac_characteristic",
+          "weight": 12
+        },
+        {
+          "type": "minecraft:item",
+          "name": "lotmcraft:conspirer_characteristic",
+          "weight": 9
+        },
+        {
+          "type": "minecraft:item",
+          "name": "lotmcraft:reaper_characteristic",
+          "weight": 6
+        },
+        {
+          "type": "minecraft:item",
+          "name": "lotmcraft:iron_blooded_knight_characteristic",
+          "weight": 3
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 70
+        }
+      ]
+    },
+    {
+      "comment": "--- RECEITAS ---",
+      "rolls": {
+        "type": "minecraft:uniform",
+        "min": 0,
+        "max": 2
+      },
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "lotmcraft:hunter",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "name": "lotmcraft:provoker",
+          "weight": 17
+        },
+        {
+          "type": "minecraft:item",
+          "name": "lotmcraft:pyromaniac",
+          "weight": 14
+        },
+        {
+          "type": "minecraft:item",
+          "name": "lotmcraft:conspirer",
+          "weight": 11
+        },
+        {
+          "type": "minecraft:item",
+          "name": "lotmcraft:reaper",
+          "weight": 8
+        },
+        {
+          "type": "minecraft:item",
+          "name": "lotmcraft:iron_blooded_knight",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 55
+        }
+      ]
+    }
+  ]
+}

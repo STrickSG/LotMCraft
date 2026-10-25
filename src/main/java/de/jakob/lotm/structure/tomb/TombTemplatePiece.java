@@ -12,6 +12,7 @@ import net.minecraft.world.level.levelgen.structure.TemplateStructurePiece;
 import net.minecraft.world.level.levelgen.structure.TerrainAdjustment;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.level.levelgen.structure.templatesystem.BlockIgnoreProcessor;
+import net.minecraft.world.level.levelgen.structure.templatesystem.LiquidSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import net.neoforged.neoforge.common.world.PieceBeardifierModifier;
@@ -35,7 +36,10 @@ public class TombTemplatePiece extends TemplateStructurePiece implements PieceBe
     }
 
     public static StructurePlaceSettings settings(Rotation rotation) {
-        return new StructurePlaceSettings().setRotation(rotation).addProcessor(BlockIgnoreProcessor.STRUCTURE_BLOCK);
+        // sem "encher de água" os blocos que aceitam água (correntes, velas, escadas...): estruturas no subsolo
+        // nascem em bolsões de água (aquíferos) e esses blocos viravam fontes de água dentro delas
+        return new StructurePlaceSettings().setRotation(rotation).addProcessor(BlockIgnoreProcessor.STRUCTURE_BLOCK)
+                .setLiquidSettings(LiquidSettings.IGNORE_WATERLOGGING);
     }
 
     @Override
