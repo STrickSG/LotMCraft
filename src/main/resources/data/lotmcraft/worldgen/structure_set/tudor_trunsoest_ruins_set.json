@@ -1,0 +1,11 @@
+{
+  "structures": [
+    { "structure": "lotmcraft:tudor_trunsoest_ruins", "weight": 1 }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 14562489,
+    "spacing": 36,
+    "separation": 14
+  }
+}

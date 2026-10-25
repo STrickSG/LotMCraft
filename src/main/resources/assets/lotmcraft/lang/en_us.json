@@ -3712,6 +3712,10 @@
   "area_title.lotmcraft.victorian_city.subtitle": "This city hides some secrets",
 
   "_comment_cartas_blasfemia": "Cartas da Blasfêmia",
+  "block.lotmcraft.blasphemy_altar": "Altar of Blasphemy",
+  "lotmcraft.blasphemy_card.sense.far": "Something of your Pathway calls you, far away…",
+  "lotmcraft.blasphemy_card.sense.closer": "The call of your Pathway grows stronger…",
+  "lotmcraft.blasphemy_card.sense.near": "It is very close… a Card of Blasphemy of your Pathway.",
   "item.lotmcraft.blasphemy_card": "Blasphemy Card: %s",
   "item.lotmcraft.blasphemy_card.desc": "Holds the potion formulas of the %s Pathway (Sequences %s to %s).",
   "item.lotmcraft.blasphemy_card.cauldron": "Works as the recipe in the Brewing Cauldron.",

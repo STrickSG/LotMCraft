@@ -54,6 +54,14 @@ public class ModBlocks {
 
 
 
+    // Altar da Blasfêmia: onde a carta única de um Caminho aparece nas estruturas
+    public static final DeferredBlock<Block> BLASPHEMY_ALTAR = registerBlock("blasphemy_altar",
+            () -> new de.jakob.lotm.block.custom.BlasphemyAltarBlock(BlockBehaviour.Properties.of()
+                    .strength(-1.0f, 3600000.0f)
+                    .noOcclusion()
+                    .lightLevel(state -> 7)
+                    .sound(net.minecraft.world.level.block.SoundType.POLISHED_DEEPSLATE)));
+
     public static final DeferredBlock<Block> RITUALISTIC_TABLE = registerBlock("ritualistic_table",
             () -> new RitualisticTableBlock(BlockBehaviour.Properties.of()
                     .strength(3.0f)

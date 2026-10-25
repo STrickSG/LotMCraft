@@ -443,6 +443,7 @@ public class LOTMCraft
         @SubscribeEvent
         public static void registerBER(EntityRenderersEvent.RegisterRenderers event) {
             event.registerBlockEntityRenderer(ModBlockEntities.RITUALISTIC_TABLE_BE.get(), RitualisticTableBlockEntityRenderer::new);
+            event.registerBlockEntityRenderer(ModBlockEntities.BLASPHEMY_ALTAR_BE.get(), de.jakob.lotm.block.entity.renderer.BlasphemyAltarBlockEntityRenderer::new);
         }
     }
 

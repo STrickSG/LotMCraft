@@ -34,6 +34,14 @@ public class BlasphemyCardItem extends Item {
         this.pathway = pathway;
     }
 
+    // Única no mundo: no chão ela não some nem é destruída (só no vazio)
+    @Override
+    public boolean onEntityItemUpdate(@NotNull ItemStack stack, @NotNull net.minecraft.world.entity.item.ItemEntity entity) {
+        entity.setInvulnerable(true);
+        entity.setUnlimitedLifetime();
+        return false;
+    }
+
     public String getPathway() {
         return pathway;
     }

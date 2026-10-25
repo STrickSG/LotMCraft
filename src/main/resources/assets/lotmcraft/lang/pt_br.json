@@ -3521,6 +3521,10 @@
   "area_title.lotmcraft.victorian_city.subtitle": "Esta cidade esconde alguns segredos",
 
   "_comment_cartas_blasfemia": "Cartas da Blasfêmia",
+  "block.lotmcraft.blasphemy_altar": "Altar da Blasfêmia",
+  "lotmcraft.blasphemy_card.sense.far": "Algo do seu Caminho te chama, muito ao longe…",
+  "lotmcraft.blasphemy_card.sense.closer": "O chamado do seu Caminho fica mais forte…",
+  "lotmcraft.blasphemy_card.sense.near": "Está muito perto… uma Carta da Blasfêmia do seu Caminho.",
   "item.lotmcraft.blasphemy_card": "Carta da Blasfêmia: %s",
   "item.lotmcraft.blasphemy_card.desc": "Guarda as fórmulas das poções do Caminho %s (Sequências %s a %s).",
   "item.lotmcraft.blasphemy_card.cauldron": "Funciona como receita no Caldeirão de Preparo.",
