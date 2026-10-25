@@ -246,6 +246,21 @@
           "weight": 1
         },
         {
+          "type": "minecraft:item",
+          "name": "lotmcraft:justice_mentor_ritual",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "lotmcraft:lightseeker_ritual",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "lotmcraft:white_angel_ritual",
+          "weight": 1
+        },
+        {
           "type": "minecraft:empty",
           "weight": 17
         }

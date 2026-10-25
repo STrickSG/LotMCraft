@@ -4,11 +4,15 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.decoration.ItemFrame;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -22,6 +26,12 @@ public final class RitualChecks {
         if ("sun".equals(pathway) && sequence == 5) return buriedInPackedIceInDarkness(player);
         // Sol, Sequência 4 (Sem Sombra): as emoções guardadas no frasco voltam durante o avanço
         if ("sun".equals(pathway) && sequence == 4) return returnOwnEmotions(player);
+        // Sol, Sequência 3 (Mentor da Justiça): manter o próprio Juramento de Justiça por 3 dias
+        if ("sun".equals(pathway) && sequence == 3) return JusticeOath.upheld(player);
+        // Sol, Sequência 2 (Buscador da Luz): item de Anjo do Sol com a sua memória, posto à sua frente
+        if ("sun".equals(pathway) && sequence == 2) return memoryPlacedBefore(player);
+        // Sol, Sequência 1 (Anjo Branco): ser adorado por 100 fiéis, contando você mesmo
+        if ("sun".equals(pathway) && sequence == 1) return Believers.count(player) >= Believers.NEEDED;
         return false;
     }
 
@@ -47,6 +57,19 @@ public final class RitualChecks {
             }
         }
         return true;
+    }
+
+    /** Item de Anjo do Sol com a memória do jogador, num suporte de item ou no chão à frente dele (até 4 blocos) */
+    private static boolean memoryPlacedBefore(ServerPlayer player) {
+        Vec3 look = player.getLookAngle().multiply(1, 0, 1).normalize();
+        for (Entity entity : player.level().getEntities(player, player.getBoundingBox().inflate(4))) {
+            ItemStack stack = entity instanceof ItemFrame frame ? frame.getItem()
+                    : entity instanceof ItemEntity item ? item.getItem() : ItemStack.EMPTY;
+            if (!JusticeOath.isSunAngelItem(stack) || !player.getUUID().equals(JusticeOath.memoryOwner(stack))) continue;
+            Vec3 toItem = entity.position().subtract(player.position()).multiply(1, 0, 1);
+            if (toItem.lengthSqr() < 1.0E-4 || toItem.normalize().dot(look) > 0) return true;
+        }
+        return false;
     }
 
     /** Procura no inventário um Frasco de Emoções com as emoções do próprio jogador e o gasta */

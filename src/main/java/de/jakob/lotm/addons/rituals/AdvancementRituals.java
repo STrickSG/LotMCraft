@@ -1,6 +1,8 @@
 package de.jakob.lotm.addons.rituals;
 
 import de.jakob.lotm.beyonders.potions.PotionItemHandler;
+import de.jakob.lotm.beyonders.potions.BeyonderCharacteristicItemHandler;
+import de.jakob.lotm.item.ModItems;
 import de.jakob.lotm.util.BeyonderData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -38,7 +40,21 @@ public final class AdvancementRituals {
             new Ritual("sun", 4, () -> List.of(
                     new ItemStack(Items.GLASS_BOTTLE),
                     EmotionFlask.example(),
-                    new ItemStack(PotionItemHandler.UNSHADOWED.get())))
+                    new ItemStack(PotionItemHandler.UNSHADOWED.get()))),
+            // Sol, Sequência 3 (Mentor da Justiça): definir a própria justiça e mantê-la sem nenhuma violação
+            new Ritual("sun", 3, () -> List.of(
+                    new ItemStack(Items.WRITABLE_BOOK),
+                    new ItemStack(PotionItemHandler.JUSTICE_MENTOR_POTION.get()))),
+            // Sol, Sequência 2 (Buscador da Luz): ligar a memória da sua justiça a um item de Anjo do Sol e pô-lo à sua frente
+            new Ritual("sun", 2, () -> List.of(
+                    new ItemStack(Items.WRITTEN_BOOK),
+                    new ItemStack(BeyonderCharacteristicItemHandler.selectCharacteristicOfPathwayAndSequence("sun", 2)),
+                    new ItemStack(PotionItemHandler.LIGHTSEEKER_POTION.get()))),
+            // Sol, Sequência 1 (Anjo Branco): ser adorado por 100 fiéis, incluindo você mesmo
+            new Ritual("sun", 1, () -> List.of(
+                    new ItemStack(ModItems.SACRED_REGISTER.get()),
+                    new ItemStack(Items.VILLAGER_SPAWN_EGG, 99),
+                    new ItemStack(PotionItemHandler.WHITE_ANGEL_POTION.get())))
     );
 
     public static List<Ritual> all() {

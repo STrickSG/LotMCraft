@@ -30,6 +30,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.EXCAVATED_AREA_ITEM.get());
         basicItem(ModItems.SUN_ITEM.get());
         basicItem(ModItems.MOON_ITEM.get());
+        basicItem(ModItems.SACRED_REGISTER.get());
         basicItem(ModItems.INGREDIENT_ENCYCLOPEDIA.get());
         basicItem(ModItems.CRYSTAL_BALL.get());
         basicItem(ModItems.MYSTERIOUS_SILVER_PLATE.get());
