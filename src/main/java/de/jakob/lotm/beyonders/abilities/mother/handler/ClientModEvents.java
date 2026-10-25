@@ -17,6 +17,9 @@ import net.neoforged.neoforge.client.event.RenderLivingEvent;
 
 @EventBusSubscriber(modid = LOTMCraft.MOD_ID, value = Dist.CLIENT)
 public class ClientModEvents {
+    private record HybridDummy(CompoundTag tag, Entity dummy) {}
+    private static final java.util.Map<LivingEntity, HybridDummy> DUMMIES = new java.util.WeakHashMap<>();
+
     
     @SubscribeEvent
     public static void onRenderLiving(RenderLivingEvent.Pre<?, ?> event) {
@@ -24,13 +27,19 @@ public class ClientModEvents {
             CompoundTag persistentData = living.getPersistentData();
             
             if(persistentData.contains("HybridMobData")) {
-                HybridMobData hybridData = HybridMobData.load(persistentData.getCompound("HybridMobData"));
-                ResourceLocation modelEntityType = hybridData.getModelEntityType();
-                
-                EntityType<?> originalType = EntityType.byString(modelEntityType.toString()).orElse(null);
-                
-                if(originalType != null) {
-                    Entity dummyEntity = originalType.create(living.level());
+                // antes criava uma entidade nova a cada quadro: agora a mesma é reaproveitada enquanto o híbrido não muda
+                CompoundTag hybridTag = persistentData.getCompound("HybridMobData");
+                HybridDummy cached = DUMMIES.get(living);
+                if (cached == null || !cached.tag().equals(hybridTag) || cached.dummy().level() != living.level()) {
+                    HybridMobData hybridData = HybridMobData.load(hybridTag);
+                    ResourceLocation modelEntityType = hybridData.getModelEntityType();
+                    EntityType<?> type = EntityType.byString(modelEntityType.toString()).orElse(null);
+                    cached = new HybridDummy(hybridTag.copy(), type == null ? null : type.create(living.level()));
+                    DUMMIES.put(living, cached);
+                }
+
+                if(cached.dummy() != null) {
+                    Entity dummyEntity = cached.dummy();
                     
                     if(dummyEntity instanceof LivingEntity livingDummy) {
                         // Copy all rendering-relevant data

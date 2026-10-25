@@ -16,6 +16,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 
 import java.util.*;
@@ -120,6 +121,9 @@ public class PlayerTeleportationAbility extends SelectableAbility {
         return targetPlayerName;
     }
 
+    /** Lista que os jogadores já receberam: só manda de novo quando alguém entra ou sai */
+    private static List<UUID> lastSent = List.of();
+
     @SubscribeEvent
     public static void onServerTick(ServerTickEvent.Post event) {
         onlinePlayers.clear();
@@ -127,17 +131,28 @@ public class PlayerTeleportationAbility extends SelectableAbility {
             onlinePlayers.add(player.getUUID());
             levelsForPlayer.put(player.getUUID(), player.serverLevel());
             namesForPlayer.put(player.getUUID(), player.getName().getString());
-            PacketHandler.sendToAllPlayers(new SyncPlayerTeleportationPlayerNamesPacket(player.getUUID().toString(), player.getName().getString()));
         }
 
         if(onlinePlayers == null || onlinePlayers.isEmpty() || onlinePlayers.contains(null)) {
             return;
         }
         List<UUID> snapshot = List.copyOf(onlinePlayers);
+        // antes isto ia a cada tick (um pacote de nome por jogador para todos os jogadores);
+        // os nomes e a lista só mudam quando alguém entra ou sai, e quem entra recebe tudo nessa hora
+        if (snapshot.equals(lastSent)) return;
+        lastSent = snapshot;
 
+        for (UUID uuid : snapshot) {
+            PacketHandler.sendToAllPlayers(new SyncPlayerTeleportationPlayerNamesPacket(uuid.toString(), namesForPlayer.get(uuid)));
+        }
         PacketHandler.sendToAllPlayers(new SyncPlayerTeleportationOnlinePlayersPacket(
                 new ArrayList<>(snapshot.stream().map(UUID::toString).toList())
         ));
+    }
+
+    @SubscribeEvent
+    public static void onServerStopped(ServerStoppedEvent event) {
+        lastSent = List.of();
     }
 
     public static void setOnlinePlayers(List<UUID> players) {

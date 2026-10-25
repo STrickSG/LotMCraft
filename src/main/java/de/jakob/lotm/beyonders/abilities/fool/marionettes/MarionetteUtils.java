@@ -114,13 +114,9 @@ public class MarionetteUtils {
         try {
             UUID uuid = UUID.fromString(uuidString);
 
+            // a lista de jogadores do servidor já acha o jogador em qualquer dimensão (antes procurava nas ~15)
             if (marionette.getServer() != null) {
-                for (ServerLevel level : marionette.getServer().getAllLevels()) {
-                    Player player = level.getPlayerByUUID(uuid);
-                    if (player != null) {
-                        return player;
-                    }
-                }
+                return marionette.getServer().getPlayerList().getPlayer(uuid);
             }
         } catch (IllegalArgumentException e) {
         }

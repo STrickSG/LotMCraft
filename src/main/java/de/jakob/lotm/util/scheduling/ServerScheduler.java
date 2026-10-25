@@ -16,6 +16,14 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Supplier;
 
 public class ServerScheduler {
+    // IDs só precisam ser únicos dentro deste agendador: um contador é muito mais rápido que UUID.randomUUID(),
+    // que usa um gerador criptográfico (as habilidades agendam milhares de tarefas, ex.: partículas)
+    private static final java.util.concurrent.atomic.AtomicLong NEXT_ID = new java.util.concurrent.atomic.AtomicLong();
+
+    private static UUID newId() {
+        return new UUID(0x4C4F544D53434845L, NEXT_ID.incrementAndGet());
+    }
+
     private static final Map<UUID, ScheduledTask> tasks = new ConcurrentHashMap<>();
     private static boolean registered = false;
 
@@ -46,7 +54,7 @@ public class ServerScheduler {
                                        @Nullable ServerLevel level,
                                        Supplier<Double> timeMultiplier) {
         if (delay < 0) delay = 0;
-        UUID id = UUID.randomUUID();
+        UUID id = newId();
         tasks.put(id, new ScheduledTask(id, task, delay, 0, 1, level, () -> true, timeMultiplier));
         return id;
     }
@@ -72,7 +80,7 @@ public class ServerScheduler {
                                          Runnable task, @Nullable ServerLevel level,
                                          Supplier<Boolean> condition,
                                          Supplier<Double> timeMultiplier) {
-        UUID id = UUID.randomUUID();
+        UUID id = newId();
         tasks.put(id, new ScheduledTask(id, task, initialDelay, interval, maxExecutions,
                 level, condition, timeMultiplier));
         return id;
@@ -112,13 +120,13 @@ public class ServerScheduler {
                                            Runnable task, @Nullable Runnable onFinish,
                                            @Nullable ServerLevel level,
                                            Supplier<Double> timeMultiplier) {
-        UUID id = UUID.randomUUID();
+        UUID id = newId();
         ScheduledTask scheduledTask = new ScheduledTask(
                 id, task, initialDelay, interval, -1, level, () -> true, timeMultiplier);
         scheduledTask.setEndTime(duration);
 
         if (onFinish != null) {
-            UUID finishId = UUID.randomUUID();
+            UUID finishId = newId();
             ScheduledTask finishTask = new ScheduledTask(
                     finishId, onFinish, duration + 1, 0, 1, level, () -> true, timeMultiplier);
             tasks.put(finishId, finishTask);
@@ -158,7 +166,7 @@ public class ServerScheduler {
                                      @Nullable Runnable onFinish,
                                      Supplier<Boolean> breakCondition,
                                      Supplier<Double> timeMultiplier) {
-        UUID id = UUID.randomUUID();
+        UUID id = newId();
         ScheduledTask scheduledTask = new ScheduledTask(
                 id, task, 0, interval, -1, level, () -> !breakCondition.get(), timeMultiplier);
         scheduledTask.setOnFinish(onFinish);

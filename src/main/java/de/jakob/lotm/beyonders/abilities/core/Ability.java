@@ -219,6 +219,20 @@ public abstract class Ability {
 
     }
 
+    private Boolean hasOnHold;
+
+    /** A habilidade tem efeito ao ser segurada (sobrescreve onHold)? Sem isso não há o que rodar nem sincronizar. */
+    public boolean hasOnHold() {
+        if (hasOnHold == null) {
+            try {
+                hasOnHold = getClass().getMethod("onHold", Level.class, LivingEntity.class).getDeclaringClass() != Ability.class;
+            } catch (NoSuchMethodException e) {
+                hasOnHold = true;
+            }
+        }
+        return hasOnHold;
+    }
+
     public boolean shouldUseAbility(LivingEntity entity) {
         return true;
     }
