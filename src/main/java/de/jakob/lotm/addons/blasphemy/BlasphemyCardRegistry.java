@@ -47,6 +47,17 @@ public class BlasphemyCardRegistry extends SavedData {
         return uid;
     }
 
+    /** A carta parada num altar vai para outro altar (continua sendo a mesma carta). */
+    public void moveTo(String pathway, ResourceKey<Level> dimension, BlockPos pos) {
+        Entry e = get(pathway);
+        if (e.state() == State.NONE) {
+            placeAtAltar(pathway, dimension, pos);
+            return;
+        }
+        cards.put(pathway, new Entry(State.ALTAR, dimension, pos.immutable(), e.uid()));
+        setDirty();
+    }
+
     /** A carta saiu do altar (alguém pegou ou o altar quebrou). */
     public void takeOut(String pathway) {
         Entry e = get(pathway);

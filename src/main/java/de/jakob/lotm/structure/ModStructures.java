@@ -51,6 +51,9 @@ public class ModStructures {
     public static final DeferredHolder<net.minecraft.world.level.levelgen.structure.placement.StructurePlacementType<?>,
             net.minecraft.world.level.levelgen.structure.placement.StructurePlacementType<ExclusiveSpreadPlacement>> EXCLUSIVE_SPREAD =
             PLACEMENT_TYPES.register("exclusive_spread", () -> () -> ExclusiveSpreadPlacement.CODEC);
+    public static final DeferredHolder<net.minecraft.world.level.levelgen.structure.placement.StructurePlacementType<?>,
+            net.minecraft.world.level.levelgen.structure.placement.StructurePlacementType<FarRingPlacement>> FAR_RING =
+            PLACEMENT_TYPES.register("far_ring", () -> () -> FarRingPlacement.CODEC);
 
     public static void register(IEventBus eventBus) {
         DEFERRED_REGISTRY_STRUCTURE.register(eventBus);

@@ -11,7 +11,8 @@
     "spacing": 70,
     "separation": 10,
     "avoid": [
-      "minecraft:villages"
+      "minecraft:villages",
+      "lotmcraft:tudor_trunsoest_ruins_set"
     ],
     "avoid_chunks": 8
   }

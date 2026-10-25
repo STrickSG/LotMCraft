@@ -48,11 +48,18 @@ public class TombRuinsStructure extends Structure {
     @Override
     protected @NotNull Optional<GenerationStub> findGenerationPoint(@NotNull GenerationContext context) {
         ChunkPos chunk = context.chunkPos();
-        int x = chunk.getMiddleBlockX(), z = chunk.getMiddleBlockZ();
-        int ground = context.chunkGenerator().getFirstOccupiedHeight(x, z, Heightmap.Types.WORLD_SURFACE_WG, context.heightAccessor(), context.randomState());
-        NoiseColumn column = context.chunkGenerator().getBaseColumn(x, z, context.heightAccessor(), context.randomState());
-        // a tumba não nasce na água nem flutuando
-        if (!column.getBlock(ground).getFluidState().isEmpty() || !column.getBlock(ground + 1).isAir()) return Optional.empty();
+        // só existem 3 por mundo: procura um ponto seco no chunk antes de desistir
+        // (a tumba não nasce na água nem flutuando)
+        int x = 0, z = 0, ground = 0;
+        boolean found = false;
+        for (int i = 0; i < 9 && !found; i++) {
+            x = chunk.getBlockX(8 + (i % 3 == 1 ? -6 : i % 3 == 2 ? 6 : 0));
+            z = chunk.getBlockZ(8 + (i / 3 == 1 ? -6 : i / 3 == 2 ? 6 : 0));
+            ground = context.chunkGenerator().getFirstOccupiedHeight(x, z, Heightmap.Types.WORLD_SURFACE_WG, context.heightAccessor(), context.randomState());
+            NoiseColumn column = context.chunkGenerator().getBaseColumn(x, z, context.heightAccessor(), context.randomState());
+            found = column.getBlock(ground).getFluidState().isEmpty() && column.getBlock(ground + 1).isAir();
+        }
+        if (!found) return Optional.empty();
 
         int minY = context.heightAccessor().getMinBuildHeight() + 6;
         int ruinsFloor = Math.max(minY + ruinsAnchor.getY(), ground - depth.sample(context.random()));
@@ -65,10 +72,11 @@ public class TombRuinsStructure extends Structure {
         BlockPos tombPos = new BlockPos(x - tombRel.getX(), ground - tombAnchor.getY(), z - tombRel.getZ());
         BlockPos ruinsPos = new BlockPos(x - ruinsRel.getX(), ruinsFloor - ruinsAnchor.getY(), z - ruinsRel.getZ());
 
+        int fx = x, fz = z, fGround = ground;
         return Optional.of(new GenerationStub(new BlockPos(x, ground, z), builder -> {
             var manager = context.structureTemplateManager();
             builder.addPiece(new TombTemplatePiece(manager, ruins, ruinsPos, rotation, TerrainAdjustment.ENCAPSULATE));
-            builder.addPiece(new StairShaftPiece(x, z, ruinsFloor, ground - 1, OPEN_ROWS));
+            builder.addPiece(new StairShaftPiece(fx, fz, ruinsFloor, fGround - 1, OPEN_ROWS));
             builder.addPiece(new TombTemplatePiece(manager, tomb, tombPos, rotation, TerrainAdjustment.BEARD_THIN));
         }));
     }

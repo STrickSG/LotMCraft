@@ -54,6 +54,8 @@ public class BlasphemyAltarBlockEntity extends BlockEntity {
         boolean here = entry.state() == BlasphemyCardRegistry.State.ALTAR && pos.equals(entry.pos()) && level.dimension().equals(entry.dimension());
 
         if (altar.hasCard && !here) altar.setHasCard(false);
+        // a carta trocou de ruína e veio para este altar
+        if (!altar.hasCard && here) altar.setHasCard(true);
         // a carta não existe em lugar nenhum: ela se manifesta neste altar
         if (!altar.hasCard && entry.state() == BlasphemyCardRegistry.State.NONE) {
             registry.placeAtAltar(altar.pathway, level.dimension(), pos);

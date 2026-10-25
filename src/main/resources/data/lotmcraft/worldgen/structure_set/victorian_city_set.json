@@ -12,6 +12,7 @@
     "separation": 12,
     "avoid": [
       "minecraft:villages",
+      "lotmcraft:tudor_trunsoest_ruins_set",
       "lotmcraft:red_priest_castle_set"
     ],
     "avoid_chunks": 8

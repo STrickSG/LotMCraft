@@ -6,20 +6,12 @@
     }
   ],
   "placement": {
-    "type": "lotmcraft:exclusive_spread",
+    "type": "lotmcraft:far_ring",
     "salt": 14562489,
-    "spacing": 36,
-    "separation": 14,
-    "avoid": [
-      "minecraft:villages",
-      "lotmcraft:red_priest_castle_set",
-      "lotmcraft:victorian_city_set",
-      "lotmcraft:big_evernight_church_set",
-      "lotmcraft:blazing_sun_church_set",
-      "lotmcraft:evernight_church_set",
-      "lotmcraft:uniqueness_temple_set",
-      "lotmcraft:beyonder_hideout_set"
-    ],
-    "avoid_chunks": 8
+    "count": 3,
+    "min_distance": 8000,
+    "max_distance": 10000,
+    "biomes": "#lotmcraft:has_structure/tudor_trunsoest_ruins_biomes",
+    "biome_search_radius": 512
   }
 }
