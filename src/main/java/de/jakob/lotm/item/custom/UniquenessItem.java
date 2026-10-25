@@ -1,6 +1,9 @@
 package de.jakob.lotm.item.custom;
 
 import de.jakob.lotm.beyonders.singularity.SingularityBonuses;
+import de.jakob.lotm.beyonders.singularity.client.SingularityTooltipClient;
+import net.minecraft.world.entity.player.Player;
+import net.neoforged.fml.loading.FMLEnvironment;
 import net.minecraft.locale.Language;
 
 import de.jakob.lotm.beyonders.singularity.SingularityData;
@@ -67,6 +70,11 @@ public class UniquenessItem extends Item {
         } else {
             tooltip.add(Component.translatable("lotmcraft.singularity.tooltip.dominance", (int) (dominance * 100)).withStyle(ChatFormatting.LIGHT_PURPLE));
         }
+        // Descrição curta: só o que vale para quem está lendo; segurando Shift, a completa
+        if (SingularityBonuses.hasBonuses(pathway) && FMLEnvironment.dist.isClient() && !SingularityTooltipClient.expanded()) {
+            shortTooltip(SingularityTooltipClient.viewer(), dominance, tooltip);
+            return;
+        }
         if (SingularityBonuses.hasBonuses(pathway)) {
             // Mesmo Caminho: bônus do mod; Caminho vizinho: efeitos do Minecraft
             tooltip.add(Component.translatable("lotmcraft.singularity.own_header").withStyle(ChatFormatting.GOLD));
@@ -90,5 +98,23 @@ public class UniquenessItem extends Item {
             tooltip.add(Component.translatable("lotmcraft.singularity.tooltip.sanity").withStyle(ChatFormatting.DARK_RED));
         }
         if (!SingularityBonuses.hasBonuses(pathway)) tooltip.add(Component.translatable("lotmcraft.singularity.tooltip.own").withStyle(ChatFormatting.DARK_GRAY));
+    }
+
+    private void shortTooltip(Player viewer, float dominance, List<Component> tooltip) {
+        boolean own = viewer != null && BeyonderData.isBeyonder(viewer) && pathway.equals(BeyonderData.getPathway(viewer));
+        boolean neighbor = viewer != null && SingularityData.isNeighborPathway(pathway, viewer);
+        if (own) {
+            for (int i = 1; Language.getInstance().has("lotmcraft.singularity.short." + pathway + ".own." + i); i++) {
+                tooltip.add(Component.translatable("lotmcraft.singularity.short." + pathway + ".own." + i).withStyle(ChatFormatting.BLUE));
+            }
+            if (dominance < 1f) tooltip.add(Component.translatable("lotmcraft.singularity.short." + pathway + ".own_negative").withStyle(ChatFormatting.RED));
+        } else if (neighbor) {
+            tooltip.add(Component.translatable("lotmcraft.singularity.effect." + pathway + ".positive").withStyle(ChatFormatting.DARK_AQUA));
+            String ability = SingularityBonuses.neighborAbility(pathway);
+            if (ability != null) tooltip.add(Component.translatable("lotmcraft.singularity.short.neighbor_ability",
+                    Component.translatable("lotmcraft." + ability)).withStyle(ChatFormatting.DARK_AQUA));
+            if (dominance < 1f) tooltip.add(Component.translatable("lotmcraft.singularity.short." + pathway + ".neighbor_negative").withStyle(ChatFormatting.RED));
+        }
+        tooltip.add(Component.translatable("lotmcraft.singularity.short.shift").withStyle(ChatFormatting.DARK_GRAY));
     }
 }
