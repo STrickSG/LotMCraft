@@ -12,7 +12,8 @@
     "separation": 10,
     "avoid": [
       "minecraft:villages",
-      "lotmcraft:tudor_trunsoest_ruins_set"
+      "lotmcraft:tudor_trunsoest_ruins_set",
+      "lotmcraft:observatory_set"
     ],
     "avoid_chunks": 8
   }

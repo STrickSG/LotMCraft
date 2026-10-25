@@ -39,7 +39,8 @@ public final class BlasphemyCardRotation {
 
     /** Caminho da carta -> conjunto de estruturas (far_ring) onde ficam os altares dela */
     private static final Map<String, ResourceLocation> SITES = Map.of(
-            "red_priest", ResourceLocation.fromNamespaceAndPath(LOTMCraft.MOD_ID, "tudor_trunsoest_ruins_set")
+            "red_priest", ResourceLocation.fromNamespaceAndPath(LOTMCraft.MOD_ID, "tudor_trunsoest_ruins_set"),
+            "wheel_of_fortune", ResourceLocation.fromNamespaceAndPath(LOTMCraft.MOD_ID, "observatory_set")
     );
 
     /** Altares de cada carta neste mundo (não mudam, então são calculados uma vez só) */

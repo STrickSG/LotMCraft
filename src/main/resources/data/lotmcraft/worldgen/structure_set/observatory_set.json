@@ -1,0 +1,17 @@
+{
+  "structures": [
+    {
+      "structure": "lotmcraft:observatory",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "lotmcraft:far_ring",
+    "salt": 27182818,
+    "count": 6,
+    "min_distance": 5000,
+    "max_distance": 7000,
+    "biomes": "#lotmcraft:has_structure/observatory_biomes",
+    "biome_search_radius": 512
+  }
+}

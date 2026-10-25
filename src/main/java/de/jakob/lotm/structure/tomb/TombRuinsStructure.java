@@ -4,6 +4,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import de.jakob.lotm.structure.ModStructures;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.QuartPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.level.ChunkPos;
@@ -48,7 +49,7 @@ public class TombRuinsStructure extends Structure {
     @Override
     protected @NotNull Optional<GenerationStub> findGenerationPoint(@NotNull GenerationContext context) {
         ChunkPos chunk = context.chunkPos();
-        // só existem 3 por mundo: procura um ponto seco no chunk antes de desistir
+        // só existem 3 por mundo: procura um ponto seco e do bioma certo no chunk antes de desistir
         // (a tumba não nasce na água nem flutuando)
         int x = 0, z = 0, ground = 0;
         boolean found = false;
@@ -57,7 +58,10 @@ public class TombRuinsStructure extends Structure {
             z = chunk.getBlockZ(8 + (i / 3 == 1 ? -6 : i / 3 == 2 ? 6 : 0));
             ground = context.chunkGenerator().getFirstOccupiedHeight(x, z, Heightmap.Types.WORLD_SURFACE_WG, context.heightAccessor(), context.randomState());
             NoiseColumn column = context.chunkGenerator().getBaseColumn(x, z, context.heightAccessor(), context.randomState());
-            found = column.getBlock(ground).getFluidState().isEmpty() && column.getBlock(ground + 1).isAir();
+            found = column.getBlock(ground).getFluidState().isEmpty() && column.getBlock(ground + 1).isAir()
+                    // o bioma é conferido no ponto escolhido: em volta pode ter rio ou outro bioma
+                    && context.validBiome().test(context.chunkGenerator().getBiomeSource().getNoiseBiome(
+                            QuartPos.fromBlock(x), QuartPos.fromBlock(ground), QuartPos.fromBlock(z), context.randomState().sampler()));
         }
         if (!found) return Optional.empty();
 

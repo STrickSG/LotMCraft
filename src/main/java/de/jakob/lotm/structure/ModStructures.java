@@ -35,6 +35,8 @@ public class ModStructures {
     // estrutura subterrânea com tumba na superfície e escadaria em espiral (Ruínas de Tudor-Trunsoest e as próximas)
     public static final DeferredHolder<StructureType<?>, StructureType<de.jakob.lotm.structure.tomb.TombRuinsStructure>> TOMB_RUINS =
             DEFERRED_REGISTRY_STRUCTURE.register("tomb_ruins", () -> explicitStructureTypeTyping(de.jakob.lotm.structure.tomb.TombRuinsStructure.CODEC));
+    public static final DeferredHolder<StructureType<?>, StructureType<de.jakob.lotm.structure.tomb.SurfaceTemplateStructure>> SURFACE_TEMPLATE =
+            DEFERRED_REGISTRY_STRUCTURE.register("surface_template", () -> explicitStructureTypeTyping(de.jakob.lotm.structure.tomb.SurfaceTemplateStructure.CODEC));
 
     public static final DeferredRegister<net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType> PIECE_TYPES =
             DeferredRegister.create(Registries.STRUCTURE_PIECE, LOTMCraft.MOD_ID);
