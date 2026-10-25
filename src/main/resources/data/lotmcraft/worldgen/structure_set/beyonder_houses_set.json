@@ -96,7 +96,8 @@
       "lotmcraft:uniqueness_temple_set",
       "lotmcraft:beyonder_hideout_set",
       "lotmcraft:tudor_trunsoest_ruins_set",
-      "lotmcraft:observatory_set"
+      "lotmcraft:observatory_set",
+      "lotmcraft:sun_altar_set"
     ],
     "avoid_chunks": 9
   }
