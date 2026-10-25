@@ -2,9 +2,9 @@
   "type": "lotmcraft:surface_template",
   "template": "lotmcraft:observatory",
   "anchor": [
-    12,
+    18,
     1,
-    12
+    18
   ],
   "terrain_adjustment": "beard_box",
   "biomes": "#lotmcraft:has_structure/observatory_biomes",
