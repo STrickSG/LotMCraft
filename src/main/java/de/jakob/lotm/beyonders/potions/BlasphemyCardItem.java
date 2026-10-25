@@ -55,7 +55,8 @@ public class BlasphemyCardItem extends Item {
         return availableSequences().contains(sequence);
     }
 
-    private int getSelectedSequence(ItemStack stack) {
+    /** Sequência escolhida na carta (agachado + clique direito troca). */
+    public int getSelectedSequence(ItemStack stack) {
         List<Integer> sequences = availableSequences();
         if (sequences.isEmpty()) return -1;
         CompoundTag tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();

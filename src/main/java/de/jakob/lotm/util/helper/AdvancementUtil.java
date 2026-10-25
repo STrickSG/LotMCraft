@@ -162,8 +162,13 @@ public class AdvancementUtil {
             if (hasRitual(pathway, sequence)) {
                 var component = player.getData(ModAttachments.RITUALS.get());
 
+                // sem o pergaminho do ritual ou a Carta da Blasfêmia na Sequência certa, o ritual não vale
+                if (!RitualChecks.knowsRitual(player, pathway, sequence)) {
+                    component.setCompleted(false);
+                    player.displayClientMessage(net.minecraft.network.chat.Component.translatable("lotmcraft.ritual.unknown").withColor(0xFF7A7A), false);
+                }
                 // rituais feitos na hora de beber a poção são conferidos agora
-                if (RitualChecks.completedWhileDrinking(player, pathway, sequence)) component.setCompleted(true);
+                else if (RitualChecks.completedWhileDrinking(player, pathway, sequence)) component.setCompleted(true);
 
                 if(entity.level() instanceof ServerLevel level) {
                     if(level.getGameRules().getBoolean(ModGameRules.APPLY_RITUALS)) {

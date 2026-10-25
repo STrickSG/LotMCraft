@@ -23,6 +23,14 @@ public class RitualRecipeItem extends Item {
         this.sequence = sequence;
     }
 
+    public String getPathway() {
+        return pathway;
+    }
+
+    public int getSequence() {
+        return sequence;
+    }
+
     @Override
     public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level level, @NotNull Player player, @NotNull InteractionHand usedHand) {
         if (level.isClientSide) {

@@ -1,5 +1,8 @@
 package de.jakob.lotm.addons.rituals;
 
+import de.jakob.lotm.beyonders.potions.BlasphemyCardItem;
+import de.jakob.lotm.beyonders.potions.RitualRecipeItem;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -20,6 +23,20 @@ import java.util.Set;
 /** Rituais de avanço que são feitos na hora de beber a poção. */
 public final class RitualChecks {
     private RitualChecks() {}
+
+    /**
+     * Para fazer o ritual é preciso conhecê-lo: ter no inventário o pergaminho deste ritual,
+     * ou a Carta da Blasfêmia do Caminho com esta Sequência escolhida.
+     * (Ler o ritual num mundo e fazê-lo em outro, sem o item, não vale.)
+     */
+    public static boolean knowsRitual(ServerPlayer player, String pathway, int sequence) {
+        for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
+            ItemStack stack = player.getInventory().getItem(i);
+            if (stack.getItem() instanceof RitualRecipeItem scroll && scroll.getPathway().equals(pathway) && scroll.getSequence() == sequence) return true;
+            if (stack.getItem() instanceof BlasphemyCardItem card && card.getPathway().equals(pathway) && card.getSelectedSequence(stack) == sequence) return true;
+        }
+        return false;
+    }
 
     public static boolean completedWhileDrinking(ServerPlayer player, String pathway, int sequence) {
         // Sol, Sequência 5 (Sacerdote da Luz): beber a poção em escuridão total, enterrado em gelo que não derrete

@@ -3035,6 +3035,7 @@
   "lotmcraft.believers.wronged": "Você feriu este aldeão: ele nunca vai adorar você.",
   "lotmcraft.believers.lost": "Você feriu um fiel e ele perdeu a fé em você. Fiéis: %s/%s",
   "lotmcraft.believers.not_worthy": "Você não pode usar isso agora.",
+  "lotmcraft.ritual.unknown": "Você não conhece este ritual: é preciso ter o pergaminho do ritual, ou a Carta da Blasfêmia do Caminho com esta Sequência escolhida.",
   "lotmcraft.justice.not_yours": "Só a sua própria justiça serve: o livro precisa ter sido assinado por você.",
   "lotmcraft.justice.sworn": "Você jurou pela sua justiça. Mantenha-a sem nenhuma violação.",
   "lotmcraft.justice.progress": "Juramento mantido: %s de %s dias.",

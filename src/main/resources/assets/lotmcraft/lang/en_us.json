@@ -3226,6 +3226,7 @@
   "lotmcraft.believers.wronged": "You hurt this villager: they will never worship you.",
   "lotmcraft.believers.lost": "You hurt a believer and they lost their faith in you. Believers: %s/%s",
   "lotmcraft.believers.not_worthy": "You can't use this right now.",
+  "lotmcraft.ritual.unknown": "You do not know this ritual: you need the ritual scroll, or the Blasphemy Card of the pathway with this Sequence selected.",
   "lotmcraft.justice.not_yours": "Only your own justice counts: the book must be signed by you.",
   "lotmcraft.justice.sworn": "You swore by your justice. Uphold it without a single violation.",
   "lotmcraft.justice.progress": "Oath upheld: %s of %s days.",
