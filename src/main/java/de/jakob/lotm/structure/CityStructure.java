@@ -1,5 +1,6 @@
 package de.jakob.lotm.structure;
 
+import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -13,7 +14,9 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.WorldGenerationContext;
 import net.minecraft.world.level.levelgen.heightproviders.HeightProvider;
 import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.StructureType;
+import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
 import net.minecraft.world.level.levelgen.structure.TerrainAdjustment;
 import net.minecraft.world.level.levelgen.structure.pools.DimensionPadding;
 import net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement;
@@ -109,40 +112,38 @@ public class CityStructure extends Structure {
                     context.heightAccessor(), context.randomState());
         }
 
-        // 3x3 sample grid instead of 121 columns
-        int r = this.maxDistanceFromCenter;
-        int cx = chunkPos.getMiddleBlockX();
-        int cz = chunkPos.getMiddleBlockZ();
-        int waterCount = 0;
-
-        for (int dx = -1; dx <= 1; dx++) {
-            for (int dz = -1; dz <= 1; dz++) {
-                int x = cx + dx * r / 2;
-                int z = cz + dz * r / 2;
-
-                NoiseColumn column = gen.getBaseColumn(x, z, context.heightAccessor(), context.randomState());
-                int y = gen.getFirstOccupiedHeight(x, z, Heightmap.Types.OCEAN_FLOOR_WG,
-                        context.heightAccessor(), context.randomState());
-
-                // block just above the floor is liquid -> water here
-                if (!column.getBlock(y).getFluidState().isEmpty()) {
-                    waterCount++;
-                }
-            }
-        }
-
-        if (waterCount > 1) { // scaled down from >3 of 121
-            return Optional.empty();
-        }
-
         BlockPos placementPos = new BlockPos(chunkPos.getMinBlockX(), surfaceY - this.foundationDepth, chunkPos.getMinBlockZ());
 
-        return JigsawPlacement.addPieces(
+        Optional<GenerationStub> stub = JigsawPlacement.addPieces(
                 context, this.startPool, this.startJigsawName, this.size,
                 placementPos, false, Optional.empty(),
                 this.maxDistanceFromCenter, PoolAliasLookup.EMPTY,
                 this.dimensionPadding, this.liquidSettings);
+        if (stub.isEmpty()) return stub;
+
+        // A cidade (113 x 101 blocos) começa no canto do chunk e gira: a checagem antiga olhava só em volta do meio
+        // do chunk e deixava a cidade nascer sobre rios e lagos. Agora as peças são montadas uma vez e a área inteira
+        // que elas ocupam é conferida: nada de água, e o terreno não pode variar demais (senão partes ficam no ar).
+        StructurePiecesBuilder pieces = stub.get().getPiecesBuilder();
+        BoundingBox box = pieces.getBoundingBox();
+        int min = Integer.MAX_VALUE, max = Integer.MIN_VALUE;
+        for (int i = 0; i <= 4; i++) {
+            for (int j = 0; j <= 4; j++) {
+                int x = box.minX() + (box.getXSpan() - 1) * i / 4;
+                int z = box.minZ() + (box.getZSpan() - 1) * j / 4;
+                int floor = gen.getFirstOccupiedHeight(x, z, Heightmap.Types.OCEAN_FLOOR_WG, context.heightAccessor(), context.randomState());
+                NoiseColumn column = gen.getBaseColumn(x, z, context.heightAccessor(), context.randomState());
+                if (!column.getBlock(floor).getFluidState().isEmpty()) return Optional.empty();
+                min = Math.min(min, floor);
+                max = Math.max(max, floor);
+            }
+        }
+        if (max - min > MAX_HEIGHT_DIFFERENCE) return Optional.empty();
+        // as peças já montadas vão junto (montar de novo gastaria o sorteio de novo)
+        return Optional.of(new GenerationStub(stub.get().position(), Either.right(pieces)));
     }
+
+    private static final int MAX_HEIGHT_DIFFERENCE = 8;
 
     @Override
     public StructureType<?> type() {

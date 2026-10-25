@@ -16,6 +16,6 @@
       "lotmcraft:observatory_set",
       "lotmcraft:red_priest_castle_set"
     ],
-    "avoid_chunks": 8
+    "avoid_chunks": 10
   }
 }
