@@ -73,7 +73,7 @@ public final class Believers {
     /** Só Beyonders de Sequência 3 ou maior podem reunir fiéis; os outros recebem um aviso. */
     private static boolean canGather(ServerPlayer player) {
         if (BeyonderData.isBeyonder(player) && BeyonderData.getSequence(player) <= MAX_SEQUENCE) return true;
-        player.displayClientMessage(Component.translatable("lotmcraft.believers.not_worthy", MAX_SEQUENCE).withColor(0xFF7A7A), true);
+        player.displayClientMessage(Component.translatable("lotmcraft.believers.not_worthy").withColor(0xFF7A7A), true);
         return false;
     }
 

@@ -31,7 +31,7 @@ import java.util.Map;
 
 /**
  * Cartas que trocam de ruína: a estrutura delas só existe poucas vezes por mundo (far_ring: longe do spawn e umas das outras)
- * e, enquanto ninguém pega a carta, ela vai para o altar da próxima ruína a cada 10 minutos.
+ * e, enquanto ninguém pega a carta, a cada 10 minutos ela vai para o altar de outra ruína, sorteada.
  */
 @EventBusSubscriber(modid = LOTMCraft.MOD_ID)
 public final class BlasphemyCardRotation {
@@ -52,7 +52,7 @@ public final class BlasphemyCardRotation {
         if (event.getServer().overworld().getGameTime() % INTERVAL == 0) rotate(event.getServer());
     }
 
-    /** Cada carta parada num altar (ou sumida) vai para o altar da próxima ruína. */
+    /** Cada carta parada num altar (ou sumida) vai para o altar de outra ruína, sorteada. */
     public static void rotate(MinecraftServer server) {
         ServerLevel level = server.overworld();
         BlasphemyCardRegistry registry = BlasphemyCardRegistry.get(server);
@@ -64,7 +64,9 @@ public final class BlasphemyCardRotation {
             if (altars.isEmpty() || (altars.size() < 2 && entry.state() == BlasphemyCardRegistry.State.ALTAR)) continue;
             int current = entry.state() == BlasphemyCardRegistry.State.ALTAR && level.dimension().equals(entry.dimension())
                     ? altars.indexOf(entry.pos()) : -1;
-            int next = current < 0 ? level.random.nextInt(altars.size()) : (current + 1) % altars.size();
+            // sorteia um dos outros altares (nunca o mesmo em que ela já está)
+            int next = level.random.nextInt(current < 0 ? altars.size() : altars.size() - 1);
+            if (current >= 0 && next >= current) next++;
             registry.moveTo(pathway, level.dimension(), altars.get(next));
         }
     }
