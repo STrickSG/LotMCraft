@@ -3225,6 +3225,7 @@
   "lotmcraft.believers.other_god": "This villager already worships someone else.",
   "lotmcraft.believers.wronged": "You hurt this villager: they will never worship you.",
   "lotmcraft.believers.lost": "You hurt a believer and they lost their faith in you. Believers: %s/%s",
+  "lotmcraft.believers.not_worthy": "Only a Beyonder of Sequence %s or higher can gather believers.",
   "lotmcraft.justice.not_yours": "Only your own justice counts: the book must be signed by you.",
   "lotmcraft.justice.sworn": "You swore by your justice. Uphold it without a single violation.",
   "lotmcraft.justice.progress": "Oath upheld: %s of %s days.",

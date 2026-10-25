@@ -2,6 +2,7 @@ package de.jakob.lotm.addons.rituals;
 
 import de.jakob.lotm.LOTMCraft;
 import de.jakob.lotm.item.ModItems;
+import de.jakob.lotm.util.BeyonderData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.ParticleTypes;
@@ -35,11 +36,14 @@ import java.util.UUID;
 /**
  * Fiéis: aldeões que adoram um jogador (de qualquer Caminho), marcados com o título "Fiel de [jogador]".
  * Cada aldeão só pode adorar uma pessoa, e quem já foi ferido por você nunca vira seu fiel.
+ * Só Beyonders de Sequência 3 ou maior (3, 2, 1, 0) podem reunir fiéis.
  * O ritual do Anjo Branco (Sol, Sequência 1) pede 100 fiéis.
  */
 @EventBusSubscriber(modid = LOTMCraft.MOD_ID)
 public final class Believers {
     public static final int NEEDED = 100;
+    /** Sequência mínima para reunir fiéis: 3 ou maior (número menor) */
+    public static final int MAX_SEQUENCE = 3;
     private static final String BELIEVER_OF = "LotmBelieverOf", OLD_NAME = "LotmNameBeforeFaith", WRONGED_BY = "LotmWrongedBy", SELF = "LotmSelfBeliever";
     private static final int COLOR = 0xFFE29A;
 
@@ -54,8 +58,16 @@ public final class Believers {
         return player.getPersistentData().getCompound(Player.PERSISTED_NBT_TAG).getBoolean(SELF);
     }
 
+    /** Só Beyonders de Sequência 3 ou maior podem reunir fiéis; os outros recebem um aviso. */
+    private static boolean canGather(ServerPlayer player) {
+        if (BeyonderData.isBeyonder(player) && BeyonderData.getSequence(player) <= MAX_SEQUENCE) return true;
+        player.displayClientMessage(Component.translatable("lotmcraft.believers.not_worthy", MAX_SEQUENCE).withColor(0xFF7A7A), true);
+        return false;
+    }
+
     /** Clique direito no ar com o Registro Sagrado: o jogador se registra entre os próprios fiéis */
     public static void worshipSelf(ServerPlayer player) {
+        if (!canGather(player)) return;
         CompoundTag persisted = player.getPersistentData().getCompound(Player.PERSISTED_NBT_TAG);
         if (!persisted.getBoolean(SELF)) {
             persisted.putBoolean(SELF, true);
@@ -74,7 +86,7 @@ public final class Believers {
         if (!event.getItemStack().is(ModItems.SACRED_REGISTER.get()) || !(event.getTarget() instanceof Villager villager)) return;
         event.setCanceled(true);
         event.setCancellationResult(InteractionResult.sidedSuccess(event.getLevel().isClientSide));
-        if (!(event.getEntity() instanceof ServerPlayer player)) return;
+        if (!(event.getEntity() instanceof ServerPlayer player) || !canGather(player)) return;
 
         CompoundTag tag = villager.getPersistentData();
         if (tag.hasUUID(BELIEVER_OF)) {
