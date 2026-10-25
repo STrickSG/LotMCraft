@@ -15,6 +15,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.chunk.ChunkGeneratorStructureState;
+import net.minecraft.world.level.levelgen.structure.placement.ConcentricRingsStructurePlacement;
 import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement;
 import net.minecraft.world.level.levelgen.structure.placement.StructurePlacementType;
 import org.jetbrains.annotations.NotNull;
@@ -29,8 +30,10 @@ import java.util.WeakHashMap;
  * Um número fixo de estruturas por mundo, longe do spawn e longe umas das outras:
  * ficam num anel em volta do spawn (entre min_distance e max_distance blocos), igualmente espaçadas,
  * e cada uma vai para o bioma da lista mais perto daquele ponto.
+ * Para o Minecraft ela é um concentric_rings (como as Fortalezas), então o /locate e mods como o
+ * Explorer's Compass acham as estruturas; as posições vêm daqui (FarRingPositionsMixin).
  */
-public class FarRingPlacement extends StructurePlacement {
+public class FarRingPlacement extends ConcentricRingsStructurePlacement {
     public static final MapCodec<FarRingPlacement> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Vec3i.offsetCodec(16).optionalFieldOf("locate_offset", Vec3i.ZERO).forGetter(FarRingPlacement::offset),
             FrequencyReductionMethod.CODEC.optionalFieldOf("frequency_reduction_method", FrequencyReductionMethod.DEFAULT).forGetter(FarRingPlacement::reduction),
@@ -59,7 +62,7 @@ public class FarRingPlacement extends StructurePlacement {
     public FarRingPlacement(Vec3i locateOffset, FrequencyReductionMethod frequencyReductionMethod, float frequency, int salt,
                             Optional<StructurePlacement.ExclusionZone> exclusionZone, int count, int minDistance, int maxDistance,
                             HolderSet<Biome> biomes, int searchRadius) {
-        super(locateOffset, frequencyReductionMethod, frequency, salt, exclusionZone);
+        super(locateOffset, frequencyReductionMethod, frequency, salt, exclusionZone, 0, 1, count, biomes);
         this.count = count;
         this.minDistance = minDistance;
         this.maxDistance = Math.max(minDistance, maxDistance);
