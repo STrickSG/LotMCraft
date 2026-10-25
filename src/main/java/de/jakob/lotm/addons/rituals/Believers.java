@@ -54,6 +54,18 @@ public final class Believers {
         return data(player.server).of(player.getUUID()).size() + (worshipsSelf(player) ? 1 : 0);
     }
 
+    /** Sanidade mínima com 100 fiéis ou mais: os fiéis são âncoras e seguram o portador antes de perder o controle */
+    public static final float ANCHOR_FLOOR = 0.20f;
+
+    /**
+     * Âncoras: Beyonders de Sequência 3 ou maior com fiéis não deixam a sanidade cair abaixo deste valor.
+     * Cresce com os fiéis, até ANCHOR_FLOOR com 100 ou mais. 0 para quem não tem fiéis ou não pode tê-los.
+     */
+    public static float anchorFloor(net.minecraft.world.entity.LivingEntity entity) {
+        if (!(entity instanceof ServerPlayer player) || !BeyonderData.isBeyonder(player) || BeyonderData.getSequence(player) > MAX_SEQUENCE) return 0f;
+        return ANCHOR_FLOOR * Math.min(count(player), NEEDED) / NEEDED;
+    }
+
     public static boolean worshipsSelf(Player player) {
         return player.getPersistentData().getCompound(Player.PERSISTED_NBT_TAG).getBoolean(SELF);
     }
