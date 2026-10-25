@@ -107,6 +107,11 @@ public class ModItemModelProvider extends ItemModelProvider {
             withExistingParent(itemName, mcLoc("item/generated")).texture("layer0", modLoc("item/singularity/fool_mask"));
             return;
         }
+        if (pathway.equals("sun")) {
+            // Sol em miniatura feito em cubos, no estilo do Blockbench (models/item/singularity/sun_blocky.json)
+            withExistingParent(itemName, modLoc("item/singularity/sun_blocky"));
+            return;
+        }
         if (pathway.equals("darkness")) {
             // Singularidade da Escuridão: sem modelo 3D por enquanto, usa a textura original
             getBuilder(itemName)

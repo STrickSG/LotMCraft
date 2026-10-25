@@ -21,7 +21,29 @@ import top.theillusivec4.curios.api.client.ICurioRenderer;
 /** Desenha a Singularidade equipada no corpo do personagem, em um lugar que combina com cada uma. */
 public class SingularityCurioRenderer implements ICurioRenderer {
 
-    private enum Placement { FACE, MONOCLE, BACK, HIP, HALO }
+    private enum Placement { FACE, MONOCLE, BACK, HIP, HALO, SHOULDER }
+
+    /** Posição ao lado do ombro (espaço do corpo: X positivo = lado esquerdo do jogador, Y para baixo, frente em -Z). */
+    public record Shoulder(float x, float y, float z, float scale) {}
+
+    // sol em miniatura: um pouco afastado do ombro esquerdo e um pouco atrás do personagem
+    private static final Shoulder SUN_SHOULDER = new Shoulder(0.72f, -0.18f, 0.22f, 0.30f);
+
+    /** Onde o sol em miniatura está no mundo (para as partículas saírem dele). */
+    public static net.minecraft.world.phys.Vec3 shoulderWorldPos(LivingEntity entity, float partialTicks) {
+        Shoulder s = SUN_SHOULDER;
+        float time = entity.tickCount + partialTicks;
+        double yaw = Math.toRadians(net.minecraft.util.Mth.rotLerp(partialTicks, entity.yBodyRotO, entity.yBodyRot));
+        double rightX = -Math.cos(yaw), rightZ = -Math.sin(yaw);   // lado direito do jogador
+        double forwardX = -Math.sin(yaw), forwardZ = Math.cos(yaw);
+        double side = -s.x(), back = s.z();
+        double height = 1.5 - (s.y() + Math.sin(time * 0.08f) * 0.04f);
+        net.minecraft.world.phys.Vec3 base = entity.getPosition(partialTicks);
+        return new net.minecraft.world.phys.Vec3(
+                base.x + rightX * side - forwardX * back,
+                base.y + height * entity.getScale(),
+                base.z + rightZ * side - forwardZ * back);
+    }
 
     private static Placement placementFor(String pathway) {
         return switch (pathway) {
@@ -29,6 +51,7 @@ public class SingularityCurioRenderer implements ICurioRenderer {
             case "error" -> Placement.MONOCLE;           // Monóculo de Cristal
             case "red_priest" -> Placement.BACK;         // Estandarte de Sangue de Salinger
             case "wheel_of_fortune", "justiciar" -> Placement.HIP;
+            case "sun" -> Placement.SHOULDER;            // sol em miniatura ao lado do ombro
             default -> Placement.HALO;                   // flutua atrás da cabeça
         };
     }
@@ -64,6 +87,17 @@ public class SingularityCurioRenderer implements ICurioRenderer {
                 poseStack.translate(0, -0.78 + bob, 0.3);
                 poseStack.mulPose(Axis.YP.rotationDegrees((ageInTicks + partialTicks) * 2f));
                 poseStack.scale(0.42f, -0.42f, -0.42f);
+            }
+            case SHOULDER -> {
+                // segue o corpo (vira junto e abaixa ao agachar), flutuando e girando devagar
+                ICurioRenderer.translateIfSneaking(poseStack, entity);
+                ICurioRenderer.rotateIfSneaking(poseStack, entity);
+                model.body.translateAndRotate(poseStack);
+                Shoulder s = SUN_SHOULDER;
+                float time = ageInTicks + partialTicks;
+                poseStack.translate(s.x(), s.y() + Math.sin(time * 0.08f) * 0.04f, s.z());
+                poseStack.mulPose(Axis.YP.rotationDegrees(time * 1.5f));
+                poseStack.scale(s.scale(), -s.scale(), -s.scale());
             }
             case BACK -> {
                 ICurioRenderer.translateIfSneaking(poseStack, entity);
