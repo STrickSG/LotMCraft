@@ -51,6 +51,11 @@ public abstract class PassiveAbility {
         }
     }
 
+    /** Mesmo que invalidateCache, pelo UUID (o cache do cliente é limpo quando chegam dados novos do jogador). */
+    public static void invalidateClientCache(UUID uuid) {
+        for (PassiveAbility ability : PassiveAbilityHandler.passiveAbilities) ability.cachedClient.remove(uuid);
+    }
+
     public boolean shouldApplyTo(LivingEntity entity) {
         Map<UUID, Boolean> cached = entity.level().isClientSide ? cachedClient : cachedServer;
         if(entity.tickCount % 20 != 0) {

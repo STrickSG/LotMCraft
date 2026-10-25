@@ -15,7 +15,11 @@ public class ClientBeyonderCache {
     }
 
     public static void updateData(UUID playerUUID, String pathway, int sequence, float spirituality, boolean griefingEnabled, boolean isPlayer, float digestionProgress, String[] pathwayHistory, int[] charStacks, int cowardWormAmount) {
-        dataCache.put(playerUUID, new BeyonderClientData(pathway, sequence, spirituality, griefingEnabled, digestionProgress, pathwayHistory, charStacks, cowardWormAmount));
+        BeyonderClientData old = dataCache.put(playerUUID, new BeyonderClientData(pathway, sequence, spirituality, griefingEnabled, digestionProgress, pathwayHistory, charStacks, cowardWormAmount));
+        // Caminho ou Sequência mudaram (ex.: comando): as passivas guardadas em cache para este jogador não valem mais
+        if (old == null || !old.pathway().equals(pathway) || old.sequence() != sequence) {
+            de.jakob.lotm.beyonders.abilities.core.PassiveAbility.invalidateClientCache(playerUUID);
+        }
     }
 
     public static String getPathway(UUID playerUUID) {

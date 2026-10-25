@@ -241,6 +241,7 @@ public class BeyonderData {
 
         component.setPathway(pathway);
         component.setSequence(sequence);
+        refreshPassives(entity);
         if(clearCharStack) component.clearCharacteristicStack();
         else component.setCharacteristicStack(0, sequence - 1);
         if (resetSpirituality) {
@@ -579,10 +580,22 @@ public class BeyonderData {
         return spiritualityLookup[sequence] * mult;
     }
 
+    /**
+     * Caminho ou Sequência mudaram: as passivas em cache e os aprimoramentos físicos do Caminho antigo
+     * são refeitos na hora (antes só a cada 10 segundos).
+     */
+    private static void refreshPassives(LivingEntity entity) {
+        if (!(entity.level() instanceof ServerLevel)) return;
+        de.jakob.lotm.events.BeyonderDataTickHandler.invalidateCache(entity);
+        de.jakob.lotm.beyonders.abilities.core.PhysicalEnhancementsAbility.resetEnhancements(entity.getUUID(), entity, false);
+        de.jakob.lotm.events.BeyonderDataTickHandler.invalidateCache(entity);
+    }
+
     public static void clearBeyonderData(LivingEntity entity) {
         BeyonderComponent component = entity.getData(ModAttachments.BEYONDER_COMPONENT);
         component.setPathway("none");
         component.setSequence(LOTMCraft.NON_BEYONDER_SEQ);
+        refreshPassives(entity);
         component.setSpirituality(0);
         component.setGriefingEnabled(true);
         component.setDigestionProgress(0);
