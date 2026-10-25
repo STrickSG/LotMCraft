@@ -6,14 +6,17 @@
     }
   ],
   "placement": {
-    "type": "minecraft:random_spread",
-
-    "salt": 4367768776,
-
+    "type": "lotmcraft:exclusive_spread",
+    "salt": 71928364,
     "spacing": 50,
-
     "separation": 10,
-    "heightmap": "MOTION_BLOCKING_NO_LEAVES",
-    "max_tries": 10
+    "avoid": [
+      "minecraft:villages",
+      "lotmcraft:red_priest_castle_set",
+      "lotmcraft:victorian_city_set",
+      "lotmcraft:big_evernight_church_set",
+      "lotmcraft:blazing_sun_church_set"
+    ],
+    "avoid_chunks": 8
   }
 }

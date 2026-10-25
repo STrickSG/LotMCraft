@@ -1,0 +1,102 @@
+{
+  "structures": [
+    {
+      "structure": "lotmcraft:beyonder_house_beach",
+      "weight": 1
+    },
+    {
+      "structure": "lotmcraft:beyonder_house_coast",
+      "weight": 1
+    },
+    {
+      "structure": "lotmcraft:beyonder_house_dark_forest",
+      "weight": 1
+    },
+    {
+      "structure": "lotmcraft:beyonder_house_desert",
+      "weight": 1
+    },
+    {
+      "structure": "lotmcraft:beyonder_house_desert_2",
+      "weight": 1
+    },
+    {
+      "structure": "lotmcraft:beyonder_house_desert_3",
+      "weight": 1
+    },
+    {
+      "structure": "lotmcraft:beyonder_house_jungle",
+      "weight": 1
+    },
+    {
+      "structure": "lotmcraft:beyonder_house_jungle_2",
+      "weight": 1
+    },
+    {
+      "structure": "lotmcraft:beyonder_house_meadows",
+      "weight": 1
+    },
+    {
+      "structure": "lotmcraft:beyonder_house_mesa",
+      "weight": 1
+    },
+    {
+      "structure": "lotmcraft:beyonder_house_mountain",
+      "weight": 1
+    },
+    {
+      "structure": "lotmcraft:beyonder_house_mushroom",
+      "weight": 1
+    },
+    {
+      "structure": "lotmcraft:beyonder_house_mushroom_2",
+      "weight": 1
+    },
+    {
+      "structure": "lotmcraft:beyonder_house_plains",
+      "weight": 1
+    },
+    {
+      "structure": "lotmcraft:beyonder_house_snow",
+      "weight": 1
+    },
+    {
+      "structure": "lotmcraft:beyonder_house_snow_2",
+      "weight": 1
+    },
+    {
+      "structure": "lotmcraft:beyonder_house_swamp",
+      "weight": 1
+    },
+    {
+      "structure": "lotmcraft:beyonder_house_swamp_2",
+      "weight": 1
+    },
+    {
+      "structure": "lotmcraft:beyonder_house_taiga",
+      "weight": 1
+    },
+    {
+      "structure": "lotmcraft:beyonder_house_taiga_2",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "lotmcraft:exclusive_spread",
+    "salt": 41277777,
+    "spacing": 24,
+    "separation": 8,
+    "avoid": [
+      "minecraft:villages",
+      "lotmcraft:red_priest_castle_set",
+      "lotmcraft:victorian_city_set",
+      "lotmcraft:big_evernight_church_set",
+      "lotmcraft:blazing_sun_church_set",
+      "lotmcraft:evernight_church_set",
+      "lotmcraft:uniqueness_temple_set",
+      "lotmcraft:beyonder_hideout_set",
+      "lotmcraft:tudor_trunsoest_ruins_set"
+    ],
+    "avoid_chunks": 5
+  }
+}

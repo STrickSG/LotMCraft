@@ -1,11 +1,25 @@
 {
   "structures": [
-    { "structure": "lotmcraft:tudor_trunsoest_ruins", "weight": 1 }
+    {
+      "structure": "lotmcraft:tudor_trunsoest_ruins",
+      "weight": 1
+    }
   ],
   "placement": {
-    "type": "minecraft:random_spread",
+    "type": "lotmcraft:exclusive_spread",
     "salt": 14562489,
     "spacing": 36,
-    "separation": 14
+    "separation": 14,
+    "avoid": [
+      "minecraft:villages",
+      "lotmcraft:red_priest_castle_set",
+      "lotmcraft:victorian_city_set",
+      "lotmcraft:big_evernight_church_set",
+      "lotmcraft:blazing_sun_church_set",
+      "lotmcraft:evernight_church_set",
+      "lotmcraft:uniqueness_temple_set",
+      "lotmcraft:beyonder_hideout_set"
+    ],
+    "avoid_chunks": 8
   }
 }

@@ -134,6 +134,23 @@ public class SimpleStructures extends Structure {
 
     }
 
+    private static final int MAX_HEIGHT_DIFFERENCE = 8;
+
+    /** Os quatro cantos do chunk não podem ter mais de 8 blocos de diferença de altura. */
+    private static boolean flatEnough(Structure.GenerationContext context) {
+        ChunkPos chunkPos = context.chunkPos();
+        int min = Integer.MAX_VALUE, max = Integer.MIN_VALUE;
+        for (int dx : new int[]{0, 15}) {
+            for (int dz : new int[]{0, 15}) {
+                int h = context.chunkGenerator().getFirstOccupiedHeight(chunkPos.getBlockX(dx), chunkPos.getBlockZ(dz),
+                        Heightmap.Types.WORLD_SURFACE_WG, context.heightAccessor(), context.randomState());
+                min = Math.min(min, h);
+                max = Math.max(max, h);
+            }
+        }
+        return max - min <= MAX_HEIGHT_DIFFERENCE;
+    }
+
     @Override
     public @NotNull TerrainAdjustment terrainAdaptation() {
         return this.terrainAdaptation;
@@ -141,6 +158,10 @@ public class SimpleStructures extends Structure {
 
     @Override
     public Optional<GenerationStub> findGenerationPoint(GenerationContext context) {
+        // na superfície: não nasce na água nem em terreno muito inclinado (era o que deixava casas flutuando)
+        if (this.projectStartToHeightmap.isPresent() && (!extraSpawningChecks(context) || !flatEnough(context))) {
+            return Optional.empty();
+        }
         // Set's our spawning blockpos's y offset
         int startY = this.startHeight.sample(context.random(), new WorldGenerationContext(context.chunkGenerator(), context.heightAccessor()));
 
