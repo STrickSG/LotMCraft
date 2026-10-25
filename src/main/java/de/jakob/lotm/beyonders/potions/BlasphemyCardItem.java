@@ -93,11 +93,6 @@ public class BlasphemyCardItem extends Item {
     }
 
     @Override
-    public boolean isFoil(@NotNull ItemStack stack) {
-        return true;
-    }
-
-    @Override
     public void appendHoverText(@NotNull ItemStack stack, @NotNull TooltipContext context, @NotNull List<Component> tooltip, @NotNull TooltipFlag flag) {
         List<Integer> sequences = availableSequences();
         if (sequences.isEmpty()) return;
