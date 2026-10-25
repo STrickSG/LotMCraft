@@ -31,18 +31,22 @@ import java.util.List;
 
 /**
  * Singularidades equipáveis (Curios):
- * - Sequência 1 do mesmo Caminho: efeitos positivos e negativos; o domínio vem com a Apoteose.
- * - Sequência 0 do mesmo Caminho: já dominada, só efeitos positivos.
- * - Sequência 0 de Caminho vizinho: o domínio sobe aos poucos enquanto equipada (cerca de 3 horas),
- *   cobrando Sanidade. Se a Sanidade zerar, ela rejeita o jogador e perde parte do domínio.
+ * - Sequência 1 do mesmo Caminho: o domínio sobe aos poucos enquanto equipada (1 hora), cobrando 1% de Sanidade
+ *   a cada 10 segundos; os bônus do mod (SingularityBonuses) valem pela metade até dominar.
+ * - Sequência 0 do mesmo Caminho: já dominada, bônus inteiros.
+ * - Sequência 0 de Caminho vizinho: o domínio sobe aos poucos enquanto equipada (2 horas e meia), cobrando 1% de
+ *   Sanidade a cada 5 segundos; recebe só efeitos do Minecraft, porque não domina o conceito daquele Caminho.
+ * Se a Sanidade zerar, ela rejeita o jogador e perde parte do domínio.
  * Ao morrer, o jogador perde as Singularidades não dominadas, que voltam a poder se manifestar nos templos.
  */
 @EventBusSubscriber(modid = LOTMCraft.MOD_ID)
 public class SingularityHandler {
     public static final String MULTIPLIER_CAUSE = "singularity";
     public static final float OWN_PATHWAY_MULTIPLIER = 1.25f;
-    /** Segundos equipada para dominar a Singularidade de um Caminho vizinho (3 horas). */
-    public static final int NEIGHBOR_DOMINATION_SECONDS = 3 * 60 * 60;
+    /** Segundos equipada para dominar a Singularidade do próprio Caminho (1 hora). */
+    public static final int OWN_DOMINATION_SECONDS = 60 * 60;
+    /** Segundos equipada para dominar a Singularidade de um Caminho vizinho (2 horas e meia). */
+    public static final int NEIGHBOR_DOMINATION_SECONDS = 150 * 60;
     private static final String KEPT_TAG = "lotmcraft_kept_singularities";
 
     private static Boolean curiosLoaded;
@@ -73,14 +77,17 @@ public class SingularityHandler {
             if (own && sequence == 0 && !SingularityData.isDominated(stack)) SingularityData.setDominance(stack, 1f);
             if (own) ownPathwayBoost = true;
 
-            if (definition != null) SingularityEffects.applyPositives(player, definition);
+            // do mesmo Caminho: bônus do mod (SingularityBonuses); vizinho: efeitos do Minecraft
+            boolean modBonuses = own && SingularityBonuses.hasBonuses(pathway);
+            if (definition != null && !modBonuses) SingularityEffects.applyPositives(player, definition);
             if ("error".equals(pathway)) revealNearby(player);
 
             if (SingularityData.isDominated(stack)) continue;
 
             // Ainda não dominada: efeitos negativos e custo de Sanidade
             if (definition != null && player.tickCount % (definition.negativeIntervalSeconds() * 20) == 0) {
-                definition.negative().accept(player);
+                var neighborNegative = own ? null : SingularityEffects.neighborNegative(pathway);
+                (neighborNegative != null ? neighborNegative : definition.negative()).accept(player);
             }
             var sanity = player.getData(ModAttachments.SANITY_COMPONENT);
             int sanityInterval = own ? 10 : 5;
@@ -88,9 +95,9 @@ public class SingularityHandler {
                 sanity.increaseSanityAndSyncIgnoreSequence(-0.01f, player);
             }
 
-            if (!own) {
+            {
                 float before = SingularityData.getDominance(stack);
-                float after = before + 1f / NEIGHBOR_DOMINATION_SECONDS;
+                float after = before + 1f / (own ? OWN_DOMINATION_SECONDS : NEIGHBOR_DOMINATION_SECONDS);
                 if (sanity.getSanity() <= 0.01f) {
                     // Perdeu o controle: a Singularidade rejeita o portador
                     after = Math.max(0f, before - 0.25f);
@@ -107,6 +114,7 @@ public class SingularityHandler {
             }
         }
         updateMultiplier(player, ownPathwayBoost);
+        SingularityBonuses.tick(player);
     }
 
     private static void updateMultiplier(ServerPlayer player, boolean active) {

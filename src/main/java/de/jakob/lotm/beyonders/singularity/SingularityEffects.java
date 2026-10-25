@@ -51,8 +51,8 @@ public final class SingularityEffects {
             // Visionário: mente afiada; alucinações escurecem a visão
             Map.entry("visionary", new Definition(List.of(p(MobEffects.DIG_SPEED, 0), p(MobEffects.NIGHT_VISION, 0)), 40,
                     give(MobEffects.DARKNESS, 6, 0))),
-            // Sol: resistência ao fogo e regeneração; a luz não deixa você se esconder
-            Map.entry("sun", new Definition(List.of(p(MobEffects.FIRE_RESISTANCE, 0), p(MobEffects.REGENERATION, 0)), 30,
+            // Sol: resistência ao fogo (Caminho vizinho); a luz não deixa você se esconder
+            Map.entry("sun", new Definition(List.of(p(MobEffects.FIRE_RESISTANCE, 0)), 30,
                     give(MobEffects.GLOWING, 20, 0))),
             // Tirano: domínio sobre os mares; raios caem ao seu redor
             Map.entry("tyrant", new Definition(List.of(p(MobEffects.WATER_BREATHING, 0), p(MobEffects.DOLPHINS_GRACE, 0), p(MobEffects.DAMAGE_BOOST, 0)), 60,
@@ -82,6 +82,41 @@ public final class SingularityEffects {
 
     public static Definition get(String pathway) {
         return DEFINITIONS.get(pathway);
+    }
+
+    /** Efeito negativo para quem é de um Caminho vizinho (se não houver, usa o mesmo do próprio Caminho). */
+    private static final Map<String, Consumer<ServerPlayer>> NEIGHBOR_NEGATIVES = Map.of(
+            // Sol: um dado de 6 lados; se cair 1, um raio solar desce do céu sobre o portador
+            "sun", player -> {
+                if (player.getRandom().nextInt(6) == 0) sunRay(player);
+            }
+    );
+
+    public static Consumer<ServerPlayer> neighborNegative(String pathway) {
+        return NEIGHBOR_NEGATIVES.get(pathway);
+    }
+
+    /** Raio solar no estilo da Luz Sagrada: desce do céu até o portador e fere, mas nunca mata. */
+    private static void sunRay(ServerPlayer player) {
+        ServerLevel level = player.serverLevel();
+        net.minecraft.core.particles.DustParticleOptions dust = new net.minecraft.core.particles.DustParticleOptions(new org.joml.Vector3f(1f, 180 / 255f, 66 / 255f), 2f);
+        Vec3 top = player.position().add(0, 14, 0);
+        level.playSound(null, player.getX(), player.getY(), player.getZ(), net.minecraft.sounds.SoundEvents.BEACON_ACTIVATE,
+                net.minecraft.sounds.SoundSource.PLAYERS, 3f, 1f);
+        for (int step = 0; step <= 6; step++) {
+            int s = step;
+            de.jakob.lotm.util.scheduling.ServerScheduler.scheduleDelayed(s * 3, () -> {
+                if (!player.isAlive()) return;
+                Vec3 pos = new Vec3(player.getX(), top.y - s * (top.y - player.getY()) / 6, player.getZ());
+                de.jakob.lotm.util.helper.ParticleUtil.spawnCircleParticles(level, net.minecraft.core.particles.ParticleTypes.FIREWORK, pos, 1.4, 20);
+                de.jakob.lotm.util.helper.ParticleUtil.spawnCircleParticles(level, dust, pos, 1.4, 20);
+                if (s == 6 && player.getHealth() > 1f) {
+                    float damage = Math.min(8f, player.getHealth() - 1f);
+                    player.hurt(de.jakob.lotm.damage.ModDamageTypes.source(level, de.jakob.lotm.damage.ModDamageTypes.LIGHT), damage);
+                    if (player.getHealth() < 1f) player.setHealth(1f);
+                }
+            }, level);
+        }
     }
 
     private static void randomShortTeleport(ServerPlayer player) {

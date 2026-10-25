@@ -553,7 +553,9 @@ public class BeyonderData {
 
     // for getting the spirituality of the main body instead, works on both client and server side
     public static float getMaxSpirituality(String path, int seq, Player player){
-        return getMaxSpirituality(path, seq) * ActingCapHelper.getEffectiveCap(player);
+        // a Singularidade do próprio Caminho aumenta a espiritualidade máxima
+        return getMaxSpirituality(path, seq) * ActingCapHelper.getEffectiveCap(player)
+                * de.jakob.lotm.beyonders.singularity.SingularityBonuses.maxSpiritualityFactor(player);
     }
 
     public static float getMaxSpirituality(String path, int seq){

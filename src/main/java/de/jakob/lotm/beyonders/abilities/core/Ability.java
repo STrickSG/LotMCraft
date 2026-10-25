@@ -155,7 +155,8 @@ public abstract class Ability {
         // Handle Cooldown
         AbilityCooldownComponent component = newUser.getData(ModAttachments.COOLDOWN_COMPONENT);
 
-        int inflatedCooldown = getCooldown(seq);
+        // a Singularidade do próprio Caminho encurta a recarga das habilidades do Caminho
+        int inflatedCooldown = Math.round(getCooldown(seq) * de.jakob.lotm.beyonders.singularity.SingularityBonuses.cooldownFactor(newUser, this));
         component.setCooldown(id, inflatedCooldown);
 
         // Use ability client and server sided
@@ -206,7 +207,8 @@ public abstract class Ability {
 
     public float getInflatedSpiritualityCost(LivingEntity entity, ServerLevel level, int seq) {
         float base = spiritualityCost(seq);
-        return base;
+        // a Singularidade do próprio Caminho deixa as habilidades do Caminho mais baratas
+        return base * de.jakob.lotm.beyonders.singularity.SingularityBonuses.costFactor(entity, this);
     }
 
     public float multiplier(LivingEntity entity) {
@@ -282,6 +284,9 @@ public abstract class Ability {
                     return true;
                 }
             }
+
+            // a Singularidade de um Caminho vizinho empresta uma habilidade alta do Caminho dela
+            if (de.jakob.lotm.beyonders.singularity.SingularityBonuses.grantsAbility(player, id)) return true;
         }
 
         return false;
