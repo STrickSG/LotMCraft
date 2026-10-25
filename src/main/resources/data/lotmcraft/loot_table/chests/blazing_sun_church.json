@@ -238,11 +238,16 @@
         {
           "type": "minecraft:item",
           "name": "lotmcraft:priest_of_light_ritual",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "name": "lotmcraft:unshadowed_ritual",
           "weight": 1
         },
         {
           "type": "minecraft:empty",
-          "weight": 9
+          "weight": 17
         }
       ]
     }

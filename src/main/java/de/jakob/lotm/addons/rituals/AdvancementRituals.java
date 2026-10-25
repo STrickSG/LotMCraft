@@ -3,6 +3,7 @@ package de.jakob.lotm.addons.rituals;
 import de.jakob.lotm.beyonders.potions.PotionItemHandler;
 import de.jakob.lotm.util.BeyonderData;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 
 import java.util.List;
@@ -29,10 +30,15 @@ public final class AdvancementRituals {
     }
 
     private static final List<Ritual> RITUALS = List.of(
-            // Sol, Sequência 5 (Sacerdote da Luz): beber a poção em escuridão total, enterrado em gelo compactado
+            // Sol, Sequência 5 (Sacerdote da Luz): em escuridão total, com o corpo enterrado em gelo que não derrete
             new Ritual("sun", 5, () -> List.of(
                     new ItemStack(Blocks.PACKED_ICE, 10),
-                    new ItemStack(PotionItemHandler.PRIEST_OF_LIGHT_POTION.get())))
+                    new ItemStack(PotionItemHandler.PRIEST_OF_LIGHT_POTION.get()))),
+            // Sol, Sequência 4 (Sem Sombra): extrair as emoções mais fortes antes e devolvê-las durante o avanço
+            new Ritual("sun", 4, () -> List.of(
+                    new ItemStack(Items.GLASS_BOTTLE),
+                    EmotionFlask.example(),
+                    new ItemStack(PotionItemHandler.UNSHADOWED.get())))
     );
 
     public static List<Ritual> all() {
