@@ -18,6 +18,7 @@ import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.minecraft.world.level.levelgen.structure.TemplateStructurePiece;
 import de.jakob.lotm.structure.FarRingPlacement;
+import de.jakob.lotm.structure.tomb.SurfaceTemplateStructure;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -30,7 +31,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Cartas que trocam de ruína: a estrutura delas só existe poucas vezes por mundo (far_ring: longe do spawn e umas das outras)
+ * Cartas que trocam de ruína: a estrutura delas só existe poucas vezes por mundo (far_ring: longe do spawn e umas das outras;
+ * ou dispersão normal com limite por mundo)
  * e, enquanto ninguém pega a carta, a cada 10 minutos ela vai para o altar de outra ruína, sorteada.
  */
 @EventBusSubscriber(modid = LOTMCraft.MOD_ID)
@@ -78,7 +80,8 @@ public final class BlasphemyCardRotation {
         List<BlockPos> altars = ALTARS.get(pathway);
         if (altars == null && SITES.containsKey(pathway)) {
             altars = findAltars(level, SITES.get(pathway));
-            if (!altars.isEmpty()) ALTARS.put(pathway, altars);
+            // com limite por mundo, novas ruínas ainda podem nascer: só guarda quando todas já existem
+            if (!altars.isEmpty() && complete(level, SITES.get(pathway))) ALTARS.put(pathway, altars);
         }
         return altars == null ? List.of() : altars;
     }
@@ -93,9 +96,17 @@ public final class BlasphemyCardRotation {
         List<BlockPos> result = new ArrayList<>();
         Holder<StructureSet> set = level.registryAccess().registryOrThrow(Registries.STRUCTURE_SET)
                 .getHolder(ResourceKey.create(Registries.STRUCTURE_SET, setId)).orElse(null);
-        if (set == null || !(set.value().placement() instanceof FarRingPlacement placement)) return result;
-        List<ChunkPos> rings = placement.positions(level.getChunkSource().getGeneratorState());
-        for (ChunkPos pos : rings) {
+        if (set == null) return result;
+        List<ChunkPos> sites = new ArrayList<>();
+        if (set.value().placement() instanceof FarRingPlacement placement) {
+            sites.addAll(placement.positions(level.getChunkSource().getGeneratorState()));
+        } else {
+            // dispersão normal com limite por mundo: só as que já nasceram
+            for (StructureSet.StructureSelectionEntry selection : set.value().structures()) {
+                if (selection.structure().value() instanceof SurfaceTemplateStructure capped && capped.maxPerWorld() > 0) sites.addAll(capped.created());
+            }
+        }
+        for (ChunkPos pos : sites) {
             ChunkAccess chunk = level.getChunk(pos.x, pos.z, ChunkStatus.STRUCTURE_STARTS);
             for (StructureSet.StructureSelectionEntry selection : set.value().structures()) {
                 StructureStart start = level.structureManager().getStartForStructure(SectionPos.bottomOf(chunk), selection.structure().value(), chunk);
@@ -110,5 +121,15 @@ public final class BlasphemyCardRotation {
             }
         }
         return result;
+    }
+
+    // far_ring já tem todas as posições desde o começo; com limite por mundo, só quando o limite foi alcançado
+    private static boolean complete(ServerLevel level, ResourceLocation setId) {
+        StructureSet set = level.registryAccess().registryOrThrow(Registries.STRUCTURE_SET).get(setId);
+        if (set == null || set.placement() instanceof FarRingPlacement) return true;
+        for (StructureSet.StructureSelectionEntry selection : set.structures()) {
+            if (selection.structure().value() instanceof SurfaceTemplateStructure capped && capped.created().size() < capped.maxPerWorld()) return false;
+        }
+        return true;
     }
 }

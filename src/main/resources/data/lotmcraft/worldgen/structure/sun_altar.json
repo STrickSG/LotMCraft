@@ -7,6 +7,8 @@
     25
   ],
   "terrain_adjustment": "beard_box",
+  "ignore_biome": false,
+  "max_per_world": 12,
   "biomes": "#lotmcraft:has_structure/sun_altar_biomes",
   "step": "surface_structures",
   "terrain_adaptation": "beard_box",

@@ -6,17 +6,16 @@
     }
   ],
   "placement": {
-    "type": "lotmcraft:far_ring",
+    "type": "lotmcraft:exclusive_spread",
     "salt": 31415926,
-    "count": 4,
-    "min_distance": 5000,
-    "max_distance": 7000,
-    "biomes": "#lotmcraft:has_structure/sun_altar_biomes",
-    "preferred_biomes": "minecraft:desert",
-    "biome_search_radius": 768,
+    "spacing": 64,
+    "separation": 32,
     "avoid": [
+      "minecraft:villages",
+      "minecraft:desert_pyramids",
+      "lotmcraft:tudor_trunsoest_ruins_set",
       "lotmcraft:observatory_set"
     ],
-    "avoid_distance": 1500
+    "avoid_chunks": 10
   }
 }

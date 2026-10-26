@@ -1,5 +1,6 @@
 package de.jakob.lotm.structure.tomb;
 
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import de.jakob.lotm.structure.ModStructures;
@@ -27,16 +28,24 @@ public class SurfaceTemplateStructure extends Structure {
             settingsCodec(instance),
             ResourceLocation.CODEC.fieldOf("template").forGetter(s -> s.template),
             BlockPos.CODEC.fieldOf("anchor").forGetter(s -> s.anchor),
-            TerrainAdjustment.CODEC.optionalFieldOf("terrain_adjustment", TerrainAdjustment.BEARD_BOX).forGetter(s -> s.adjustment)
+            TerrainAdjustment.CODEC.optionalFieldOf("terrain_adjustment", TerrainAdjustment.BEARD_BOX).forGetter(s -> s.adjustment),
+            Codec.BOOL.optionalFieldOf("ignore_biome", true).forGetter(s -> s.ignoreBiome),
+            Codec.intRange(0, 10_000).optionalFieldOf("max_per_world", 0).forGetter(s -> s.maxPerWorld)
     ).apply(instance, SurfaceTemplateStructure::new));
 
     private final ResourceLocation template;
     private final BlockPos anchor;
     private final TerrainAdjustment adjustment;
+    /** O bioma já foi escolhido pelo posicionamento (far_ring): não confere de novo aqui */
+    private final boolean ignoreBiome;
+    /** Quantas desta estrutura podem existir no mundo (0 = sem limite) */
+    private final int maxPerWorld;
 
-    public SurfaceTemplateStructure(StructureSettings settings, ResourceLocation template, BlockPos anchor, TerrainAdjustment adjustment) {
+    public SurfaceTemplateStructure(StructureSettings settings, ResourceLocation template, BlockPos anchor, TerrainAdjustment adjustment,
+                                    boolean ignoreBiome, int maxPerWorld) {
         super(settings);
         this.template = template; this.anchor = anchor; this.adjustment = adjustment;
+        this.ignoreBiome = ignoreBiome; this.maxPerWorld = maxPerWorld;
     }
 
     @Override
@@ -68,10 +77,35 @@ public class SurfaceTemplateStructure extends Structure {
                 builder.addPiece(new TombTemplatePiece(context.structureTemplateManager(), template, pos, rotation, adjustment))));
     }
 
-    /** O bioma já foi escolhido pelo posicionamento (far_ring): aqui não pode faltar estrutura por causa dele */
     @Override
     public @NotNull Optional<GenerationStub> findValidGenerationPoint(@NotNull GenerationContext context) {
-        return findGenerationPoint(context);
+        if (maxPerWorld > 0 && !de.jakob.lotm.structure.StructureCap.hasRoom(template, maxPerWorld)) return Optional.empty();
+        // far_ring: o bioma já foi escolhido pelo posicionamento, aqui não pode faltar estrutura por causa dele
+        return ignoreBiome ? findGenerationPoint(context) : super.findValidGenerationPoint(context);
+    }
+
+    /** Com limite por mundo: só cria se ainda houver lugar (a reserva é feita aqui, quando a estrutura nasce de verdade) */
+    @Override
+    public @NotNull net.minecraft.world.level.levelgen.structure.StructureStart generate(net.minecraft.core.RegistryAccess registryAccess,
+            net.minecraft.world.level.chunk.ChunkGenerator chunkGenerator, net.minecraft.world.level.biome.BiomeSource biomeSource,
+            net.minecraft.world.level.levelgen.RandomState randomState,
+            net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager structureTemplateManager, long seed,
+            ChunkPos chunkPos, int references, net.minecraft.world.level.LevelHeightAccessor heightAccessor,
+            java.util.function.Predicate<net.minecraft.core.Holder<net.minecraft.world.level.biome.Biome>> validBiome) {
+        var start = super.generate(registryAccess, chunkGenerator, biomeSource, randomState, structureTemplateManager, seed, chunkPos, references, heightAccessor, validBiome);
+        if (maxPerWorld > 0 && start.isValid() && !de.jakob.lotm.structure.StructureCap.claim(template, maxPerWorld, chunkPos)) {
+            return net.minecraft.world.level.levelgen.structure.StructureStart.INVALID_START;
+        }
+        return start;
+    }
+
+    /** Onde já nasceram (só para estruturas com limite por mundo) */
+    public java.util.List<ChunkPos> created() {
+        return de.jakob.lotm.structure.StructureCap.created(template);
+    }
+
+    public int maxPerWorld() {
+        return maxPerWorld;
     }
 
     @Override
