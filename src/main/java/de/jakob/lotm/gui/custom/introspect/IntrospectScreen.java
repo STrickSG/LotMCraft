@@ -367,6 +367,19 @@ public class IntrospectScreen extends AbstractContainerScreen<IntrospectMenu> {
 
     // =====================================================================================
 
+    /*
+     * A tela inteira (abas à esquerda + moldura + painéis à direita) precisa de ~423 x 264 pixels de interface.
+     * Com a escala automática do Minecraft, monitores 1440p, 4K, 1366x768 e 720p só têm 240-256 de altura e
+     * ~427-455 de largura: parte das habilidades, a roda e os botões ficavam fora da tela. Enquanto esta tela
+     * está aberta, a escala da interface desce o necessário (sempre um número inteiro, para a pixel art
+     * continuar nítida) e volta ao normal quando ela fecha.
+     */
+    private static final int CONTENT_LEFT = TAB_W + 6;
+    private static final int CONTENT_RIGHT = 192 + 5 + 140 + 2;
+    private static final int CONTENT_HEIGHT = 15 + 115 + 5 + 100 + 5 + 20 + 4;
+    private static final int COG_HEIGHT = 26;
+    private boolean scaleChanged = false;
+
     public IntrospectScreen(IntrospectMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
         this.playerInventory = playerInventory;
@@ -609,9 +622,28 @@ public class IntrospectScreen extends AbstractContainerScreen<IntrospectMenu> {
 
     @Override
     protected void init() {
+        if (this.minecraft != null) {
+            com.mojang.blaze3d.platform.Window window = this.minecraft.getWindow();
+            int wanted = window.calculateScale(this.minecraft.options.guiScale().get(), this.minecraft.isEnforceUnicode());
+            int fits = (int) Math.floor(Math.min(window.getWidth() / (double) (CONTENT_LEFT + CONTENT_RIGHT),
+                    window.getHeight() / (double) CONTENT_HEIGHT));
+            int scale = Math.max(1, Math.min(wanted, fits));
+            if (scale != (int) window.getGuiScale()) {
+                window.setGuiScale(scale);
+                scaleChanged = true;
+            }
+            this.width = window.getGuiScaledWidth();
+            this.height = window.getGuiScaledHeight();
+        }
         super.init();
 
         if (this.minecraft == null) return;
+
+        // centraliza o conjunto todo, não só a moldura (as abas e o painel da direita têm larguras diferentes)
+        this.leftPos = (this.width - (CONTENT_LEFT + CONTENT_RIGHT)) / 2 + CONTENT_LEFT;
+        this.topPos = this.height >= CONTENT_HEIGHT + COG_HEIGHT
+                ? (this.height - CONTENT_HEIGHT - COG_HEIGHT) / 2 + COG_HEIGHT
+                : Math.max(0, (this.height - CONTENT_HEIGHT) / 2);
 
         this.killCount = ClientSacrificeCache.getKillCount();
 
@@ -931,6 +963,17 @@ public class IntrospectScreen extends AbstractContainerScreen<IntrospectMenu> {
     // =====================================================================================
     //  Render
     // =====================================================================================
+
+    /** Fechou (ou abriu outra tela por cima): a escala da interface volta a ser a das opções. */
+    @Override
+    public void removed() {
+        super.removed();
+        if (scaleChanged && this.minecraft != null) {
+            com.mojang.blaze3d.platform.Window window = this.minecraft.getWindow();
+            window.setGuiScale(window.calculateScale(this.minecraft.options.guiScale().get(), this.minecraft.isEnforceUnicode()));
+            scaleChanged = false;
+        }
+    }
 
     @Override
     public void render(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {

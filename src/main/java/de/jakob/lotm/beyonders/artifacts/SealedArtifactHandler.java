@@ -69,13 +69,13 @@ public class SealedArtifactHandler {
         List<Ability> pathwayAbilities = new ArrayList<>();
 
         // always add one ability from the same sequence
-        pathwayAbilities.add(getPathwayAbilities(pathway, sequence, true, pathwayAbilities));
+        addIfPresent(pathwayAbilities, getPathwayAbilities(pathway, sequence, true, pathwayAbilities));
 
         if (sequence <= 2) {
-            pathwayAbilities.add(getPathwayAbilities(pathway, sequence, false, pathwayAbilities));
-            pathwayAbilities.add(getPathwayAbilities(pathway, sequence, false, pathwayAbilities));
+            addIfPresent(pathwayAbilities, getPathwayAbilities(pathway, sequence, false, pathwayAbilities));
+            addIfPresent(pathwayAbilities, getPathwayAbilities(pathway, sequence, false, pathwayAbilities));
         } else if (sequence <= 4) {
-            pathwayAbilities.add(getPathwayAbilities(pathway, sequence, false, pathwayAbilities));
+            addIfPresent(pathwayAbilities, getPathwayAbilities(pathway, sequence, false, pathwayAbilities));
         }
 
         return pathwayAbilities;
@@ -84,6 +84,11 @@ public class SealedArtifactHandler {
     /**
      * Gets all abilities for a pathway at or above a sequence (higher sequence number = lower rank)
      */
+    /** Quando o Caminho não tem mais habilidades para sortear, não entra uma habilidade nula no artefato */
+    private static void addIfPresent(List<Ability> list, Ability ability) {
+        if (ability != null) list.add(ability);
+    }
+
     private static Ability getPathwayAbilities(String pathway, int targetSequence, boolean exact, List<Ability> excluded) {
         Ability validAbility;
         if (exact){
