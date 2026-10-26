@@ -79,7 +79,7 @@ public class SurfaceTemplateStructure extends Structure {
 
     @Override
     public @NotNull Optional<GenerationStub> findValidGenerationPoint(@NotNull GenerationContext context) {
-        if (maxPerWorld > 0 && !de.jakob.lotm.structure.StructureCap.hasRoom(template, maxPerWorld)) return Optional.empty();
+        if (maxPerWorld > 0 && !de.jakob.lotm.structure.StructureCap.allowed(template, maxPerWorld, context.chunkPos())) return Optional.empty();
         // far_ring: o bioma já foi escolhido pelo posicionamento, aqui não pode faltar estrutura por causa dele
         return ignoreBiome ? findGenerationPoint(context) : super.findValidGenerationPoint(context);
     }

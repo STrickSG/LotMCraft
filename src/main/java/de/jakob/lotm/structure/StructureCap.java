@@ -34,11 +34,13 @@ public class StructureCap extends SavedData {
         return server.overworld().getDataStorage().computeIfAbsent(new Factory<>(StructureCap::new, StructureCap::load, null), NAME);
     }
 
-    /** Ainda cabe mais uma desta estrutura neste mundo? */
-    public static boolean hasRoom(ResourceLocation structure, int max) {
+    /** A estrutura pode existir neste chunk? (ainda cabe mais uma, ou ela já nasceu aqui) */
+    public static boolean allowed(ResourceLocation structure, int max, ChunkPos pos) {
         synchronized (LOCK) {
             StructureCap cap = get();
-            return cap == null || cap.created.getOrDefault(structure.toString(), List.of()).size() < max;
+            if (cap == null) return true;
+            List<ChunkPos> list = cap.created.getOrDefault(structure.toString(), List.of());
+            return list.size() < max || list.contains(pos);
         }
     }
 
