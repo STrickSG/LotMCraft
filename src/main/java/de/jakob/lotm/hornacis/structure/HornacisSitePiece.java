@@ -7,7 +7,17 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.nbt.DoubleTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.StructureManager;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.TemplateStructurePiece;
 import net.minecraft.world.level.levelgen.structure.TerrainAdjustment;
@@ -55,9 +65,47 @@ public class HornacisSitePiece extends TemplateStructurePiece implements PieceBe
     }
 
     private static StructurePlaceSettings settings(Rotation rotation, BlockPos pivot) {
-        return new StructurePlaceSettings().setRotation(rotation).setRotationPivot(pivot)
+        // as entidades são postas à parte (placeEntities)
+        return new StructurePlaceSettings().setRotation(rotation).setRotationPivot(pivot).setIgnoreEntities(true)
                 .addProcessor(BlockIgnoreProcessor.STRUCTURE_BLOCK)
                 .setLiquidSettings(LiquidSettings.IGNORE_WATERLOGGING);
+    }
+
+    @Override
+    public void postProcess(@NotNull WorldGenLevel level, @NotNull StructureManager structures, @NotNull ChunkGenerator generator,
+                            @NotNull RandomSource random, @NotNull BoundingBox box, @NotNull ChunkPos chunk, @NotNull BlockPos origin) {
+        super.postProcess(level, structures, generator, random, box, chunk, origin);
+        placeEntities(level, box);
+    }
+
+    /**
+     * Como no StructureTemplate do vanilla, mas também acerta o bloco onde molduras e pinturas ficam presas
+     * (TileX/Y/Z): no template ele é relativo e, sem isso, a entidade reclama de "posição inválida".
+     */
+    private void placeEntities(ServerLevelAccessor level, BoundingBox box) {
+        Mirror mirror = placeSettings.getMirror();
+        for (StructureTemplate.StructureEntityInfo info : template.entityInfoList) {
+            BlockPos block = StructureTemplate.transform(info.blockPos, mirror, rotation, pivot).offset(templatePosition);
+            if (!box.isInside(block)) continue;
+            Vec3 pos = StructureTemplate.transform(info.pos, mirror, rotation, pivot).add(templatePosition.getX(), templatePosition.getY(), templatePosition.getZ());
+            CompoundTag tag = info.nbt.copy();
+            ListTag list = new ListTag();
+            list.add(DoubleTag.valueOf(pos.x));
+            list.add(DoubleTag.valueOf(pos.y));
+            list.add(DoubleTag.valueOf(pos.z));
+            tag.put("Pos", list);
+            tag.remove("UUID");
+            if (tag.contains("TileX")) {
+                tag.putInt("TileX", block.getX());
+                tag.putInt("TileY", block.getY());
+                tag.putInt("TileZ", block.getZ());
+            }
+            EntityType.create(tag, level.getLevel()).ifPresent(entity -> {
+                float yaw = entity.rotate(rotation) + entity.mirror(mirror) - entity.getYRot();
+                entity.moveTo(pos.x, pos.y, pos.z, yaw, entity.getXRot());
+                level.addFreshEntityWithPassengers(entity);
+            });
+        }
     }
 
     @Override
