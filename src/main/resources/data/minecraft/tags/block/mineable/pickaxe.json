@@ -1,0 +1,24 @@
+{
+  "replace": false,
+  "values": [
+    "lotmcraft:hornacis_stone_bricks",
+    "lotmcraft:hornacis_stone_brick_stairs",
+    "lotmcraft:hornacis_stone_brick_slab",
+    "lotmcraft:hornacis_stone_brick_wall",
+    "lotmcraft:cracked_hornacis_stone_bricks",
+    "lotmcraft:mossy_hornacis_stone_bricks",
+    "lotmcraft:polished_hornacis_stone",
+    "lotmcraft:polished_hornacis_stone_stairs",
+    "lotmcraft:polished_hornacis_stone_slab",
+    "lotmcraft:hornacis_column",
+    "lotmcraft:hornacis_column_capital",
+    "lotmcraft:evernight_carved_stone",
+    "lotmcraft:evernight_tiles",
+    "lotmcraft:evernight_tile_slab",
+    "lotmcraft:evernight_glass",
+    "lotmcraft:dome_tiles",
+    "lotmcraft:dome_tile_stairs",
+    "lotmcraft:dome_tile_slab",
+    "lotmcraft:stone_candlestick"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "structures": [
+    {
+      "structure": "lotmcraft:hornacis_summit_ruin",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "lotmcraft:hornacis_site",
+    "salt": 439287825,
+    "site": "summit_ruin"
+  }
+}

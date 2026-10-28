@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "lotmcraft:hornacis_stone_brick_slab",
+    "lotmcraft:polished_hornacis_stone_slab",
+    "lotmcraft:evernight_tile_slab",
+    "lotmcraft:dome_tile_slab"
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "lotmcraft:block/polished_hornacis_stone",
+    "side": "lotmcraft:block/hornacis_column_capital"
+  }
+}

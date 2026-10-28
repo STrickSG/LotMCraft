@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "bottom": "lotmcraft:block/evernight_tiles",
+    "top": "lotmcraft:block/evernight_tiles",
+    "side": "lotmcraft:block/evernight_tiles"
+  }
+}

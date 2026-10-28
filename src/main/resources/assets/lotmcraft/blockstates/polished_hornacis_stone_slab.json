@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "lotmcraft:block/polished_hornacis_stone_slab"
+    },
+    "type=top": {
+      "model": "lotmcraft:block/polished_hornacis_stone_slab_top"
+    },
+    "type=double": {
+      "model": "lotmcraft:block/polished_hornacis_stone"
+    }
+  }
+}

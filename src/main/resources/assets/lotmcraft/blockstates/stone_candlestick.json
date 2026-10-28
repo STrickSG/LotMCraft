@@ -1,0 +1,31 @@
+{
+  "variants": {
+    "facing=north,wall=false": {
+      "model": "lotmcraft:block/stone_candlestick"
+    },
+    "facing=north,wall=true": {
+      "model": "lotmcraft:block/stone_candlestick_wall"
+    },
+    "facing=east,wall=false": {
+      "model": "lotmcraft:block/stone_candlestick"
+    },
+    "facing=east,wall=true": {
+      "model": "lotmcraft:block/stone_candlestick_wall",
+      "y": 90
+    },
+    "facing=south,wall=false": {
+      "model": "lotmcraft:block/stone_candlestick"
+    },
+    "facing=south,wall=true": {
+      "model": "lotmcraft:block/stone_candlestick_wall",
+      "y": 180
+    },
+    "facing=west,wall=false": {
+      "model": "lotmcraft:block/stone_candlestick"
+    },
+    "facing=west,wall=true": {
+      "model": "lotmcraft:block/stone_candlestick_wall",
+      "y": 270
+    }
+  }
+}

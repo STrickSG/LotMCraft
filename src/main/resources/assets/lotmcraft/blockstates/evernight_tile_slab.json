@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "lotmcraft:block/evernight_tile_slab"
+    },
+    "type=top": {
+      "model": "lotmcraft:block/evernight_tile_slab_top"
+    },
+    "type=double": {
+      "model": "lotmcraft:block/evernight_tiles"
+    }
+  }
+}
