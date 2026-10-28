@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:block/cube_column",
-  "textures": {
-    "end": "lotmcraft:block/hornacis_column_top",
-    "side": "lotmcraft:block/hornacis_column"
-  }
-}

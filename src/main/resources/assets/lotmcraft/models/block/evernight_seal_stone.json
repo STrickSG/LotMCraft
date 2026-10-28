@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:block/cube_all",
-  "textures": {
-    "all": "lotmcraft:block/evernight_seal_stone"
-  }
-}

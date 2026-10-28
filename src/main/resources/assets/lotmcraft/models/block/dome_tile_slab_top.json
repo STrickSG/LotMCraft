@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/slab_top",
-  "textures": {
-    "bottom": "lotmcraft:block/dome_tiles",
-    "top": "lotmcraft:block/dome_tiles",
-    "side": "lotmcraft:block/dome_tiles"
-  }
-}

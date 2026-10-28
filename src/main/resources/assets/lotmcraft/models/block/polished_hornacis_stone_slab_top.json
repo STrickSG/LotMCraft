@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/slab_top",
-  "textures": {
-    "bottom": "lotmcraft:block/polished_hornacis_stone",
-    "top": "lotmcraft:block/polished_hornacis_stone",
-    "side": "lotmcraft:block/polished_hornacis_stone"
-  }
-}
