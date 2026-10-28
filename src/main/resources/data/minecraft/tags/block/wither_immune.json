@@ -1,0 +1,26 @@
+{
+  "replace": false,
+  "values": [
+    "lotmcraft:ancient_stone",
+    "lotmcraft:ancient_stone_stairs",
+    "lotmcraft:ancient_stone_slab",
+    "lotmcraft:ancient_stone_wall",
+    "lotmcraft:cracked_ancient_stone",
+    "lotmcraft:mossy_ancient_stone",
+    "lotmcraft:ancient_plaster",
+    "lotmcraft:ancient_fresco",
+    "lotmcraft:ancient_beam",
+    "lotmcraft:ancient_boards",
+    "lotmcraft:ancient_board_stairs",
+    "lotmcraft:ancient_board_slab",
+    "lotmcraft:ancient_slate",
+    "lotmcraft:ancient_slate_stairs",
+    "lotmcraft:ancient_slate_slab",
+    "lotmcraft:ancient_lattice",
+    "lotmcraft:ancient_set_table",
+    "lotmcraft:ancient_bottles",
+    "lotmcraft:ancient_candlestick",
+    "lotmcraft:evernight_seal",
+    "lotmcraft:evernight_seal_stone"
+  ]
+}

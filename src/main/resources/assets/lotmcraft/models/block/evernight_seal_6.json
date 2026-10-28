@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "lotmcraft:block/evernight_seal_stone",
+    "north": "lotmcraft:block/evernight_seal_6",
+    "south": "lotmcraft:block/evernight_seal_stone",
+    "east": "lotmcraft:block/evernight_seal_stone",
+    "west": "lotmcraft:block/evernight_seal_stone",
+    "up": "lotmcraft:block/evernight_seal_stone",
+    "down": "lotmcraft:block/evernight_seal_stone"
+  }
+}

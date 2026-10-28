@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "lotmcraft:ancient_stone_slab",
+    "lotmcraft:ancient_board_slab",
+    "lotmcraft:ancient_slate_slab"
+  ]
+}

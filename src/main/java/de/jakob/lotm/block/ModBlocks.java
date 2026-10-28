@@ -125,6 +125,7 @@ public class ModBlocks {
     }
 
     public static void register(IEventBus eventBus) {
+        de.jakob.lotm.block.hornacis.AncientBlocks.init();
         BLOCKS.register(eventBus);
     }
 

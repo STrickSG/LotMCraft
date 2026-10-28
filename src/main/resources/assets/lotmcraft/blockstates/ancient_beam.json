@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=y": {
+      "model": "lotmcraft:block/ancient_beam"
+    },
+    "axis=z": {
+      "model": "lotmcraft:block/ancient_beam_horizontal",
+      "x": 90
+    },
+    "axis=x": {
+      "model": "lotmcraft:block/ancient_beam_horizontal",
+      "x": 90,
+      "y": 90
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "lotmcraft:block/ancient_set_table"
+    },
+    "facing=east": {
+      "model": "lotmcraft:block/ancient_set_table",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "lotmcraft:block/ancient_set_table",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "lotmcraft:block/ancient_set_table",
+      "y": 270
+    }
+  }
+}
