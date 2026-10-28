@@ -25,7 +25,8 @@ import java.util.Optional;
  * Uma estrutura num lugar da Cordilheira de Hornacis (ver HornacisSitePlacement). O template sai da lista pelo
  * número do lugar, então cada lugar tem sempre a mesma; acima de {@code high_y} usa a lista {@code high_templates}
  * (por exemplo, os acampamentos soterrados na neve). Com {@code houses}, vira um vilarejo: o template é o centro
- * (a praça) e {@code house_count} casas ficam num anel de raio {@code house_ring} em volta dele.
+ * (a praça) e {@code house_count} casas ficam num anel de raio {@code house_ring} em volta dele; {@code extras} são restos
+ * soltos ({@code extra_count} deles, num anel de raio {@code extra_ring}, entre as casas).
  */
 public class HornacisSiteStructure extends Structure {
     public static final MapCodec<HornacisSiteStructure> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -37,7 +38,10 @@ public class HornacisSiteStructure extends Structure {
             Codec.INT.optionalFieldOf("high_y", Integer.MAX_VALUE).forGetter(s -> s.highY),
             ResourceLocation.CODEC.listOf().optionalFieldOf("houses", List.of()).forGetter(s -> s.houses),
             Codec.INT.optionalFieldOf("house_count", 0).forGetter(s -> s.houseCount),
-            Codec.INT.optionalFieldOf("house_ring", 20).forGetter(s -> s.houseRing)
+            Codec.INT.optionalFieldOf("house_ring", 20).forGetter(s -> s.houseRing),
+            ResourceLocation.CODEC.listOf().optionalFieldOf("extras", List.of()).forGetter(s -> s.extras),
+            Codec.INT.optionalFieldOf("extra_count", 0).forGetter(s -> s.extraCount),
+            Codec.INT.optionalFieldOf("extra_ring", 30).forGetter(s -> s.extraRing)
     ).apply(instance, HornacisSiteStructure::new));
 
     private final HornacisRegion.SiteType site;
@@ -46,9 +50,13 @@ public class HornacisSiteStructure extends Structure {
     /** Vilarejo: casas em volta do template do centro, cada uma no chão do próprio lugar e com a porta para o centro */
     private final List<ResourceLocation> houses;
     private final int houseCount, houseRing;
+    /** Restos soltos (pedaços de muro, cantos de casa) num anel mais de fora, entre as casas */
+    private final List<ResourceLocation> extras;
+    private final int extraCount, extraRing;
 
     public HornacisSiteStructure(StructureSettings settings, HornacisRegion.SiteType site, List<ResourceLocation> templates,
-                                 List<ResourceLocation> highTemplates, int highY, List<ResourceLocation> houses, int houseCount, int houseRing) {
+                                 List<ResourceLocation> highTemplates, int highY, List<ResourceLocation> houses, int houseCount, int houseRing,
+                                 List<ResourceLocation> extras, int extraCount, int extraRing) {
         super(settings);
         this.site = site;
         this.templates = templates;
@@ -57,6 +65,9 @@ public class HornacisSiteStructure extends Structure {
         this.houses = houses;
         this.houseCount = houseCount;
         this.houseRing = houseRing;
+        this.extras = extras;
+        this.extraCount = extraCount;
+        this.extraRing = extraRing;
     }
 
     @Override
@@ -96,6 +107,15 @@ public class HornacisSiteStructure extends Structure {
             int quarter = Math.floorMod((int) Math.round((toCenter - Math.PI / 2) / (Math.PI / 2)), 4);
             ResourceLocation house = houses.get((first + k) % houses.size());
             builder.addPiece(new HornacisSitePiece(context.structureTemplateManager(), house, x, groundAt(context, x, z, 4), z, Rotation.values()[quarter]));
+        }
+        // os restos soltos ficam entre as casas, mais longe da praça, virados para qualquer lado
+        for (int k = 0; k < extraCount && !extras.isEmpty(); k++) {
+            double a = start + (k + 0.5) * Math.PI * 2 / Math.max(houseCount, extraCount) + (random.nextDouble() - 0.5) * 0.3;
+            double r = extraRing + random.nextInt(5) - 2;
+            int x = s.x() + (int) Math.round(Math.cos(a) * r), z = s.z() + (int) Math.round(Math.sin(a) * r);
+            ResourceLocation extra = extras.get((first + k) % extras.size());
+            builder.addPiece(new HornacisSitePiece(context.structureTemplateManager(), extra, x, groundAt(context, x, z, 3), z,
+                    Rotation.values()[random.nextInt(4)], false));
         }
     }
 

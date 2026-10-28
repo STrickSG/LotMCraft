@@ -798,20 +798,36 @@ public final class HornacisRegion {
         Sample tmp = new Sample();
         // palácio no platô do cume
         sites.add(new Site(SiteType.PALACE, 0, (int) Math.round(mainX), (int) Math.round(mainZ), SUMMIT_Y, 50, (int) Math.round(Math.toDegrees(mainAngle) / 90) & 3));
-        // ruínas no cume: terraços nos ombros do chifre, entre as arestas
+        // ruínas no cume: nos ombros do chifre, entre as arestas, no trecho mais plano de cada lado (numa encosta
+        // íngreme o terraço viraria um buraco cavado na montanha); se nenhum trecho for plano o bastante, não há ruína
         for (int i = 0; i < 3; i++) {
             double ang = mainAngle + i * Math.PI * 2 / 3;
-            for (double rr = 150; rr < 700; rr += 10) {
-                int x = (int) Math.round(mainX + StrictMath.cos(ang) * rr), z = (int) Math.round(mainZ + StrictMath.sin(ang) * rr);
-                sampleRaw(x, z, tmp);
-                if (tmp.raw < 1500) {
-                    sites.add(new Site(SiteType.SUMMIT_RUIN, i, x, z, (int) Math.round(tmp.raw), 30, i & 3));
-                    break;
+            double best = Double.MAX_VALUE;
+            int bx = 0, bz = 0, by = 0;
+            for (double rr = 150; rr <= 900; rr += 10) {
+                for (int k = -4; k <= 4; k++) {
+                    double a = ang + k * 0.12;
+                    int x = (int) Math.round(mainX + StrictMath.cos(a) * rr), z = (int) Math.round(mainZ + StrictMath.sin(a) * rr);
+                    sampleRaw(x, z, tmp);
+                    if (tmp.mask < 0.85 || tmp.raw > 1500 || tmp.raw < 1150) continue;
+                    double h = tmp.raw, slope = 0;
+                    for (int q = 0; q < 8 && slope < best; q++) {
+                        double qa = q * Math.PI / 4;
+                        sampleRaw(x + StrictMath.cos(qa) * 26, z + StrictMath.sin(qa) * 26, tmp);
+                        slope = Math.max(slope, Math.abs(tmp.raw - h) / 26);
+                    }
+                    if (slope < best) {
+                        best = slope;
+                        bx = x;
+                        bz = z;
+                        by = (int) Math.round(h);
+                    }
                 }
             }
+            if (best < 0.5) sites.add(new Site(SiteType.SUMMIT_RUIN, i, bx, bz, by, 30, i & 3));
         }
         // ruínas nas florestas, vales e encostas suaves em volta do pico principal
-        s = pickSites(s, SiteType.RUIN, 10, 1500, 5000, 300, 1150, 0.6, 700, 36, tmp);
+        s = pickSites(s, SiteType.RUIN, 10, 1500, 5000, 300, 1150, 0.42, 700, 36, tmp);
         // acampamentos de aventureiros espalhados pela cordilheira
         s = pickSitesAnywhere(s, SiteType.CAMP, 35, 250, 1200, 0.8, 700, 14, tmp);
         // o mosteiro da Igreja da Noite Eterna, vigiando o caminho para o pico

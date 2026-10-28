@@ -1,5 +1,6 @@
 package de.jakob.lotm.hornacis.structure;
 
+import de.jakob.lotm.block.hornacis.AncientBlocks;
 import de.jakob.lotm.structure.ModStructures;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
@@ -15,6 +16,7 @@ import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.phys.Vec3;
@@ -40,16 +42,24 @@ public class HornacisSitePiece extends TemplateStructurePiece implements PieceBe
 
     private final Rotation rotation;
     private final BlockPos pivot;
+    /** Se o terreno em volta é ajustado ao chão da peça (os restos soltos só pousam no chão, sem cavar) */
+    private final boolean adjustTerrain;
 
     public HornacisSitePiece(StructureTemplateManager manager, ResourceLocation template, int x, int y, int z, Rotation rotation) {
-        this(manager, template, rotation, centerOf(manager, template), x, y, z);
+        this(manager, template, x, y, z, rotation, true);
     }
 
-    private HornacisSitePiece(StructureTemplateManager manager, ResourceLocation template, Rotation rotation, BlockPos pivot, int x, int y, int z) {
+    public HornacisSitePiece(StructureTemplateManager manager, ResourceLocation template, int x, int y, int z, Rotation rotation, boolean adjustTerrain) {
+        this(manager, template, rotation, centerOf(manager, template), x, y, z, adjustTerrain);
+    }
+
+    private HornacisSitePiece(StructureTemplateManager manager, ResourceLocation template, Rotation rotation, BlockPos pivot, int x, int y, int z,
+                              boolean adjustTerrain) {
         super(ModStructures.HORNACIS_SITE_PIECE.get(), 0, manager, template, template.toString(), settings(rotation, pivot),
                 new BlockPos(x - pivot.getX(), y - GROUND, z - pivot.getZ()));
         this.rotation = rotation;
         this.pivot = pivot;
+        this.adjustTerrain = adjustTerrain;
     }
 
     public HornacisSitePiece(StructureTemplateManager manager, CompoundTag tag) {
@@ -57,6 +67,7 @@ public class HornacisSitePiece extends TemplateStructurePiece implements PieceBe
                 id -> settings(Rotation.valueOf(tag.getString("Rot")), new BlockPos(tag.getInt("PX"), 0, tag.getInt("PZ"))));
         this.rotation = Rotation.valueOf(tag.getString("Rot"));
         this.pivot = new BlockPos(tag.getInt("PX"), 0, tag.getInt("PZ"));
+        this.adjustTerrain = !tag.contains("Beard") || tag.getBoolean("Beard");
     }
 
     private static BlockPos centerOf(StructureTemplateManager manager, ResourceLocation template) {
@@ -76,6 +87,28 @@ public class HornacisSitePiece extends TemplateStructurePiece implements PieceBe
                             @NotNull RandomSource random, @NotNull BoundingBox box, @NotNull ChunkPos chunk, @NotNull BlockPos origin) {
         super.postProcess(level, structures, generator, random, box, chunk, origin);
         placeEntities(level, box);
+        if (!adjustTerrain) fillFoundations(level, box);
+    }
+
+    /**
+     * Um resto solto numa encosta pousa no chão sem cavar: onde o alicerce ficou acima do terreno, ele desce
+     * (até 8 blocos) até encontrar o chão, e nada fica flutuando.
+     */
+    private void fillFoundations(WorldGenLevel level, BoundingBox box) {
+        int y0 = boundingBox.minY();
+        BlockPos.MutableBlockPos p = new BlockPos.MutableBlockPos();
+        for (int x = Math.max(box.minX(), boundingBox.minX()); x <= Math.min(box.maxX(), boundingBox.maxX()); x++) {
+            for (int z = Math.max(box.minZ(), boundingBox.minZ()); z <= Math.min(box.maxZ(), boundingBox.maxZ()); z++) {
+                BlockState foundation = level.getBlockState(p.set(x, y0, z));
+                if (!foundation.is(AncientBlocks.ANCIENT_STONE.get()) && !foundation.is(AncientBlocks.CRACKED_ANCIENT_STONE.get())
+                        && !foundation.is(AncientBlocks.MOSSY_ANCIENT_STONE.get())) continue;
+                for (int y = y0 - 1; y >= y0 - 8 && y > level.getMinBuildHeight(); y--) {
+                    BlockState below = level.getBlockState(p.set(x, y, z));
+                    if (!below.canBeReplaced()) break;
+                    level.setBlock(p, foundation, 2);
+                }
+            }
+        }
     }
 
     /**
@@ -114,6 +147,7 @@ public class HornacisSitePiece extends TemplateStructurePiece implements PieceBe
         tag.putString("Rot", rotation.name());
         tag.putInt("PX", pivot.getX());
         tag.putInt("PZ", pivot.getZ());
+        tag.putBoolean("Beard", adjustTerrain);
     }
 
     @Override
@@ -127,7 +161,7 @@ public class HornacisSitePiece extends TemplateStructurePiece implements PieceBe
 
     @Override
     public TerrainAdjustment getTerrainAdjustment() {
-        return TerrainAdjustment.BEARD_THIN;
+        return adjustTerrain ? TerrainAdjustment.BEARD_THIN : TerrainAdjustment.NONE;
     }
 
     @Override

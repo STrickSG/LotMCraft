@@ -15,5 +15,11 @@
     "lotmcraft:hornacis/casa_sobrado"
   ],
   "house_count": 3,
-  "house_ring": 17
+  "house_ring": 17,
+  "extras": [
+    "lotmcraft:hornacis/resto_canto",
+    "lotmcraft:hornacis/resto_muro"
+  ],
+  "extra_count": 2,
+  "extra_ring": 26
 }

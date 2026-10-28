@@ -17,5 +17,11 @@
     "lotmcraft:hornacis/casa_alicerce"
   ],
   "house_count": 5,
-  "house_ring": 21
+  "house_ring": 21,
+  "extras": [
+    "lotmcraft:hornacis/resto_muro",
+    "lotmcraft:hornacis/resto_canto"
+  ],
+  "extra_count": 4,
+  "extra_ring": 31
 }
