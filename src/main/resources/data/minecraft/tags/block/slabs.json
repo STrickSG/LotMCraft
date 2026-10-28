@@ -3,6 +3,8 @@
   "values": [
     "lotmcraft:ancient_stone_slab",
     "lotmcraft:ancient_board_slab",
-    "lotmcraft:ancient_slate_slab"
+    "lotmcraft:ancient_slate_slab",
+    "lotmcraft:ancient_palace_stone_slab",
+    "lotmcraft:ancient_dome_tile_slab"
   ]
 }

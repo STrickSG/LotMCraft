@@ -4022,5 +4022,19 @@
   "block.lotmcraft.ancient_bottles": "Half-Empty Wine Bottles",
   "block.lotmcraft.ancient_candlestick": "Ancient Stone Candlestick",
   "block.lotmcraft.evernight_seal": "Evernight Seal",
-  "block.lotmcraft.evernight_seal_stone": "Evernight Seal Stone"
+  "block.lotmcraft.evernight_seal_stone": "Evernight Seal Stone",
+  "block.lotmcraft.ancient_palace_stone": "Ancient Palace Stone",
+  "block.lotmcraft.ancient_palace_stone_stairs": "Ancient Palace Stone Stairs",
+  "block.lotmcraft.ancient_palace_stone_slab": "Ancient Palace Stone Slab",
+  "block.lotmcraft.ancient_palace_stone_wall": "Ancient Palace Stone Wall",
+  "block.lotmcraft.ancient_column": "Ancient Fluted Column",
+  "block.lotmcraft.ancient_dome_tiles": "Ancient Dome Tiles",
+  "block.lotmcraft.ancient_dome_tile_stairs": "Ancient Dome Tile Stairs",
+  "block.lotmcraft.ancient_dome_tile_slab": "Ancient Dome Tile Slab",
+  "block.lotmcraft.evernight_glass": "Evernight Stained Glass",
+  "block.lotmcraft.evernight_glass_pane": "Evernight Stained Glass Pane",
+  "block.lotmcraft.evernight_paving": "Evernight Paving",
+  "block.lotmcraft.evernight_frieze": "Evernight Frieze",
+  "block.lotmcraft.ancient_brazier": "Ancient Brazier",
+  "block.lotmcraft.evernight_starry_stone": "Evernight Starry Stone"
 }

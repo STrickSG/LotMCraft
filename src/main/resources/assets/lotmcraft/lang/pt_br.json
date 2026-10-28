@@ -3831,5 +3831,19 @@
   "block.lotmcraft.ancient_bottles": "Garrafas de Vinho pela Metade",
   "block.lotmcraft.ancient_candlestick": "Castiçal de Pedra Antigo",
   "block.lotmcraft.evernight_seal": "Selo da Noite Eterna",
-  "block.lotmcraft.evernight_seal_stone": "Pedra do Selo da Noite Eterna"
+  "block.lotmcraft.evernight_seal_stone": "Pedra do Selo da Noite Eterna",
+  "block.lotmcraft.ancient_palace_stone": "Pedra do Palácio Antigo",
+  "block.lotmcraft.ancient_palace_stone_stairs": "Escada de Pedra do Palácio Antigo",
+  "block.lotmcraft.ancient_palace_stone_slab": "Laje de Pedra do Palácio Antigo",
+  "block.lotmcraft.ancient_palace_stone_wall": "Muro de Pedra do Palácio Antigo",
+  "block.lotmcraft.ancient_column": "Coluna Canelada Antiga",
+  "block.lotmcraft.ancient_dome_tiles": "Telhas da Cúpula Antiga",
+  "block.lotmcraft.ancient_dome_tile_stairs": "Escada de Telhas da Cúpula Antiga",
+  "block.lotmcraft.ancient_dome_tile_slab": "Laje de Telhas da Cúpula Antiga",
+  "block.lotmcraft.evernight_glass": "Vitral da Noite Eterna",
+  "block.lotmcraft.evernight_glass_pane": "Vidraça da Noite Eterna",
+  "block.lotmcraft.evernight_paving": "Lajes da Noite Eterna",
+  "block.lotmcraft.evernight_frieze": "Friso da Noite Eterna",
+  "block.lotmcraft.ancient_brazier": "Braseiro Antigo",
+  "block.lotmcraft.evernight_starry_stone": "Pedra Estrelada da Noite Eterna"
 }

@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "bottom": "lotmcraft:block/ancient_palace_stone",
+    "top": "lotmcraft:block/ancient_palace_stone",
+    "side": "lotmcraft:block/ancient_palace_stone"
+  }
+}

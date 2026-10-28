@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "lotmcraft:block/ancient_dome_tiles",
+    "top": "lotmcraft:block/ancient_dome_tiles",
+    "side": "lotmcraft:block/ancient_dome_tiles"
+  }
+}

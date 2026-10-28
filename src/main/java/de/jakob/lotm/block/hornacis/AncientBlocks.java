@@ -36,6 +36,19 @@ public final class AncientBlocks {
         return ancient(MapColor.DEEPSLATE, SoundType.DEEPSLATE_TILES);
     }
 
+    private static BlockBehaviour.Properties palace() {
+        return ancient(MapColor.QUARTZ, SoundType.STONE);
+    }
+
+    private static BlockBehaviour.Properties tiles() {
+        return ancient(MapColor.WARPED_STEM, SoundType.DEEPSLATE_TILES);
+    }
+
+    private static BlockBehaviour.Properties glass() {
+        return ancient(MapColor.COLOR_BLUE, SoundType.GLASS).noOcclusion().isValidSpawn((s, l, p, e) -> false)
+                .isRedstoneConductor((s, l, p) -> false).isSuffocating((s, l, p) -> false).isViewBlocking((s, l, p) -> false);
+    }
+
     private static BlockBehaviour.Properties prop(SoundType sound) {
         return ancient(MapColor.NONE, sound).noOcclusion().isValidSpawn((s, l, p, e) -> false)
                 .isRedstoneConductor((s, l, p) -> false).isSuffocating((s, l, p) -> false).isViewBlocking((s, l, p) -> false);
@@ -86,6 +99,32 @@ public final class AncientBlocks {
             () -> new EvernightSealBlock(ancient(MapColor.COLOR_BLACK, SoundType.DEEPSLATE_TILES).lightLevel(s -> 3)));
     public static final DeferredBlock<Block> EVERNIGHT_SEAL_STONE = reg("evernight_seal_stone",
             () -> new Block(ancient(MapColor.COLOR_BLACK, SoundType.DEEPSLATE_TILES)));
+
+    // ---------------- Palácio do Pico Principal (a neve não assenta nestas pedras: o palácio está selado)
+    /** Cantaria clara do palácio, com escada, laje e muro. */
+    public static final DeferredBlock<Block> ANCIENT_PALACE_STONE = reg("ancient_palace_stone", () -> new Block(palace()));
+    public static final DeferredBlock<StairBlock> ANCIENT_PALACE_STONE_STAIRS = reg("ancient_palace_stone_stairs",
+            () -> new StairBlock(ANCIENT_PALACE_STONE.get().defaultBlockState(), palace()));
+    public static final DeferredBlock<SlabBlock> ANCIENT_PALACE_STONE_SLAB = reg("ancient_palace_stone_slab", () -> new SlabBlock(palace()));
+    public static final DeferredBlock<WallBlock> ANCIENT_PALACE_STONE_WALL = reg("ancient_palace_stone_wall", () -> new WallBlock(palace().forceSolidOn()));
+    /** Fuste de coluna canelada. */
+    public static final DeferredBlock<RotatedPillarBlock> ANCIENT_COLUMN = reg("ancient_column", () -> new RotatedPillarBlock(palace()));
+    /** Telhas de escama da cúpula, com a pátina azul-esverdeada. */
+    public static final DeferredBlock<Block> ANCIENT_DOME_TILES = reg("ancient_dome_tiles", () -> new Block(tiles()));
+    public static final DeferredBlock<StairBlock> ANCIENT_DOME_TILE_STAIRS = reg("ancient_dome_tile_stairs",
+            () -> new StairBlock(ANCIENT_DOME_TILES.get().defaultBlockState(), tiles()));
+    public static final DeferredBlock<SlabBlock> ANCIENT_DOME_TILE_SLAB = reg("ancient_dome_tile_slab", () -> new SlabBlock(tiles()));
+    /** Vitral da Noite Eterna (azul-índigo com a estrela de prata), em bloco e em vidraça. */
+    public static final DeferredBlock<TransparentBlock> EVERNIGHT_GLASS = reg("evernight_glass", () -> new TransparentBlock(glass()));
+    public static final DeferredBlock<IronBarsBlock> EVERNIGHT_GLASS_PANE = reg("evernight_glass_pane", () -> new IronBarsBlock(glass()));
+    /** Lajes azul-noite da praça e o friso com a lua crescente e as estrelas. */
+    public static final DeferredBlock<Block> EVERNIGHT_PAVING = reg("evernight_paving", () -> new Block(ancient(MapColor.COLOR_BLUE, SoundType.POLISHED_DEEPSLATE)));
+    public static final DeferredBlock<Block> EVERNIGHT_FRIEZE = reg("evernight_frieze", () -> new Block(palace()));
+    /** Pedra estrelada: o céu da Noite Eterna pintado por dentro da cúpula. */
+    public static final DeferredBlock<Block> EVERNIGHT_STARRY_STONE = reg("evernight_starry_stone", () -> new Block(ancient(MapColor.COLOR_BLUE, SoundType.POLISHED_DEEPSLATE)));
+    /** Braseiro de pedra com a chama amarela que nunca apaga. */
+    public static final DeferredBlock<AncientBrazierBlock> ANCIENT_BRAZIER = reg("ancient_brazier",
+            () -> new AncientBrazierBlock(prop(SoundType.STONE).lightLevel(s -> 15)));
 
     /** Só para o registro acontecer junto com o dos outros blocos do mod. */
     public static void init() {}

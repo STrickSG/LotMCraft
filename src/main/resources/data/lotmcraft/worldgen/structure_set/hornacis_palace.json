@@ -1,0 +1,13 @@
+{
+  "structures": [
+    {
+      "structure": "lotmcraft:hornacis_palace",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "lotmcraft:hornacis_site",
+    "salt": 980391587,
+    "site": "palace"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "lotmcraft:block/ancient_column_top",
+    "side": "lotmcraft:block/ancient_column"
+  }
+}

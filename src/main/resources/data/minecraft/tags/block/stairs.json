@@ -3,6 +3,8 @@
   "values": [
     "lotmcraft:ancient_stone_stairs",
     "lotmcraft:ancient_board_stairs",
-    "lotmcraft:ancient_slate_stairs"
+    "lotmcraft:ancient_slate_stairs",
+    "lotmcraft:ancient_palace_stone_stairs",
+    "lotmcraft:ancient_dome_tile_stairs"
   ]
 }

@@ -21,6 +21,20 @@
     "lotmcraft:ancient_bottles",
     "lotmcraft:ancient_candlestick",
     "lotmcraft:evernight_seal",
-    "lotmcraft:evernight_seal_stone"
+    "lotmcraft:evernight_seal_stone",
+    "lotmcraft:ancient_palace_stone",
+    "lotmcraft:ancient_palace_stone_stairs",
+    "lotmcraft:ancient_palace_stone_slab",
+    "lotmcraft:ancient_palace_stone_wall",
+    "lotmcraft:ancient_column",
+    "lotmcraft:ancient_dome_tiles",
+    "lotmcraft:ancient_dome_tile_stairs",
+    "lotmcraft:ancient_dome_tile_slab",
+    "lotmcraft:evernight_glass",
+    "lotmcraft:evernight_glass_pane",
+    "lotmcraft:evernight_paving",
+    "lotmcraft:evernight_frieze",
+    "lotmcraft:ancient_brazier",
+    "lotmcraft:evernight_starry_stone"
   ]
 }
