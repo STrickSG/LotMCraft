@@ -5,7 +5,11 @@
   "mixins": [
     "EntityAccessor",
     "FarRingPositionsMixin",
-    "MixinIngredient"
+    "MixinIngredient",
+    "HornacisBiomeSourceMixin",
+    "HornacisPossibleBiomesMixin",
+    "HornacisNoiseChunkMixin",
+    "HornacisNoiseGeneratorMixin"
   ],
   "client": [
     "EntityGlowMixin"

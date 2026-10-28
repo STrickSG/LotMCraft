@@ -1,0 +1,25 @@
+{
+  "feature": "minecraft:flower_meadow",
+  "placement": [
+    {
+      "type": "minecraft:count",
+      "count": 2
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "MOTION_BLOCKING"
+    },
+    {
+      "type": "lotmcraft:hornacis_altitude",
+      "fade": 40,
+      "min_y": 480,
+      "max_y": 760
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

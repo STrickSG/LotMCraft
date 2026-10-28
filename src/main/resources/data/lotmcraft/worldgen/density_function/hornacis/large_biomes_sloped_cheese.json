@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:cache_once",
+  "argument": {
+    "type": "lotmcraft:hornacis_terrain",
+    "input": "minecraft:overworld_large_biomes/sloped_cheese",
+    "detail": {
+      "type": "minecraft:noise",
+      "noise": "lotmcraft:hornacis_detail",
+      "xz_scale": 1.0,
+      "y_scale": 1.0
+    },
+    "smooth": false
+  }
+}

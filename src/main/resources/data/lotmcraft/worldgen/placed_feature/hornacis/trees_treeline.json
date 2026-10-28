@@ -1,0 +1,29 @@
+{
+  "feature": "minecraft:trees_grove",
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 2
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:surface_water_depth_filter",
+      "max_water_depth": 0
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "OCEAN_FLOOR"
+    },
+    {
+      "type": "lotmcraft:hornacis_altitude",
+      "fade": 30,
+      "min_y": 500,
+      "max_y": 575
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

@@ -244,6 +244,7 @@ public class LOTMCraft
         ModGameRules.register();
 
         SpiritPatchSetup.init(modEventBus);
+        de.jakob.lotm.hornacis.HornacisSetup.init(modEventBus);
 
         PotionItemHandler.registerPotions(modEventBus);
 

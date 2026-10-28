@@ -1,0 +1,24 @@
+{
+  "feature": "minecraft:patch_berry_bush",
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 5
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "WORLD_SURFACE_WG"
+    },
+    {
+      "type": "lotmcraft:hornacis_altitude",
+      "fade": 32,
+      "max_y": 460
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

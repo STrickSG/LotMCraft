@@ -1,0 +1,40 @@
+{
+  "feature": "minecraft:trees_old_growth_pine_taiga",
+  "placement": [
+    {
+      "type": "minecraft:count",
+      "count": {
+        "type": "minecraft:weighted_list",
+        "distribution": [
+          {
+            "data": 9,
+            "weight": 9
+          },
+          {
+            "data": 11,
+            "weight": 1
+          }
+        ]
+      }
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:surface_water_depth_filter",
+      "max_water_depth": 0
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "OCEAN_FLOOR"
+    },
+    {
+      "type": "lotmcraft:hornacis_altitude",
+      "fade": 50,
+      "max_y": 380
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

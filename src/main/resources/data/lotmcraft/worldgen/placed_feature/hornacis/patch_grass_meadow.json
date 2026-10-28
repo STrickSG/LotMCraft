@@ -1,0 +1,25 @@
+{
+  "feature": "minecraft:patch_grass",
+  "placement": [
+    {
+      "type": "minecraft:count",
+      "count": 6
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "WORLD_SURFACE_WG"
+    },
+    {
+      "type": "lotmcraft:hornacis_altitude",
+      "fade": 40,
+      "min_y": 500,
+      "max_y": 770
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

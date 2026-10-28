@@ -17,8 +17,10 @@ public class SpiritPatchSetup {
     private static void commonSetup(FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
             Regions.register(new SpiritPatchRegion(ResourceLocation.fromNamespaceAndPath(LOTMCraft.MOD_ID, "spirit_patch")));
+            // o TerraBlender guarda uma regra por namespace: as do mod (Retalho Espiritual e Hornacis) vão juntas
             SurfaceRuleManager.addSurfaceRules(SurfaceRuleManager.RuleCategory.OVERWORLD,
-                    LOTMCraft.MOD_ID, SpiritPatchSurfaceRules.make());
+                    LOTMCraft.MOD_ID, net.minecraft.world.level.levelgen.SurfaceRules.sequence(
+                            SpiritPatchSurfaceRules.make(), de.jakob.lotm.hornacis.HornacisSurfaceRules.make()));
         });
     }
 }
