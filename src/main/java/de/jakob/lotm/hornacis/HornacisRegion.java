@@ -5,28 +5,27 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * A Cordilheira de Hornacis de um mundo: onde fica, a forma, a altura de cada coluna, as zonas (sub-biomas)
- * e os lugares das estruturas. Tudo sai da seed do mundo, sem nada do Minecraft, então o mesmo código
- * desenha o terreno no jogo e as prévias fora dele.
+ * A Cordilheira de Hornacis de um mundo: onde fica, a forma, a altura de cada coluna e os lugares das
+ * estruturas. Tudo sai da seed do mundo, sem nada do Minecraft, então o mesmo código desenha o terreno no
+ * jogo e as prévias fora dele.
  *
  * Na novel: a cordilheira separa Loen de Intis, o pico principal passa de 6000 m e é o mais alto;
  * no cume ficava a Nação da Noite Eterna, com relíquias também nas florestas, vales e encostas suaves em volta.
  *
- * O relevo é montado em duas etapas: uma forma bruta (envelope da cadeia, cristas, picos e o Pico Principal)
- * e depois uma simulação de erosão pela água numa grade de 8 blocos, que cava os vales que se ramificam
- * como rios e deixa as cristas afiadas. Só StrictMath: o resultado é o mesmo em qualquer máquina.
+ * O relevo é montado em etapas: uma forma bruta (envelope da cadeia, cristas, picos e o Pico Principal),
+ * uma simulação de erosão pela água numa grade de 24 blocos, que cava os vales que se ramificam como rios,
+ * e por fim os poços que sobram são aterrados (a água sempre tem por onde escorrer, nada fica oco).
+ * Só StrictMath e raiz quadrada: o resultado é o mesmo em qualquer máquina.
  */
 public final class HornacisRegion {
     public static final double LENGTH = 20000;
     public static final double HALF_WIDTH = 2600;
-    /** Teto do terreno (o mundo vai até 640) */
+    /** Teto do terreno (o mundo vai até 1727) */
     public static final int MAX_TERRAIN = 1680;
     /** Altura do platô do cume, onde fica o palácio */
     public static final int SUMMIT_Y = 1600;
     public static final double MAIN_RADIUS = 2600;
     private static final double BASE = 70;
-
-    public enum Zone { NONE, FOOTHILLS, HIGHLANDS, SLOPES, GLACIER, PEAKS, MAIN_PEAK }
 
     public enum SiteType { PALACE, SUMMIT_RUIN, RUIN, CAMP, MONASTERY }
 
@@ -39,9 +38,8 @@ public final class HornacisRegion {
 
     /** Resultado de uma coluna (reaproveitado para não alocar) */
     public static final class Sample {
-        public double mask, height, envelope, valley, mainDist, raw;
-        public Zone zone = Zone.NONE;
-        double u, v, vv, w, tu;
+        public double mask, height, envelope, mainDist, raw, slope;
+        double u, v, vv, w, tu, floor;
     }
 
     public final long seed;
@@ -50,14 +48,14 @@ public final class HornacisRegion {
     public final int minX, minZ, maxX, maxZ;
 
     private final double spineA1, spineF1, spineP1, spineA2, spineF2, spineP2;
-    private final HornacisNoise warpA, warpB, widthNoise, gully, dither, detailA, detailB, ridgeWarpA, ridgeWarpB;
+    private final HornacisNoise warpA, warpB, widthNoise, gully, detailA, detailB, ridgeWarpA, ridgeWarpB;
     private final HornacisNoise[] ridge = new HornacisNoise[6];
     private final double[] peakX, peakZ, peakR, peakH;
     private final double[] passU, passDepth;
     private final double[] spireX, spireZ;
     private final double mainU;
 
-    /** Grade já erodida, em coordenadas da cordilheira (u ao longo, v através) */
+    /** Grade já erodida, em coordenadas da cordilheira (u ao longo, v através), uma altura a cada 24 blocos */
     private static final double CELL = 24;
     private float[] grid;
     private int gridU, gridV;
@@ -68,7 +66,7 @@ public final class HornacisRegion {
     private int siteMinX, siteMinZ, siteW, siteH;
     private static final int SITE_CELL = 128;
 
-    /** Células de 64 blocos onde o terreno passa de ~300 (só ali o ruído é calculado acima de 320) */
+    /** Altura máxima do terreno em cada célula de 64 blocos (só até ali o ruído é calculado) */
     private short[] top;
     private int tallW, tallH;
 
@@ -89,7 +87,7 @@ public final class HornacisRegion {
         warpB = new HornacisNoise(r[k++]);
         widthNoise = new HornacisNoise(r[k++]);
         gully = new HornacisNoise(r[k++]);
-        dither = new HornacisNoise(r[k++]);
+        k++; // (era o ruído das zonas)
         detailA = new HornacisNoise(r[k++]);
         detailB = new HornacisNoise(r[k++]);
         ridgeWarpA = new HornacisNoise(r[k++]);
@@ -156,16 +154,23 @@ public final class HornacisRegion {
         maxZ = (int) Math.ceil(cz + ez);
     }
 
-    /** Monta a cordilheira de um mundo. A posição é sorteada a até ~6000 blocos do spawn, de preferência em terra. */
-    /** Guarda a grade erodida entre uma abertura e outra do mundo (calcular leva alguns segundos). */
+    /**
+     * Guarda, na pasta do mundo, o lugar escolhido para a cordilheira (para sempre) e a grade erodida
+     * (calcular leva alguns segundos).
+     */
     public interface GridStore {
+        /** Centro (x, z) escolhido na primeira vez que este mundo abriu com a cordilheira, ou null. */
+        double[] loadCenter(long seed);
+
+        void saveCenter(long seed, double x, double z);
+
         float[] load(long key, int size);
 
         void save(long key, float[] grid);
     }
 
     /** Muda quando o relevo muda: a grade guardada de antes deixa de valer. */
-    public static final int VERSION = 1;
+    public static final int VERSION = 2;
 
     public long gridKey() {
         long k = HornacisNoise.mix(seed ^ VERSION * 0x9E3779B97F4A7C15L);
@@ -174,10 +179,16 @@ public final class HornacisRegion {
     }
 
     public static HornacisRegion create(long worldSeed, LandTest land) {
-        return create(worldSeed, land, null);
+        return create(worldSeed, land, null, List.of());
     }
 
-    public static HornacisRegion create(long worldSeed, LandTest land, GridStore store) {
+    /**
+     * Monta a cordilheira de um mundo. Na primeira vez a posição é sorteada a até ~8000 blocos do spawn, de
+     * preferência em terra firme e sempre longe do que o mundo já tinha gerado antes ({@code explored}: os
+     * arquivos de região, de 512 x 512 blocos, que já existem), para não cortar o que já foi construído ou
+     * explorado. Depois a posição fica guardada e nunca muda.
+     */
+    public static HornacisRegion create(long worldSeed, LandTest land, GridStore store, List<int[]> explored) {
         long s = HornacisNoise.mix(worldSeed ^ 0x484F524E41434953L);
         long[] r = new long[200];
         for (int i = 0; i < r.length; i++) {
@@ -185,28 +196,12 @@ public final class HornacisRegion {
             r[i] = s;
         }
         double angle = unit(r[0]) * Math.PI;
-        long pick = r[1];
-        double bestScore = -1, bx = 0, bz = 0;
-        for (int attempt = 0; attempt < 48; attempt++) {
-            pick = HornacisNoise.mix(pick + 0x9E3779B97F4A7C15L);
-            double dist = 8000 * Math.sqrt(unit(pick));
-            pick = HornacisNoise.mix(pick + 0x9E3779B97F4A7C15L);
-            double a = unit(pick) * Math.PI * 2;
-            double cx = StrictMath.cos(a) * dist, cz = StrictMath.sin(a) * dist;
-            int landCount = 0, total = 0;
-            for (int i = -5; i <= 5; i++) {
-                for (int j = -1; j <= 1; j++) {
-                    double u = i * LENGTH * 0.09, v = j * 1500;
-                    int x = (int) (cx + u * StrictMath.cos(angle) - v * StrictMath.sin(angle));
-                    int z = (int) (cz + u * StrictMath.sin(angle) + v * StrictMath.cos(angle));
-                    total++;
-                    if (land == null || land.isLand(x, z)) landCount++;
-                }
-            }
-            double score = landCount / (double) total;
-            if (score > bestScore) { bestScore = score; bx = cx; bz = cz; }
-            if (score >= 0.85) break;
+        double[] center = store == null ? null : store.loadCenter(worldSeed);
+        if (center == null) {
+            center = pickCenter(r[1], angle, land, explored);
+            if (store != null) store.saveCenter(worldSeed, center[0], center[1]);
         }
+        double bx = center[0], bz = center[1];
         long[] rest = new long[r.length - 2];
         System.arraycopy(r, 2, rest, 0, rest.length);
         HornacisRegion region = new HornacisRegion(worldSeed, bx, bz, angle, rest);
@@ -214,6 +209,50 @@ public final class HornacisRegion {
         region.placeSites(HornacisNoise.mix(worldSeed ^ 0x5349544553L));
         region.buildTopGrid();
         return region;
+    }
+
+    private static double[] pickCenter(long pick, double angle, LandTest land, List<int[]> explored) {
+        double ca = StrictMath.cos(angle), sa = StrictMath.sin(angle);
+        double bestScore = -1, bx = 0, bz = 0;
+        // anéis cada vez mais longe: o primeiro (até 8000 blocos) quase sempre serve num mundo novo
+        for (int ring = 0; ring < 40 && bestScore < 0; ring++) {
+            double maxDist = 8000 + ring * 6000.0;
+            for (int attempt = 0; attempt < 48; attempt++) {
+                pick = HornacisNoise.mix(pick + 0x9E3779B97F4A7C15L);
+                double dist = maxDist * Math.sqrt(unit(pick));
+                pick = HornacisNoise.mix(pick + 0x9E3779B97F4A7C15L);
+                double a = unit(pick) * Math.PI * 2;
+                double cx = StrictMath.cos(a) * dist, cz = StrictMath.sin(a) * dist;
+                if (overlaps(cx, cz, ca, sa, explored)) continue;
+                int landCount = 0, total = 0;
+                for (int i = -5; i <= 5; i++) {
+                    for (int j = -1; j <= 1; j++) {
+                        double u = i * LENGTH * 0.09, v = j * 1500;
+                        int x = (int) (cx + u * ca - v * sa);
+                        int z = (int) (cz + u * sa + v * ca);
+                        total++;
+                        if (land == null || land.isLand(x, z)) landCount++;
+                    }
+                }
+                double score = landCount / (double) total;
+                if (score > bestScore) { bestScore = score; bx = cx; bz = cz; }
+                if (score >= 0.85) break;
+            }
+        }
+        return new double[]{bx, bz};
+    }
+
+    /** A cordilheira com centro em (cx, cz) passaria por algum pedaço do mundo que já foi gerado? */
+    private static boolean overlaps(double cx, double cz, double ca, double sa, List<int[]> explored) {
+        // retângulo (girado) que contém a cadeia inteira: comprimento, curvas da espinha, largura, torção e folga
+        double hu = LENGTH / 2 * 1.12 + 500 + 1200 + 362;
+        double hv = 2000 + HALF_WIDTH * 1.25 * 1.3 + 500 + 1200 + 362;
+        for (int[] t : explored) {
+            double dx = t[0] * 512.0 + 256 - cx, dz = t[1] * 512.0 + 256 - cz;
+            double u = dx * ca + dz * sa, v = -dx * sa + dz * ca;
+            if (Math.abs(u) < hu && Math.abs(v) < hv) return true;
+        }
+        return false;
     }
 
     // ---------------------------------------------------------------- geometria
@@ -273,12 +312,13 @@ public final class HornacisRegion {
         double h = BASE + 280 * env + 880 * StrictMath.pow(env, 0.7) * r;
 
         for (int i = 0; i < peakX.length; i++) {
-            double d = Math.hypot(x - peakX[i], z - peakZ[i]);
+            double d = dist(x - peakX[i], z - peakZ[i]);
             if (d < peakR[i]) h += peakH[i] * StrictMath.pow(1 - d / peakR[i], 1.6) * env * (0.55 + 0.45 * r);
         }
+        // as passagens só baixam as cristas (nunca sobem um vale)
         for (int i = 0; i < passU.length; i++) {
             double g = StrictMath.exp(-sq((s.u - passU[i]) / 800));
-            h -= (h - 600) * passDepth[i] * g * Math.max(0, 1 - Math.abs(s.vv) / s.w);
+            h -= Math.max(0, h - 600) * passDepth[i] * g * Math.max(0, 1 - Math.abs(s.vv) / s.w);
         }
 
         // nenhum outro pico chega perto do principal
@@ -291,13 +331,47 @@ public final class HornacisRegion {
             double phi = StrictMath.atan2(mdz, mdx) - mainAngle;
             double reff = dm * (1 + 0.2 * StrictMath.cos(3 * phi) + 0.05 * StrictMath.cos(7 * phi + 1.3) + 0.06 * gully.sample(x / 250, z / 250));
             double t = reff / MAIN_RADIUS;
-            if (t < 1) {
-                double hm = 450 + (1710 - 450) * StrictMath.pow(1 - t, 1.35);
-                double wm = 1 - smooth(0.65, 1.0, t);
-                h = smoothMax(h, hm * wm + h * (1 - wm), 80);
-            }
+            // a base do chifre se apaga junto com a cadeia (senão ela sairia pela borda estreita da
+            // cordilheira e seria cortada num paredão); a suavização também some na borda do chifre
+            double wm = (1 - smooth(0.65, 1.0, t)) * smooth(0.0, 0.3, env);
+            if (wm > 0) h = smoothMax(h, horn(reff) * wm + h * (1 - wm), 80 * wm);
         }
         return h;
+    }
+
+    /**
+     * Perfil do Pico Principal (distância do centro → altura): no alto as faces são íngremes como as de um
+     * chifre (~45°), embaixo o maciço se abre devagar. O platô do palácio fica bem no topo.
+     */
+    private static final double[] HORN_D = {0, 92, 150, 250, 400, 600, 900, 1300, 2000, 2600};
+    private static final double[] HORN_H = {1606, 1600, 1545, 1455, 1330, 1190, 1030, 860, 610, 450};
+    private static final double[] HORN_M = monotoneSlopes(HORN_D, HORN_H);
+
+    private static double horn(double d) {
+        int n = HORN_D.length;
+        if (d >= HORN_D[n - 1]) return HORN_H[n - 1];
+        int k = 0;
+        while (d > HORN_D[k + 1]) k++;
+        double len = HORN_D[k + 1] - HORN_D[k], t = (d - HORN_D[k]) / len;
+        double t2 = t * t, t3 = t2 * t;
+        return (2 * t3 - 3 * t2 + 1) * HORN_H[k] + (t3 - 2 * t2 + t) * len * HORN_M[k]
+                + (-2 * t3 + 3 * t2) * HORN_H[k + 1] + (t3 - t2) * len * HORN_M[k + 1];
+    }
+
+    /** Inclinações (Fritsch–Carlson) para a curva passar pelos pontos sem ondular entre eles. */
+    private static double[] monotoneSlopes(double[] x, double[] y) {
+        int n = x.length;
+        double[] d = new double[n - 1], m = new double[n];
+        for (int i = 0; i < n - 1; i++) d[i] = (y[i + 1] - y[i]) / (x[i + 1] - x[i]);
+        m[0] = d[0];
+        m[n - 1] = d[n - 2];
+        for (int i = 1; i < n - 1; i++) {
+            if (d[i - 1] * d[i] <= 0) continue;
+            double a = x[i] - x[i - 1], b = x[i + 1] - x[i];
+            double w1 = 2 * b + a, w2 = b + 2 * a;
+            m[i] = (w1 + w2) / (w1 / d[i - 1] + w2 / d[i]);
+        }
+        return m;
     }
 
     private double ridged(double x, double z) {
@@ -343,14 +417,121 @@ public final class HornacisRegion {
             }
         });
         // a erosão é em sequência (cada gota muda o terreno da próxima): sempre o mesmo resultado
+        float[] rough = h.clone();
         erode(h, seed);
+        // a erosão só abre os vales: fica metade do que ela cavou, e quase nada no Pico Principal
+        // (senão ela derrete as montanhas e o cume vira uma torre fina)
+        for (int j = 0; j < gridV; j++) {
+            double v = gridV0 + j * CELL;
+            for (int i = 0; i < gridU; i++) {
+                double u = gridU0 + i * CELL;
+                double d = dist(toWorldX(u, v) - mainX, toWorldZ(u, v) - mainZ);
+                double keep = 0.08 + 0.42 * smooth(250, 1400, d);
+                int k = i + j * gridU;
+                h[k] = (float) (rough[k] - (rough[k] - h[k]) * keep);
+            }
+        }
+        fillPits(h);
         grid = h;
         if (store != null) store.save(gridKey(), h);
     }
 
     /**
+     * Aterra os poços (depressões fechadas) que a erosão deixa: a "água" entra pela borda da grade e sobe
+     * sempre pelo ponto mais baixo que ainda falta (priority-flood). Onde ela teria de empoçar, o terreno sobe
+     * até a borda do poço, com um declive mínimo para tudo escorrer. Ordem total (altura, índice): o mesmo
+     * resultado sempre.
+     */
+    private void fillPits(float[] h) {
+        final float slope = 0.05f;
+        int w = gridU, n = gridU * gridV;
+        boolean[] done = new boolean[n];
+        LongHeap heap = new LongHeap(4 * (gridU + gridV));
+        for (int i = 0; i < w; i++) {
+            seed(h, done, heap, i);
+            seed(h, done, heap, i + (gridV - 1) * w);
+        }
+        for (int j = 1; j < gridV - 1; j++) {
+            seed(h, done, heap, j * w);
+            seed(h, done, heap, w - 1 + j * w);
+        }
+        // fora das montanhas (na altura da base) também é saída: a planície em volta fica como está
+        for (int k = 0; k < n; k++) if (h[k] <= BASE + 0.5f) seed(h, done, heap, k);
+        while (!heap.isEmpty()) {
+            int c = (int) heap.pop();
+            float hc = h[c];
+            int cx = c % w, cy = c / w;
+            for (int dy = -1; dy <= 1; dy++) {
+                int ny = cy + dy;
+                if (ny < 0 || ny >= gridV) continue;
+                for (int dx = -1; dx <= 1; dx++) {
+                    int nx = cx + dx;
+                    if ((dx == 0 && dy == 0) || nx < 0 || nx >= w) continue;
+                    int k = nx + ny * w;
+                    if (done[k]) continue;
+                    done[k] = true;
+                    if (h[k] <= hc) h[k] = hc + slope;
+                    heap.push(key(h[k], k));
+                }
+            }
+        }
+    }
+
+    private static void seed(float[] h, boolean[] done, LongHeap heap, int k) {
+        if (done[k]) return;
+        done[k] = true;
+        heap.push(key(h[k], k));
+    }
+
+    /** Altura (positiva) nos 32 bits de cima, índice nos de baixo: ordena por altura e desempata pelo índice. */
+    private static long key(float height, int index) {
+        return ((long) Float.floatToIntBits(Math.max(0, height)) << 32) | index;
+    }
+
+    /** Fila de prioridade mínima de longs (sem objetos: a grade tem centenas de milhares de pontos). */
+    private static final class LongHeap {
+        private long[] a;
+        private int size;
+
+        LongHeap(int capacity) {
+            a = new long[Math.max(16, capacity)];
+        }
+
+        boolean isEmpty() {
+            return size == 0;
+        }
+
+        void push(long v) {
+            if (size == a.length) a = java.util.Arrays.copyOf(a, size * 2);
+            int i = size++;
+            while (i > 0) {
+                int p = (i - 1) >> 1;
+                if (a[p] <= v) break;
+                a[i] = a[p];
+                i = p;
+            }
+            a[i] = v;
+        }
+
+        long pop() {
+            long top = a[0], last = a[--size];
+            int i = 0;
+            while (true) {
+                int l = 2 * i + 1;
+                if (l >= size) break;
+                int m = l + 1 < size && a[l + 1] < a[l] ? l + 1 : l;
+                if (a[m] >= last) break;
+                a[i] = a[m];
+                i = m;
+            }
+            a[i] = last;
+            return top;
+        }
+    }
+
+    /**
      * Erosão por gotas: cada gota desce pela encosta, arranca material onde corre rápido e deposita onde
-     * desacelera. Alturas em unidades de célula (8 blocos) para os parâmetros ficarem na escala certa.
+     * desacelera. Alturas em unidades de célula (24 blocos) para os parâmetros ficarem na escala certa.
      */
     private void erode(float[] map, long seed) {
         int w = gridU, hgt = gridV;
@@ -443,37 +624,50 @@ public final class HornacisRegion {
         out[2] = nw * (1 - ox) * (1 - oy) + ne * ox * (1 - oy) + sw * (1 - ox) * oy + se * ox * oy;
     }
 
-    /** Altura da grade erodida (interpolação bicúbica, sem degraus de 8 em 8 blocos). */
-    private double gridHeight(double u, double v) {
+    /**
+     * Altura da grade erodida (interpolação bicúbica, sem degraus de 24 em 24 blocos). Também guarda em
+     * {@code out} a inclinação ali (blocos de altura por bloco andado) e o "chão": a interpolação linear dos
+     * 4 nós em volta, que nunca forma poços porque a grade não tem.
+     */
+    private double gridSample(double u, double v, Sample out) {
         double gx = (u - gridU0) / CELL, gy = (v - gridV0) / CELL;
         int ix = (int) Math.floor(gx), iy = (int) Math.floor(gy);
-        if (ix < 1 || iy < 1 || ix >= gridU - 2 || iy >= gridV - 2) return BASE;
-        double fx = gx - ix, fy = gy - iy;
-        double[] col = new double[4];
-        for (int j = -1; j <= 2; j++) {
-            int row = (iy + j) * gridU + ix;
-            col[j + 1] = cubic(grid[row - 1], grid[row], grid[row + 1], grid[row + 2], fx);
+        if (ix < 1 || iy < 1 || ix >= gridU - 2 || iy >= gridV - 2) {
+            out.slope = 0;
+            out.floor = BASE;
+            return BASE;
         }
-        return cubic(col[0], col[1], col[2], col[3], fy);
+        double fx = gx - ix, fy = gy - iy;
+        int r0 = (iy - 1) * gridU + ix, r1 = r0 + gridU, r2 = r1 + gridU, r3 = r2 + gridU;
+        double a0 = cubic(grid, r0, fx), a1 = cubic(grid, r1, fx), a2 = cubic(grid, r2, fx), a3 = cubic(grid, r3, fx);
+        double s0 = cubicSlope(grid, r0, fx), s1 = cubicSlope(grid, r1, fx), s2 = cubicSlope(grid, r2, fx), s3 = cubicSlope(grid, r3, fx);
+        double du = cubic(s0, s1, s2, s3, fy) / CELL, dv = cubicSlope(a0, a1, a2, a3, fy) / CELL;
+        out.slope = Math.sqrt(du * du + dv * dv);
+        float c00 = grid[r1], c10 = grid[r1 + 1], c01 = grid[r2], c11 = grid[r2 + 1];
+        out.floor = (c00 * (1 - fx) + c10 * fx) * (1 - fy) + (c01 * (1 - fx) + c11 * fx) * fy;
+        return cubic(a0, a1, a2, a3, fy);
+    }
+
+    private static double cubic(float[] g, int i, double t) {
+        return cubic(g[i - 1], g[i], g[i + 1], g[i + 2], t);
+    }
+
+    private static double cubicSlope(float[] g, int i, double t) {
+        return cubicSlope(g[i - 1], g[i], g[i + 1], g[i + 2], t);
+    }
+
+    /** Derivada de {@link #cubic} em t. */
+    private static double cubicSlope(double p0, double p1, double p2, double p3, double t) {
+        return 0.5 * (p2 - p0 + t * (2 * (2 * p0 - 5 * p1 + 4 * p2 - p3) + 3 * t * (3 * (p1 - p2) + p3 - p0)));
     }
 
     private static double cubic(double p0, double p1, double p2, double p3, double t) {
         return p1 + 0.5 * t * (p2 - p0 + t * (2 * p0 - 5 * p1 + 4 * p2 - p3 + t * (3 * (p1 - p2) + p3 - p0)));
     }
 
-    /** Fundo de vale? (mais baixo que a vizinhança na grade) */
-    private double valley(double u, double v, double h) {
-        double avg = 0;
-        for (int k = 0; k < 8; k++) {
-            double a = k * Math.PI / 4;
-            avg += gridHeight(u + StrictMath.cos(a) * 120, v + StrictMath.sin(a) * 120);
-        }
-        return avg / 8 - h;
-    }
-
     // ---------------------------------------------------------------- altura final
 
-    /** Altura, máscara e zona de uma coluna. */
+    /** Altura e máscara de uma coluna. */
     public void sample(double x, double z, Sample out) {
         sampleRaw(x, z, out);
         if (out.mask <= 0) return;
@@ -485,7 +679,7 @@ public final class HornacisRegion {
                 Site[] cell = siteGrid[gx + gz * siteW];
                 if (cell != null) {
                     for (Site site : cell) {
-                        double d = Math.hypot(x - site.x(), z - site.z());
+                        double d = dist(x - site.x(), z - site.z());
                         if (d >= site.radius()) continue;
                         double f = 1 - smooth(site.radius() * 0.6, site.radius(), d);
                         h += (site.y() - h) * f;
@@ -494,7 +688,6 @@ public final class HornacisRegion {
             }
         }
         out.height = Math.min(h, MAX_TERRAIN);
-        out.zone = zone(x, z, out);
     }
 
     /** Máscara da cordilheira num ponto (0 fora, 1 no meio): só a forma, sem calcular a altura. */
@@ -511,15 +704,17 @@ public final class HornacisRegion {
 
     /** Altura sem os platôs das estruturas. */
     public void sampleRaw(double x, double z, Sample out) {
-        out.zone = Zone.NONE;
         out.mask = 0;
         if (x < minX || x > maxX || z < minZ || z > maxZ) return;
         shape(x, z, out);
         if (out.mask <= 0) return;
-        double h = gridHeight(out.u, out.v);
-        // detalhe fino por cima da grade de 8 blocos
-        double env = out.envelope;
-        h += env * (6 * detailA.sample(x / 60, z / 60) + 2.5 * detailB.sample(x / 22, z / 22) + 0.8 * detailA.sample(x / 9, z / 9));
+        double h = gridSample(out.u, out.v, out);
+        // detalhe fino por cima da grade de 24 blocos: pedras e saliências nas encostas, quase liso no plano
+        // (no plano o detalhe faria pocinhos)
+        double amp = out.envelope * (0.15 + 0.85 * smooth(0.15, 0.7, out.slope));
+        h += amp * (6 * detailA.sample(x / 60, z / 60) + 2.5 * detailB.sample(x / 22, z / 22) + 0.8 * detailA.sample(x / 9, z / 9));
+        // nunca mais de 1,5 bloco abaixo do "chão" da grade: a superfície não fica com buracos
+        h = Math.max(h, out.floor - 1.5);
 
         double mdx = x - mainX, mdz = z - mainZ;
         double dm = Math.sqrt(mdx * mdx + mdz * mdz);
@@ -527,28 +722,15 @@ public final class HornacisRegion {
             // platô do cume (o palácio) e as agulhas de pedra em volta
             double f = 1 - smooth(54, 92, dm);
             h += (SUMMIT_Y - h) * f;
+            // (na borda de cada agulha o perfil já está abaixo do platô: sem degrau em volta)
             for (int i = 0; i < spireX.length; i++) {
-                double ds = Math.hypot(x - spireX[i], z - spireZ[i]);
-                if (ds < 16) h = Math.max(h, 1650 - 50 * StrictMath.pow(ds / 16, 1.25));
+                double ds = dist(x - spireX[i], z - spireZ[i]);
+                if (ds < 16) h = Math.max(h, 1650 - 70 * StrictMath.pow(ds / 16, 1.25));
             }
         }
         out.mainDist = dm;
         out.raw = h;
         out.height = Math.min(h, MAX_TERRAIN);
-        out.valley = 0;
-    }
-
-    private Zone zone(double x, double z, Sample s) {
-        if (s.mask < 0.45) return Zone.NONE;
-        double h = s.height + 40 * dither.sample(x / 200, z / 200);
-        if (s.mainDist < 1000 || (s.mainDist < 2000 && h > 1250)) return Zone.MAIN_PEAK;
-        if (h > 1050) return Zone.PEAKS;
-        if (h > 800) {
-            if (h < 1000 && valley(s.u, s.v, s.height) > 25) return Zone.GLACIER;
-            return Zone.SLOPES;
-        }
-        if (h > 530) return Zone.HIGHLANDS;
-        return Zone.FOOTHILLS;
     }
 
     // ---------------------------------------------------------------- terreno alto (desempenho)
@@ -568,25 +750,41 @@ public final class HornacisRegion {
         return max;
     }
 
+    /**
+     * Teto de cada célula de 64 blocos, tirado direto dos nós da grade: cada nó vale para a própria célula e
+     * as vizinhas (a interpolação usa nós a até 48 blocos). A folga cobre o detalhe fino (até ~10 blocos) e
+     * o quanto a bicúbica passa dos nós nas encostas íngremes; o platô do cume, as agulhas e os terraços das
+     * estruturas entram à parte.
+     */
     private void buildTopGrid() {
         tallW = (maxX - minX) / 64 + 1;
         tallH = (maxZ - minZ) / 64 + 1;
-        short[] t = new short[tallW * tallH];
-        java.util.stream.IntStream.range(0, tallW).parallel().forEach(i -> {
-            Sample s = new Sample();
-            for (int j = 0; j < tallH; j++) {
-                double max = 0;
-                // amostras a cada 8 blocos, incluindo a borda da célula vizinha
-                for (int a = -1; a <= 9; a++) {
-                    for (int b = -1; b <= 9; b++) {
-                        sample(minX + i * 64 + a * 8, minZ + j * 64 + b * 8, s);
-                        if (s.mask > 0) max = Math.max(max, s.height);
-                    }
-                }
-                t[i + j * tallW] = (short) (max > 0 ? Math.ceil(max) : 0);
+        float[] t = new float[tallW * tallH];
+        for (int j = 0; j < gridV; j++) {
+            double v = gridV0 + j * CELL;
+            for (int i = 0; i < gridU; i++) {
+                float hv = grid[i + j * gridU];
+                if (hv <= BASE + 1) continue;
+                double u = gridU0 + i * CELL;
+                raise(t, toWorldX(u, v), toWorldZ(u, v), 1, hv);
             }
-        });
-        top = t;
+        }
+        raise(t, mainX, mainZ, 3, 1660);
+        for (Site site : sites) raise(t, site.x(), site.z(), 1, site.y());
+        short[] out = new short[t.length];
+        for (int k = 0; k < t.length; k++) out[k] = (short) (t[k] > 0 ? Math.min(MAX_TERRAIN, Math.ceil(t[k]) + 40) : 0);
+        top = out;
+    }
+
+    private void raise(float[] t, double x, double z, int spread, float height) {
+        int cx = ((int) Math.floor(x) - minX) >> 6, cz = ((int) Math.floor(z) - minZ) >> 6;
+        for (int a = -spread; a <= spread; a++) {
+            for (int b = -spread; b <= spread; b++) {
+                int i = cx + a, j = cz + b;
+                if (i < 0 || j < 0 || i >= tallW || j >= tallH) continue;
+                t[i + j * tallW] = Math.max(t[i + j * tallW], height);
+            }
+        }
     }
 
     // ---------------------------------------------------------------- estruturas
@@ -653,7 +851,7 @@ public final class HornacisRegion {
                            double spacing, int radius, Sample tmp, long s) {
         sampleRaw(x, z, tmp);
         if (tmp.mask < 0.85 || tmp.raw < hMin || tmp.raw > hMax) return false;
-        if (Math.hypot(x - mainX, z - mainZ) < 900) return false;
+        if (dist(x - mainX, z - mainZ) < 900) return false;
         double h = tmp.raw;
         double slope = 0;
         for (int k = 0; k < 8; k++) {
@@ -664,7 +862,7 @@ public final class HornacisRegion {
         if (slope > maxSlope) return false;
         for (Site o : sites) {
             double min = Math.max(spacing, o.radius() + radius + 40);
-            if (Math.hypot(o.x() - x, o.z() - z) < min) return false;
+            if (dist(o.x() - x, o.z() - z) < min) return false;
         }
         sites.add(new Site(type, index, x, z, (int) Math.round(h), radius, (int) ((s >>> 40) & 3)));
         return true;
@@ -709,6 +907,11 @@ public final class HornacisRegion {
 
     static double clamp(double v, double lo, double hi) {
         return v < lo ? lo : Math.min(v, hi);
+    }
+
+    /** Distância (raiz quadrada é exata em qualquer máquina, Math.hypot não garante) */
+    private static double dist(double dx, double dz) {
+        return Math.sqrt(dx * dx + dz * dz);
     }
 
     private static double sq(double v) {

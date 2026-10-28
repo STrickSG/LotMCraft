@@ -382,6 +382,7 @@ public class LOTMCraft
             EntityRenderers.register(ModEntities.KNOWLEDGE_DEMON.get(), KnowledgeDemonRenderer::new);
             EntityRenderers.register(ModEntities.STONE_GOLEM.get(), StoneGolemRenderer::new);
             EntityRenderers.register(ModEntities.HEADLESS_BRIDE.get(), HeadlessBrideRenderer::new);
+            EntityRenderers.register(ModEntities.HORNACIS_GRAY_MOUNTAIN_GOAT.get(), de.jakob.lotm.entity.client.hornacis_goat.HornacisGoatRenderer::new);
 
 
             GuidingBookRenderer.loadPages(LOTMCraft.MOD_ID);

@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-/** As posições de um FarRingPlacement são as dele, não as dos anéis das Fortalezas. */
+/** As posições de um FarRingPlacement (e dos lugares de Hornacis) são as deles, não as dos anéis das Fortalezas. */
 @Mixin(ChunkGeneratorStructureState.class)
 public class FarRingPositionsMixin {
     @Inject(method = "generateRingPositions", at = @At("HEAD"), cancellable = true)
@@ -24,6 +24,9 @@ public class FarRingPositionsMixin {
         if (placement instanceof FarRingPlacement far) {
             ChunkGeneratorStructureState state = (ChunkGeneratorStructureState) (Object) this;
             cir.setReturnValue(CompletableFuture.supplyAsync(() -> far.positions(state), Util.backgroundExecutor()));
+        } else if (placement instanceof de.jakob.lotm.hornacis.structure.HornacisSitePlacement site) {
+            // os lugares que a Cordilheira de Hornacis escolheu
+            cir.setReturnValue(CompletableFuture.completedFuture(site.positions()));
         }
     }
 }

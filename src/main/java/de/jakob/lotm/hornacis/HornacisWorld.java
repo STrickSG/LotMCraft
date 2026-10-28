@@ -32,7 +32,8 @@ import java.util.zip.InflaterInputStream;
 
 /**
  * Liga a Cordilheira de Hornacis ao mundo que está aberto: monta a região pela seed antes de o mundo
- * começar a gerar, marca a fonte de biomas do Overworld e diz até que altura o ruído precisa ser calculado.
+ * começar a gerar, marca a fonte de biomas e as funções de relevo do Overworld (só dele) e diz até que
+ * altura o ruído precisa ser calculado.
  */
 @EventBusSubscriber(modid = LOTMCraft.MOD_ID)
 public final class HornacisWorld {
@@ -44,6 +45,8 @@ public final class HornacisWorld {
 
     private static volatile HornacisRegion region;
     private static volatile Holder<Biome> biome;
+    /** O RandomState do Overworld (todo chunk gerado lá usa ele): só ele recebe a cordilheira */
+    private static volatile RandomState overworldState;
 
     private HornacisWorld() {}
 
@@ -59,6 +62,7 @@ public final class HornacisWorld {
     public static void onServerAboutToStart(ServerAboutToStartEvent event) {
         region = null;
         biome = null;
+        overworldState = null;
         MinecraftServer server = event.getServer();
         RegistryAccess access = server.registryAccess();
         LevelStem stem = access.registryOrThrow(Registries.LEVEL_STEM).get(LevelStem.OVERWORLD);
@@ -76,8 +80,11 @@ public final class HornacisWorld {
         RandomState random = RandomState.create(settings, access.lookupOrThrow(Registries.NOISE), seed);
         DensityFunction continents = random.router().continents();
         HornacisRegion.LandTest land = (x, z) -> continents.compute(new DensityFunction.SinglePointContext(x, 0, z)) > -0.11;
-        Path file = server.getWorldPath(LevelResource.ROOT).resolve("data").resolve("lotmcraft_hornacis.bin");
-        HornacisRegion created = HornacisRegion.create(seed, land, new FileStore(file));
+        Path root = server.getWorldPath(LevelResource.ROOT);
+        Path data = root.resolve("data");
+        HornacisRegion created = HornacisRegion.create(seed, land,
+                new FileStore(data.resolve("lotmcraft_hornacis.bin"), data.resolve("lotmcraft_hornacis_center.bin")),
+                exploredRegions(root.resolve("region")));
         biome = holder;
         region = created;
         ((HornacisSource) generator.getBiomeSource()).lotmcraft$setHornacis(created);
@@ -86,10 +93,42 @@ public final class HornacisWorld {
                 (System.nanoTime() - start) / 1_000_000);
     }
 
+    /**
+     * Liga as funções de relevo de um RandomState à cordilheira. Chamado quando o Overworld cria o dele,
+     * antes de gerar qualquer chunk (ver HornacisChunkMapMixin).
+     */
+    public static void attach(RandomState state) {
+        HornacisRegion r = region;
+        if (r == null) return;
+        HornacisDensity.bind(state.router().finalDensity(), r);
+        HornacisDensity.bind(state.router().initialDensityWithoutJaggedness(), r);
+        overworldState = state;
+    }
+
     @SubscribeEvent
     public static void onServerStopped(ServerStoppedEvent event) {
         region = null;
         biome = null;
+        overworldState = null;
+    }
+
+    /** Arquivos de região (512 x 512 blocos cada) que o Overworld já tem: lugares já gerados. */
+    private static java.util.List<int[]> exploredRegions(Path folder) {
+        java.util.List<int[]> list = new java.util.ArrayList<>();
+        if (!Files.isDirectory(folder)) return list;
+        try (var files = Files.list(folder)) {
+            files.forEach(f -> {
+                String[] parts = f.getFileName().toString().split("\\.");
+                if (parts.length != 4 || !parts[0].equals("r") || !parts[3].equals("mca")) return;
+                try {
+                    list.add(new int[]{Integer.parseInt(parts[1]), Integer.parseInt(parts[2])});
+                } catch (NumberFormatException ignored) {
+                }
+            });
+        } catch (IOException e) {
+            LOTMCraft.LOGGER.warn("Cordilheira de Hornacis: não deu para listar {}", folder, e);
+        }
+        return list;
     }
 
     /**
@@ -104,13 +143,31 @@ public final class HornacisWorld {
 
     private static final ThreadLocal<HornacisRegion.Sample> SAMPLE = ThreadLocal.withInitial(HornacisRegion.Sample::new);
 
+    /** Inclinação do relevo da cordilheira em (x, z), em blocos de altura por bloco andado (0 fora dela). */
+    public static double slopeAt(int x, int z) {
+        HornacisRegion r = region;
+        if (r == null || !r.inBox(x, z)) return 0;
+        HornacisRegion.Sample s = SAMPLE.get();
+        double x0 = heightAt(r, s, x - 2, z), x1 = heightAt(r, s, x + 2, z);
+        double z0 = heightAt(r, s, x, z - 2), z1 = heightAt(r, s, x, z + 2);
+        if (Double.isNaN(x0 + x1 + z0 + z1)) return 0;
+        double dx = (x1 - x0) / 4, dz = (z1 - z0) / 4;
+        return Math.sqrt(dx * dx + dz * dz);
+    }
+
+    private static double heightAt(HornacisRegion r, HornacisRegion.Sample s, int x, int z) {
+        r.sample(x, z, s);
+        return s.mask > 0 ? s.height : Double.NaN;
+    }
+
     /**
      * Até onde calcular o ruído do terreno num pedaço do mundo. As configurações do Overworld vão até 1727
      * por causa da cordilheira; fora dela o terreno vanilla nunca passa de 256, então o ruído para em 320
      * como sempre (sem custo a mais). Dentro dela, só até o pico mais alto daquele pedaço.
      */
-    public static NoiseSettings noiseFor(NoiseSettings clamped, NoiseGeneratorSettings settings, int x0, int z0, int x1, int z1) {
-        if (!HornacisDensity.isHornacis(settings)) return clamped;
+    public static NoiseSettings noiseFor(NoiseSettings clamped, RandomState state, int x0, int z0, int x1, int z1) {
+        // outra dimensão (ou um mundo sem cordilheira): como sempre
+        if (state != overworldState) return clamped;
         int top = VANILLA_TOP;
         HornacisRegion r = region;
         if (r != null) {
@@ -122,9 +179,41 @@ public final class HornacisWorld {
         return new NoiseSettings(clamped.minY(), top - clamped.minY(), clamped.noiseSizeHorizontal(), clamped.noiseSizeVertical());
     }
 
-    /** A grade erodida guardada na pasta do mundo (comprimida, ~1 MB) */
-    private record FileStore(Path file) implements HornacisRegion.GridStore {
+    /**
+     * Na pasta do mundo: o lugar da cordilheira (escolhido uma vez, nunca muda) e a grade erodida
+     * (comprimida, ~1 MB; recalculada se o relevo mudar numa versão nova).
+     */
+    private record FileStore(Path file, Path centerFile) implements HornacisRegion.GridStore {
         private static final int MAGIC = 0x484F524E;
+
+        @Override
+        public double[] loadCenter(long seed) {
+            if (!Files.isRegularFile(centerFile)) return null;
+            try (DataInputStream in = new DataInputStream(Files.newInputStream(centerFile))) {
+                if (in.readInt() != MAGIC || in.readLong() != seed) return null;
+                return new double[]{in.readDouble(), in.readDouble()};
+            } catch (IOException e) {
+                LOTMCraft.LOGGER.warn("Cordilheira de Hornacis: não deu para ler {}", centerFile, e);
+                return null;
+            }
+        }
+
+        @Override
+        public void saveCenter(long seed, double x, double z) {
+            try {
+                Files.createDirectories(centerFile.getParent());
+                Path tmp = centerFile.resolveSibling(centerFile.getFileName() + ".tmp");
+                try (DataOutputStream out = new DataOutputStream(Files.newOutputStream(tmp))) {
+                    out.writeInt(MAGIC);
+                    out.writeLong(seed);
+                    out.writeDouble(x);
+                    out.writeDouble(z);
+                }
+                Files.move(tmp, centerFile, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+            } catch (IOException e) {
+                LOTMCraft.LOGGER.warn("Cordilheira de Hornacis: não deu para salvar {}", centerFile, e);
+            }
+        }
 
         @Override
         public float[] load(long key, int size) {

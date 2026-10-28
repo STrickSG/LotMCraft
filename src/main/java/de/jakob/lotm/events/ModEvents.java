@@ -155,6 +155,7 @@ public class ModEvents {
         event.registerLayerDefinition(KnowledgeDemonModel.LAYER_LOCATION, KnowledgeDemonModel::createBodyLayer);
         event.registerLayerDefinition(StoneGolemModel.LAYER_LOCATION, StoneGolemModel::createBodyLayer);
         event.registerLayerDefinition(HeadlessBrideModel.LAYER_LOCATION, HeadlessBrideModel::createBodyLayer);
+        event.registerLayerDefinition(de.jakob.lotm.entity.client.hornacis_goat.HornacisGoatModel.LAYER_LOCATION, de.jakob.lotm.entity.client.hornacis_goat.HornacisGoatModel::createBodyLayer);
 
         // Mythical Creature Forms
         event.registerLayerDefinition(TyrantMythicalCreatureModel.LAYER_LOCATION, TyrantMythicalCreatureModel::createBodyLayer);
@@ -199,6 +200,7 @@ public class ModEvents {
         event.put(ModEntities.KNOWLEDGE_DEMON.get(), KnowledgeDemonEntity.createAttributes().build());
         event.put(ModEntities.STONE_GOLEM.get(), StoneGolemEntity.createAttributes().build());
         event.put(ModEntities.HEADLESS_BRIDE.get(), HeadlessBrideEntity.createAttributes().build());
+        event.put(ModEntities.HORNACIS_GRAY_MOUNTAIN_GOAT.get(), net.minecraft.world.entity.animal.goat.Goat.createAttributes().build());
     }
 
     @SubscribeEvent
@@ -320,6 +322,14 @@ public class ModEvents {
                 SpawnPlacementTypes.NO_RESTRICTIONS,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 Mob::checkMobSpawnRules,
+                RegisterSpawnPlacementsEvent.Operation.REPLACE
+        );
+        // como a cabra comum: em pedra, neve, gelo compactado ou cascalho, com luz
+        event.register(
+                ModEntities.HORNACIS_GRAY_MOUNTAIN_GOAT.get(),
+                SpawnPlacementTypes.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                net.minecraft.world.entity.animal.goat.Goat::checkGoatSpawnRules,
                 RegisterSpawnPlacementsEvent.Operation.REPLACE
         );
     }

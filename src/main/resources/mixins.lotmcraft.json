@@ -9,7 +9,9 @@
     "HornacisBiomeSourceMixin",
     "HornacisPossibleBiomesMixin",
     "HornacisNoiseChunkMixin",
-    "HornacisNoiseGeneratorMixin"
+    "HornacisNoiseGeneratorMixin",
+    "HornacisChunkMapMixin",
+    "HornacisGoatAiMixin"
   ],
   "client": [
     "EntityGlowMixin"

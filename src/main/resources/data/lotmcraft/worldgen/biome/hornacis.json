@@ -33,10 +33,16 @@
     ],
     "creature": [
       {
-        "type": "minecraft:goat",
+        "type": "lotmcraft:hornacis_gray_mountain_goat",
         "weight": 6,
         "minCount": 1,
         "maxCount": 3
+      },
+      {
+        "type": "minecraft:goat",
+        "weight": 2,
+        "minCount": 1,
+        "maxCount": 2
       },
       {
         "type": "minecraft:wolf",
@@ -135,16 +141,13 @@
   "spawn_costs": {},
   "carvers": {
     "air": [
-      "minecraft:cave",
-      "minecraft:cave_extra_underground",
-      "minecraft:canyon"
+      "minecraft:cave_extra_underground"
     ]
   },
   "features": [
     [],
     [
-      "minecraft:lake_lava_underground",
-      "minecraft:lake_lava_surface"
+      "minecraft:lake_lava_underground"
     ],
     [
       "minecraft:amethyst_geode",

@@ -23,6 +23,6 @@ public class HornacisNoiseChunkMixin {
                                                DensityFunctions.BeardifierOrMarker beardifier, NoiseGeneratorSettings settings,
                                                Aquifer.FluidPicker fluidPicker, Blender blender) {
         ChunkPos pos = chunk.getPos();
-        return HornacisWorld.noiseFor(clamped, settings, pos.getMinBlockX(), pos.getMinBlockZ(), pos.getMaxBlockX(), pos.getMaxBlockZ());
+        return HornacisWorld.noiseFor(clamped, state, pos.getMinBlockX(), pos.getMinBlockZ(), pos.getMaxBlockX(), pos.getMaxBlockZ());
     }
 }
