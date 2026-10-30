@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:pallbearer_potion"
     },
-    "title": "Death Serves Life",
-    "description": "Consume a Potion and advance to Pallbearer.",
+    "title": {"translate": "advancements.lotmcraft.become_pallbearer.title", "fallback": "Death Serves Life"},
+    "description": {"translate": "advancements.lotmcraft.become_pallbearer.description", "fallback": "Consume a Potion and advance to Pallbearer."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

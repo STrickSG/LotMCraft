@@ -33,6 +33,12 @@ public class PacketHandler {
 
     private static void registerClientPackets(PayloadRegistrar registrar) {
         registrar.playToClient(
+                de.jakob.lotm.network.packets.toClient.ParticleBatchPacket.TYPE,
+                de.jakob.lotm.network.packets.toClient.ParticleBatchPacket.STREAM_CODEC,
+                de.jakob.lotm.network.packets.toClient.ParticleBatchPacket::handle
+        );
+
+        registrar.playToClient(
                 SyncBeyonderDataPacket.TYPE,
                 SyncBeyonderDataPacket.STREAM_CODEC,
                 SyncBeyonderDataPacket::handle

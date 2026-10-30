@@ -73,7 +73,7 @@ public class CharmAbility extends Ability {
         LivingEntity target = AbilityUtil.getTargetEntity(entity, 15, 1.5f);
         if(target == null) {
             if(entity instanceof ServerPlayer player) {
-                ClientboundSetActionBarTextPacket packet = new ClientboundSetActionBarTextPacket(Component.literal("No entity to charm found.").withColor(0xFFf980ff));
+                ClientboundSetActionBarTextPacket packet = new ClientboundSetActionBarTextPacket(Component.translatable("lotmcraft.msg.ability.charm.no_entity").withColor(0xFFf980ff));
                 player.connection.send(packet);
             }
             return;
@@ -86,7 +86,7 @@ public class CharmAbility extends Ability {
 
         if(charmed.containsKey(target.getUUID()) || onCharmedCooldown.contains(target.getUUID())) {
             if(entity instanceof ServerPlayer player) {
-                ClientboundSetActionBarTextPacket packet = new ClientboundSetActionBarTextPacket(Component.literal("The entity was charmed already.").withColor(0xFFf980ff));
+                ClientboundSetActionBarTextPacket packet = new ClientboundSetActionBarTextPacket(Component.translatable("lotmcraft.msg.ability.charm.already").withColor(0xFFf980ff));
                 player.connection.send(packet);
             }
             return;
@@ -103,7 +103,7 @@ public class CharmAbility extends Ability {
                 target.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
             } else {
                 if(entity instanceof ServerPlayer player) {
-                    ClientboundSetActionBarTextPacket packet = new ClientboundSetActionBarTextPacket(Component.literal("Battle Hypnosis is too strong to charm.").withColor(0xFFf980ff));
+                    ClientboundSetActionBarTextPacket packet = new ClientboundSetActionBarTextPacket(Component.translatable("lotmcraft.msg.ability.charm.hypnosis").withColor(0xFFf980ff));
                     player.connection.send(packet);
                 }
                 return;
@@ -171,13 +171,13 @@ public class CharmAbility extends Ability {
             return;
 
         Entity damager = event.getSource().getEntity();
-        if(!charmed.containsKey(damager.getUUID()) || charmed.get(damager.getUUID()) != event.getEntity().getUUID())
+        if(!charmed.containsKey(damager.getUUID()) || !event.getEntity().getUUID().equals(charmed.get(damager.getUUID())))
             return;
 
         charmed.remove(damager.getUUID());
         event.setNewDamage(0);
         if(event.getEntity() instanceof ServerPlayer player) {
-            ClientboundSetActionBarTextPacket packet = new ClientboundSetActionBarTextPacket(Component.literal("The enemy was charmed and the hit didnt hurt you.").withColor(0xFFf980ff));
+            ClientboundSetActionBarTextPacket packet = new ClientboundSetActionBarTextPacket(Component.translatable("lotmcraft.msg.ability.charm.blocked").withColor(0xFFf980ff));
             player.connection.send(packet);
         }
     }

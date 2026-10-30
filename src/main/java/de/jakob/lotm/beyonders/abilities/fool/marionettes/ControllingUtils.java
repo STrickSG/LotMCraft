@@ -127,9 +127,23 @@ public class ControllingUtils {
         target.setHealth(Math.min(sourceHealth, maxHealth));
     }
 
+    // Lado do cliente: estes métodos são chamados por BeyonderData.getPathway/getSequence, inclusive em
+    // HUDs e renderizadores a cada frame. Antes, cada chamada enviava um pedido de sincronização ao
+    // servidor (e o servidor respondia a cada um); agora o pedido sai no máximo uma vez por segundo.
+    private static volatile long lastControllingSyncRequest = 0;
+
+    private static void requestControllingSync() {
+        long now = System.currentTimeMillis();
+        if (now - lastControllingSyncRequest < 1000) {
+            return;
+        }
+        lastControllingSyncRequest = now;
+        PacketHandler.sendToServer(new RequestControllingSyncPacket());
+    }
+
     public static PathwayData currentlyControlling(Player player) {
         if(player.level().isClientSide()) {
-            PacketHandler.sendToServer(new RequestControllingSyncPacket());
+            requestControllingSync();
         }
         EntityControllingComponent component = player.getData(ModAttachments.ENTITY_CONTROLLING_COMPONENT);
         return new PathwayData(component.getControlledEntityPathway(), component.getControlledEntitySequence());
@@ -137,14 +151,14 @@ public class ControllingUtils {
 
     public static boolean isControlling(Player player) {
         if (player.level().isClientSide()) {
-            PacketHandler.sendToServer(new RequestControllingSyncPacket());
+            requestControllingSync();
         }
         return player.getData(ModAttachments.ENTITY_CONTROLLING_COMPONENT).isControlling();
     }
 
     public static boolean canUseOwnAbilitiesWhileControlling(Player player) {
         if(player.level().isClientSide()) {
-            PacketHandler.sendToServer(new RequestControllingSyncPacket());
+            requestControllingSync();
         }
         return player.getData(ModAttachments.ENTITY_CONTROLLING_COMPONENT).isCanUseOwnAbilities();
     }
@@ -210,6 +224,9 @@ public class ControllingUtils {
         component.getActiveToggles().forEach(toggle -> toggle.useAbility(level, player));
 
         component.reset();
+
+        // Avisa o cliente na hora que o controle acabou (antes ele só descobria pelos pedidos constantes)
+        syncControllingData(player);
     }
 
     public static void syncControllingData(ServerPlayer player) {

@@ -1,0 +1,29 @@
+
+newmtl caule
+Kd 0.921569 0.882353 0.784314
+map_Kd lotmcraft:item/singularity/grain
+
+newmtl chapeu
+Kd 0.784314 0.235294 0.274510
+map_Kd lotmcraft:item/singularity/grain
+
+newmtl flor
+Kd 0.901961 0.470588 0.784314
+map_Kd lotmcraft:item/singularity/grain
+
+newmtl miolo
+Kd 0.980392 0.823529 0.235294
+map_Kd lotmcraft:item/singularity/grain
+
+newmtl musgo
+Kd 0.274510 0.470588 0.196078
+map_Kd lotmcraft:item/singularity/grain
+
+newmtl pinta
+Kd 0.980392 0.960784 0.921569
+map_Kd lotmcraft:item/singularity/grain
+
+newmtl terra
+Kd 0.352941 0.235294 0.156863
+map_Kd lotmcraft:item/singularity/grain
+

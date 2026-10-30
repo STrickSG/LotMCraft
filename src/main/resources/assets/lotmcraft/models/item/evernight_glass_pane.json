@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "lotmcraft:block/evernight_glass"
+  },
+  "render_type": "minecraft:translucent"
+}

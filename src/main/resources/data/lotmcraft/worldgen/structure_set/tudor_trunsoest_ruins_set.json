@@ -1,0 +1,17 @@
+{
+  "structures": [
+    {
+      "structure": "lotmcraft:tudor_trunsoest_ruins",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "lotmcraft:far_ring",
+    "salt": 14562489,
+    "count": 3,
+    "min_distance": 8000,
+    "max_distance": 10000,
+    "biomes": "#lotmcraft:has_structure/tudor_trunsoest_ruins_biomes",
+    "biome_search_radius": 512
+  }
+}

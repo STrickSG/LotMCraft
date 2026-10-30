@@ -425,6 +425,10 @@ public class ModEntities {
             ENTITY_TYPES.register("stone_golem", () -> EntityType.Builder.of(StoneGolemEntity::new, MobCategory.MONSTER)
                     .sized(1.5f, 3.25f).build("stone_golem"));
 
+    public static final Supplier<EntityType<HornacisGoatEntity>> HORNACIS_GRAY_MOUNTAIN_GOAT =
+            ENTITY_TYPES.register("hornacis_gray_mountain_goat", () -> EntityType.Builder.of(HornacisGoatEntity::new, MobCategory.CREATURE)
+                    .sized(0.9f, 1.3f).passengerAttachments(1.1125f).clientTrackingRange(10).build("hornacis_gray_mountain_goat"));
+
     public static final Supplier<EntityType<HeadlessBrideEntity>> HEADLESS_BRIDE =
             ENTITY_TYPES.register("headless_bride", () -> EntityType.Builder.of(HeadlessBrideEntity::new, MobCategory.MONSTER)
                     .sized(1.25f, 2f).build("headless_bride"));

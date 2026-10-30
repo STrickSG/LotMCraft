@@ -49,7 +49,7 @@ public class OrderJusticiarAbility extends PassiveAbility {
 
         Component message = Component.translatable("ability.lotmcraft.order_justiciar.murder_prefix")
                 .withStyle(ChatFormatting.GOLD)
-                .append(Component.literal(concealed ? "Unknown" : killer.getDisplayName().getString())
+                .append((concealed ? Component.translatable("lotmcraft.msg.unknown") : killer.getDisplayName().copy())
                         .withStyle(ChatFormatting.WHITE))
                 .append(Component.translatable("ability.lotmcraft.order_justiciar.murder_middle")
                         .withStyle(ChatFormatting.GRAY))

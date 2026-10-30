@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:ocean_songster_potion"
     },
-    "title": "Song of the Deep",
-    "description": "Consume a Potion and advance to Ocean Songster.",
+    "title": {"translate": "advancements.lotmcraft.become_ocean_songster.title", "fallback": "Song of the Deep"},
+    "description": {"translate": "advancements.lotmcraft.become_ocean_songster.description", "fallback": "Consume a Potion and advance to Ocean Songster."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

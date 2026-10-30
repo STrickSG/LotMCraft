@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "lotmcraft:block/ancient_lattice"
+  },
+  "render_type": "minecraft:cutout"
+}

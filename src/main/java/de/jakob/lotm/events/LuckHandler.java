@@ -243,6 +243,8 @@ public class LuckHandler {
     public static void onEntityTick(EntityTickEvent.Post event) {
         if (!(event.getEntity() instanceof LivingEntity entity)) return;
         if (!(entity.level() instanceof ServerLevel level)) return;
+        // Sem componente a sorte é 0 (padrão); evita criar o componente para toda entidade a cada tick
+        if (!entity.hasData(ModAttachments.LUCK_COMPONENT)) return;
 
         int luck = getLuck(entity);
         if (luck == 0) return;
@@ -390,7 +392,7 @@ public class LuckHandler {
 
         if (entity instanceof ServerPlayer player)
             player.connection.send(new ClientboundSetActionBarTextPacket(
-                    Component.literal("You tripped!").withStyle(s -> s.withColor(0xA17234))
+                    Component.translatable("lotmcraft.msg.tripped").withStyle(s -> s.withColor(0xA17234))
             ));
     }
 

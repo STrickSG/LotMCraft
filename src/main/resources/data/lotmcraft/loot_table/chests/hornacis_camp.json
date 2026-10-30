@@ -1,0 +1,444 @@
+{
+  "type": "minecraft:chest",
+  "random_sequence": "lotmcraft:chests/hornacis_camp",
+  "pools": [
+    {
+      "comment": "--- O DIÁRIO DE QUEM ACAMPOU AQUI ---",
+      "rolls": {
+        "type": "minecraft:uniform",
+        "min": 1,
+        "max": 1
+      },
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:written_book",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_book_cover",
+              "title": "Diário de Bastian Roux",
+              "author": "Bastian Roux",
+              "generation": 0
+            },
+            {
+              "function": "minecraft:set_written_book_pages",
+              "pages": [
+                "3 de setembro\n\nSubi de Haut-Hornacis com duas mulas e corda para um mês. Todo bar de Backlund fala do tesouro da família Antigonus. Se existir, está aqui em cima.",
+                "7 de setembro\n\nAchei a primeira ruína. Cúpulas altas, colunas de pedra mais grossas que três homens. A pedra foi tirada da própria montanha. Ninguém sabe quem construiu isto.",
+                "9 de setembro\n\nUma casa inteira, intacta. A mesa ainda estava posta: talheres, pratos com manchas secas de comida podre, uma garrafa pela metade que virou quase água. Como se todos tivessem saído para buscar lenha e nunca voltado.",
+                "12 de setembro\n\nProcurei o cemitério por dois dias. Não existe. Nenhum túmulo em lugar nenhum. Um povo inteiro e nenhum túmulo.",
+                "15 de setembro\n\nA névoa desce do Pico Principal todo fim de tarde. À noite ouço alguém repetir, bem baixinho: \"Hornacis... Flegrea...\". As mulas não dormem.",
+                "16 de setembro\n\nVou subir amanhã cedo. Lá em cima há um palácio. Daqui ele parece grande demais, como se não tivesse sido feito para gente."
+              ],
+              "mode": "replace_all"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:written_book",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_book_cover",
+              "title": "Notas de campo",
+              "author": "Dra. Maylin Hoyt",
+              "generation": 0
+            },
+            {
+              "function": "minecraft:set_written_book_pages",
+              "pages": [
+                "Expedição da Universidade de Backlund\n\nObjetivo: registrar as relíquias espalhadas pelas florestas, vales e encostas suaves em volta do Pico Principal de Hornacis.",
+                "Os murais estão perfeitamente conservados. Mostram a vida comum: colheita, casamento, crianças. E a adoração da noite e de uma senhora a quem chamam de Governante da Noite Eterna.",
+                "Um painel se repete em várias casas: o morto deitado na cama, cercado pela família. Eles acreditavam que a morte não era o fim e que os mortos os protegiam na noite. Guardavam o corpo em casa por três dias inteiros.",
+                "E depois? Nada. Nenhum túmulo, nenhuma cripta, nenhum ossuário. Os murais não falam de enterro.",
+                "Os símbolos da Noite Eterna estão por toda parte, mas não são o Emblema Sagrado da Igreja da Deusa da Noite Eterna. São parecidos, e diferentes.",
+                "Hipótese para o relatório: um povo antigo, humano, que sumiu de repente. Nenhum sinal de guerra, de fogo ou de saque. Simplesmente sumiu."
+              ],
+              "mode": "replace_all"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:written_book",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_book_cover",
+              "title": "Caderno de um guia",
+              "author": "Lucien de Haut-Hornacis",
+              "generation": 0
+            },
+            {
+              "function": "minecraft:set_written_book_pages",
+              "pages": [
+                "Para quem achar isto:\n\nSou guia há vinte anos. Levei caçadores, estudiosos e loucos até as ruínas. Quase todos voltaram. Os que subiram ao Pico Principal, não.",
+                "A cabra cinzenta da montanha tem um chifre só, no meio da testa. O chifre da cabra adulta vale mais do que a carne de um rebanho inteiro: há compradores em Backlund que pagam qualquer preço e não dizem para quê.",
+                "Elas sobem por onde nem as cabras comuns sobem e dão cabeçada em tudo. Quando batem o chifre numa pedra, às vezes ele quebra. Vale a pena seguir uma.",
+                "Conselhos: durma longe da névoa. Não coma nada que encontrar nas casas antigas. Não responda se ouvir alguém chamar seu nome lá de cima.",
+                "O mosteiro da Igreja da Noite Eterna fica num esporão de onde se vê o pico. Os monges não sobem. Dizem que vigiam. Nunca disseram o quê."
+              ],
+              "mode": "replace_all"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:written_book",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_book_cover",
+              "title": "Carta não enviada",
+              "author": "Ellen",
+              "generation": 0
+            },
+            {
+              "function": "minecraft:set_written_book_pages",
+              "pages": [
+                "Querido Thomas,\n\nSe esta carta chegar, é porque alguém achou meu acampamento. O frio aqui em cima não é como o de Backlund: ele entra nos ossos e fica.",
+                "Perdi Gerard na passagem do norte. A corda arrebentou. Não consegui nem ver onde ele caiu.",
+                "Não achei tesouro nenhum. Só casas vazias com a comida ainda nos pratos. Tenho a impressão de que alguém ainda mora aqui, só que eu não consigo ver.",
+                "Diga às crianças que a mamãe viu montanhas mais altas que as nuvens. Diga que eram bonitas. Eram."
+              ],
+              "mode": "replace_all"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:written_book",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_book_cover",
+              "title": "Registro de escalada",
+              "author": "Corvo",
+              "generation": 0
+            },
+            {
+              "function": "minecraft:set_written_book_pages",
+              "pages": [
+                "Altitude do acampamento: acima das nuvens. A neve aqui nunca derrete.",
+                "A família Antigonus tinha um brasão: um olho vertical feito de muitos símbolos finos. Vi esse olho entalhado numa coluna caída perto do cume.",
+                "Os do Caminho do Bobo sobem atrás da herança dos Antigonus. Nenhum deles desceu para contar. Talvez a herança não queira ser achada.",
+                "O palácio do pico tem uma porta que nenhuma ferramenta abre. Há um selo nela, com o emblema da Noite Eterna. Vi a luz amarela das velas lá dentro, embora ninguém as acenda.",
+                "Volto amanhã com mais gente. Se eu não voltar, não venham."
+              ],
+              "mode": "replace_all"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "comment": "--- SUPRIMENTOS ---",
+      "rolls": {
+        "type": "minecraft:uniform",
+        "min": 3,
+        "max": 6
+      },
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:bread",
+          "weight": 10,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 2,
+                "max": 5
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:cooked_mutton",
+          "weight": 8,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1,
+                "max": 4
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:apple",
+          "weight": 5,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1,
+                "max": 3
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:torch",
+          "weight": 8,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 4,
+                "max": 10
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:coal",
+          "weight": 7,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 2,
+                "max": 6
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:iron_ingot",
+          "weight": 5,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1,
+                "max": 3
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:lead",
+          "weight": 4,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1,
+                "max": 2
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:string",
+          "weight": 5,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 2,
+                "max": 6
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:leather",
+          "weight": 4,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1,
+                "max": 3
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:snowball",
+          "weight": 4,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 2,
+                "max": 8
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:paper",
+          "weight": 4,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 2,
+                "max": 5
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:candle",
+          "weight": 3,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1,
+                "max": 3
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:glass_bottle",
+          "weight": 3,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1,
+                "max": 2
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:gold_nugget",
+          "weight": 4,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 2,
+                "max": 7
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:flint_and_steel",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:compass",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:spyglass",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:map",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:emerald",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1,
+                "max": 2
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "comment": "--- O QUE ELES VIERAM BUSCAR (Caminho do Bobo, Sequências 9 e 8) ---",
+      "rolls": {
+        "type": "minecraft:uniform",
+        "min": 0,
+        "max": 1
+      },
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "lotmcraft:seer",
+          "weight": 6
+        },
+        {
+          "type": "minecraft:item",
+          "name": "lotmcraft:clown",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "lotmcraft:seer_potion",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "name": "lotmcraft:star_crystal",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "lotmcraft:lavos_squid_blood",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "lotmcraft:hornacis_gray_mountain_goat_horn",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "name": "lotmcraft:human_faced_rose_complete_stalk",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 30
+        }
+      ]
+    }
+  ]
+}

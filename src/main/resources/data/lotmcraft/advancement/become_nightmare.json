@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:nightmare_potion"
     },
-    "title": "Sweet Dreams",
-    "description": "Consume a Potion and advance to Nightmare.",
+    "title": {"translate": "advancements.lotmcraft.become_nightmare.title", "fallback": "Sweet Dreams"},
+    "description": {"translate": "advancements.lotmcraft.become_nightmare.description", "fallback": "Consume a Potion and advance to Nightmare."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

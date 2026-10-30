@@ -19,7 +19,7 @@
     "absolute": -4
   },
 
-  "terrain_adaptation": "none",
+  "terrain_adaptation": "beard_thin",
 
   "locate_offset": [0, -4, 0],
 

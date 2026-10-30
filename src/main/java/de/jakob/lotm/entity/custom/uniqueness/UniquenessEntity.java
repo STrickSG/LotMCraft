@@ -147,6 +147,12 @@ public class UniquenessEntity extends Entity {
             return;
         }
 
+        // Um Deus (Sequência 0) de um Caminho vizinho pode tomar a Singularidade para tentar dominá-la
+        if (seq == 0 && entity instanceof ServerPlayer god && de.jakob.lotm.beyonders.singularity.SingularityData.isNeighborPathway(pathway, god)) {
+            takeAsNeighborGod(god, pathway, serverLevel);
+            return;
+        }
+
         // Others are harmed
         if (seq <= 2 && BeyonderData.isBeyonder(entity)) {
             // Angels (seq <= 2) take massive damage
@@ -178,12 +184,27 @@ public class UniquenessEntity extends Entity {
 
         player.playSound(SoundEvents.ITEM_PICKUP);
 
+        // A Singularidade também vem como item equipável (ainda sem domínio; ele vem com a Apoteose)
+        if (player instanceof ServerPlayer serverPlayer) {
+            de.jakob.lotm.beyonders.singularity.SingularityHandler.giveSingularity(serverPlayer, pathway, 0f);
+        }
+
         // Sync uniqueness component to client
         if (player instanceof ServerPlayer serverPlayer) {
             de.jakob.lotm.network.PacketHandler.syncUniquenessToPlayer(serverPlayer);
         }
 
         // Remove from active map and discard entity
+        ACTIVE_ENTITIES.remove(pathway);
+        this.discard();
+    }
+
+    private void takeAsNeighborGod(ServerPlayer god, String pathway, ServerLevel serverLevel) {
+        de.jakob.lotm.beyonders.singularity.SingularityHandler.giveSingularity(god, pathway, 0f);
+        int color = BeyonderData.pathwayInfos.containsKey(pathway) ? BeyonderData.pathwayInfos.get(pathway).color() : 0xFFFFFF;
+        serverLevel.players().forEach(p -> p.displayClientMessage(
+                Component.literal(god.getName().getString()).append(Component.translatable("lotm.uniqueness.picked_up")).withColor(color), false));
+        god.playSound(SoundEvents.ITEM_PICKUP);
         ACTIVE_ENTITIES.remove(pathway);
         this.discard();
     }
@@ -216,6 +237,11 @@ public class UniquenessEntity extends Entity {
         }
 
         if(BeyonderData.playerMap.anyPlayerHoldsUniqueness(pathway)) {
+            return true;
+        }
+
+        // Alguém está com ela em forma de item (inclusive um Deus de Caminho vizinho)
+        if (de.jakob.lotm.beyonders.singularity.SingularityRegistry.get(level.getServer()).isHeld(pathway)) {
             return true;
         }
 

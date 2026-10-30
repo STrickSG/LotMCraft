@@ -4,7 +4,14 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "EntityAccessor",
-    "MixinIngredient"
+    "FarRingPositionsMixin",
+    "MixinIngredient",
+    "HornacisBiomeSourceMixin",
+    "HornacisPossibleBiomesMixin",
+    "HornacisNoiseChunkMixin",
+    "HornacisNoiseGeneratorMixin",
+    "HornacisChunkMapMixin",
+    "HornacisGoatAiMixin"
   ],
   "client": [
     "EntityGlowMixin"

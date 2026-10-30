@@ -33,6 +33,12 @@ public class SanityEventHandler {
             return;
         }
 
+        // Mobs que não são Beyonders e nunca tiveram a sanidade alterada estão no padrão (1.0) e não têm
+        // nada a fazer aqui; isto evita anexar (e salvar) um componente de sanidade em todo mob do mundo.
+        if(!(entity instanceof Player) && !entity.hasData(ModAttachments.SANITY_COMPONENT) && !BeyonderData.isBeyonder(entity)) {
+            return;
+        }
+
         SanityComponent sanityComp = entity.getData(ModAttachments.SANITY_COMPONENT);
 
         boolean isBeyonder = BeyonderData.isBeyonder(entity);

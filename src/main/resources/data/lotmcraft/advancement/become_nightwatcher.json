@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:nightwatcher_potion"
     },
-    "title": "Guardian of the Night",
-    "description": "Consume a Potion and advance to Nightwatcher.",
+    "title": {"translate": "advancements.lotmcraft.become_nightwatcher.title", "fallback": "Guardian of the Night"},
+    "description": {"translate": "advancements.lotmcraft.become_nightwatcher.description", "fallback": "Consume a Potion and advance to Nightwatcher."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

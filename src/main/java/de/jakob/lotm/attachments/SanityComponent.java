@@ -29,7 +29,7 @@ public class SanityComponent {
     public void setSanityAndSync(float sanity, LivingEntity entity) {
         float maxSanity = entity instanceof net.minecraft.world.entity.player.Player p
                 ? de.jakob.lotm.beyonders.acting.ActingCapHelper.getEffectiveCap(p) : 1.0f;
-        this.sanity = Math.clamp(sanity, 0.0f, maxSanity);
+        this.sanity = anchored(Math.clamp(sanity, 0.0f, maxSanity), this.sanity, entity);
 
         if (entity instanceof ServerPlayer player) {
             PacketHandler.sendToPlayer(player, new SyncSanityPacket(this.sanity, entity.getId()));
@@ -47,12 +47,14 @@ public class SanityComponent {
             }
         }
 
+        float before = this.sanity;
         this.sanity += amount;
 
         float maxSanity = entity instanceof net.minecraft.world.entity.player.Player p
                 ? de.jakob.lotm.beyonders.acting.ActingCapHelper.getEffectiveCap(p) : 1.0f;
         if (this.sanity > maxSanity) this.sanity = maxSanity;
         else if (this.sanity < 0.0f) this.sanity = 0.0f;
+        this.sanity = anchored(this.sanity, before, entity);
 
         if (entity instanceof ServerPlayer player) {
             PacketHandler.sendToPlayer(player, new SyncSanityPacket(sanity, entity.getId()));
@@ -60,12 +62,14 @@ public class SanityComponent {
     }
 
     public void increaseSanityAndSyncIgnoreSequence(float amount, LivingEntity entity) {
+        float before = this.sanity;
         this.sanity += amount;
 
         float maxSanity = entity instanceof net.minecraft.world.entity.player.Player p
                 ? de.jakob.lotm.beyonders.acting.ActingCapHelper.getEffectiveCap(p) : 1.0f;
         if (this.sanity > maxSanity) this.sanity = maxSanity;
         else if (this.sanity < 0.0f) this.sanity = 0.0f;
+        this.sanity = anchored(this.sanity, before, entity);
 
         if (entity instanceof ServerPlayer player) {
             PacketHandler.sendToPlayer(player, new SyncSanityPacket(sanity, entity.getId()));
@@ -89,12 +93,14 @@ public class SanityComponent {
 
         amount *= getSanityDifferenceMultiplier(casterSequence, targetSequence);
 
+        float before = this.sanity;
         this.sanity += amount;
 
         float maxSanitySeq = entity instanceof net.minecraft.world.entity.player.Player p
                 ? de.jakob.lotm.beyonders.acting.ActingCapHelper.getEffectiveCap(p) : 1.0f;
         if (this.sanity > maxSanitySeq) this.sanity = maxSanitySeq;
         else if (this.sanity < 0.0f) this.sanity = 0.0f;
+        this.sanity = anchored(this.sanity, before, entity);
 
         if (entity instanceof ServerPlayer player) {
             PacketHandler.sendToPlayer(player, new SyncSanityPacket(sanity, entity.getId()));
@@ -103,6 +109,15 @@ public class SanityComponent {
 
     public void decreaseSanityWithSequenceDifference(float amount, LivingEntity entity, int casterSequence, int targetSequence) {
         increaseSanityWithSequenceDifference(-amount, entity, casterSequence, targetSequence);
+    }
+
+    /**
+     * Âncoras (fiéis): a sanidade não cai abaixo do piso dos fiéis.
+     * Se já estava abaixo dele, só não cai mais do que já estava.
+     */
+    private static float anchored(float sanity, float before, LivingEntity entity) {
+        float floor = Math.min(de.jakob.lotm.addons.rituals.Believers.anchorFloor(entity), before);
+        return Math.max(sanity, floor);
     }
 
     private float getSanityDifferenceMultiplier(int casterSequence, int targetSequence) {

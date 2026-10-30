@@ -87,7 +87,7 @@ public class RequiemAbility extends Ability {
 
         if(pacifiedEntities.contains(targetEntity.getUUID())) {
             if(entity instanceof ServerPlayer player) {
-                ClientboundSetActionBarTextPacket packet = new ClientboundSetActionBarTextPacket(Component.literal("Entity is already pacified.").withColor(0xFFff124d));
+                ClientboundSetActionBarTextPacket packet = new ClientboundSetActionBarTextPacket(Component.translatable("lotmcraft.msg.ability.already_pacified").withColor(0xFFff124d));
                 player.connection.send(packet);
             }
             return;

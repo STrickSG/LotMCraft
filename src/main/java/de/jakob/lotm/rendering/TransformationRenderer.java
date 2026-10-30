@@ -97,6 +97,9 @@ public class TransformationRenderer {
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void onRenderLivingPre(RenderLivingEvent.Pre<?, ?> event) {
         LivingEntity entity = event.getEntity();
+        // roda para toda entidade na tela a cada quadro: sem componente ela não está transformada
+        // (getData criaria um componente para cada uma)
+        if (!entity.hasData(ModAttachments.TRANSFORMATION_COMPONENT)) return;
         TransformationComponent component = entity.getData(ModAttachments.TRANSFORMATION_COMPONENT);
 
         if (!component.isTransformed()) {

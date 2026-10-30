@@ -6,9 +6,9 @@
     "lotmcraft:chaos",
     "lotmcraft:curse",
     "lotmcraft:thread",
-    "lotmcraft:corruption",
-    "lotmcraft:abyss",
-    "lotmcraft:filth",
-    "lotmcraft:degeneration"
+    { "id": "lotmcraft:corruption", "required": false },
+    { "id": "lotmcraft:abyss", "required": false },
+    { "id": "lotmcraft:filth", "required": false },
+    { "id": "lotmcraft:degeneration", "required": false }
   ]
 }

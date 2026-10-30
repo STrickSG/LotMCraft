@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:lucky_one_potion"
     },
-    "title": "Feeling Lucky",
-    "description": "Consume a Potion and advance to Lucky One.",
+    "title": {"translate": "advancements.lotmcraft.become_lucky_one.title", "fallback": "Feeling Lucky"},
+    "description": {"translate": "advancements.lotmcraft.become_lucky_one.description", "fallback": "Consume a Potion and advance to Lucky One."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

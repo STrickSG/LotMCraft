@@ -20,12 +20,12 @@ public class EnablePlayerAbilitiesCommand {
                         var targetEntity = EntityArgument.getEntity(context, "target");
 
                         if (!(targetEntity instanceof Player player)) {
-                            source.sendFailure(Component.literal("Target must be a player!"));
+                            source.sendFailure(Component.translatable("lotmcraft.msg.cmd.target_player"));
                             return 0;
                         }
 
                         player.getData(ModAttachments.DISABLED_ABILITIES_COMPONENT).enableAllAbilities();
-                        source.sendSuccess(() -> Component.literal("Reenabled all abilities for " + player.getName().getString()), true);
+                        source.sendSuccess(() -> Component.translatable("lotmcraft.msg.cmd.reenabled_all", player.getName().getString()), true);
                         return 1;
                     })
                 )

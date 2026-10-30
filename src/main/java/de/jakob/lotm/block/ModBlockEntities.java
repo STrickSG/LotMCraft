@@ -40,6 +40,10 @@ public class ModBlockEntities {
                     BlockEntityType.Builder.of(RitualisticTablePartBlockEntity::new,
                             ModBlocks.RITUALISTIC_TABLE_PART.get()).build(null));
 
+    public static final Supplier<BlockEntityType<de.jakob.lotm.block.entity.BlasphemyAltarBlockEntity>> BLASPHEMY_ALTAR_BE =
+            BLOCK_ENTITIES.register("blasphemy_altar_be", () -> BlockEntityType.Builder.of(
+                    de.jakob.lotm.block.entity.BlasphemyAltarBlockEntity::new, ModBlocks.BLASPHEMY_ALTAR.get()).build(null));
+
     public static void register(IEventBus eventBus) {
         BLOCK_ENTITIES.register(eventBus);
     }

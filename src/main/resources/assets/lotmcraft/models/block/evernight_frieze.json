@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "lotmcraft:block/ancient_palace_stone",
+    "side": "lotmcraft:block/evernight_frieze"
+  }
+}

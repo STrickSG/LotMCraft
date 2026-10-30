@@ -73,6 +73,9 @@ public class ApotheosisTickHandler {
 
             // Sync to client
             PacketHandler.syncUniquenessToPlayer((ServerPlayer) player);
+
+            // Agora Deus do Caminho: a Singularidade em forma de item passa a ser totalmente dominada
+            de.jakob.lotm.beyonders.singularity.SingularityHandler.onApotheosisCompleted((ServerPlayer) player);
         }
     }
 

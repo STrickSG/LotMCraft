@@ -51,6 +51,11 @@ public final class BossRuntime {
         }
     }
 
+    /** Há algum chefe com objetivos ou barra ativos (senão não há nada a desfazer nos outros mobs) */
+    static boolean hasAnyState() {
+        return !BARS.isEmpty() || !APPLIED.isEmpty();
+    }
+
     static void unapplyGoals(Mob mob) {
         BossAiGoals.Installed installed;
         synchronized (APPLIED) {

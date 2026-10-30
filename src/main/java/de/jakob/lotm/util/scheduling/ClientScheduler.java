@@ -22,6 +22,14 @@ import java.util.function.Supplier;
 
 @EventBusSubscriber(modid = LOTMCraft.MOD_ID, value = Dist.CLIENT)
 public class ClientScheduler {
+    // IDs só precisam ser únicos dentro deste agendador: um contador é muito mais rápido que UUID.randomUUID(),
+    // que usa um gerador criptográfico (as habilidades agendam milhares de tarefas, ex.: partículas)
+    private static final java.util.concurrent.atomic.AtomicLong NEXT_ID = new java.util.concurrent.atomic.AtomicLong();
+
+    private static UUID newId() {
+        return new UUID(0x4C4F544D53434845L, NEXT_ID.incrementAndGet());
+    }
+
     private static final Map<UUID, ScheduledTask> tasks = new ConcurrentHashMap<>();
 
     // -------------------------------------------------------------------------
@@ -41,7 +49,7 @@ public class ClientScheduler {
     public static UUID scheduleDelayed(int delay, Runnable task,
                                        @Nullable ClientLevel level,
                                        Supplier<Double> timeMultiplier) {
-        UUID id = UUID.randomUUID();
+        UUID id = newId();
         tasks.put(id, new ScheduledTask(id, task, delay, 0, 1, level, () -> true, timeMultiplier));
         return id;
     }
@@ -67,7 +75,7 @@ public class ClientScheduler {
                                          Runnable task, @Nullable ClientLevel level,
                                          Supplier<Boolean> condition,
                                          Supplier<Double> timeMultiplier) {
-        UUID id = UUID.randomUUID();
+        UUID id = newId();
         tasks.put(id, new ScheduledTask(id, task, initialDelay, interval, maxExecutions,
                 level, condition, timeMultiplier));
         return id;
@@ -107,13 +115,13 @@ public class ClientScheduler {
                                            Runnable task, @Nullable Runnable onFinish,
                                            @Nullable ClientLevel level,
                                            Supplier<Double> timeMultiplier) {
-        UUID id = UUID.randomUUID();
+        UUID id = newId();
         ScheduledTask scheduledTask = new ScheduledTask(
                 id, task, initialDelay, interval, -1, level, () -> true, timeMultiplier);
         scheduledTask.setEndTime(duration);
 
         if (onFinish != null) {
-            UUID finishId = UUID.randomUUID();
+            UUID finishId = newId();
             ScheduledTask finishTask = new ScheduledTask(
                     finishId, onFinish, duration, 0, 1, level, () -> true, timeMultiplier);
             tasks.put(finishId, finishTask);
@@ -142,13 +150,13 @@ public class ClientScheduler {
                                      @Nullable Runnable onFinish,
                                      AtomicBoolean breakCondition,
                                      Supplier<Double> timeMultiplier) {
-        UUID id = UUID.randomUUID();
+        UUID id = newId();
         ClientScheduler.ScheduledTask scheduledTask = new ClientScheduler.ScheduledTask(
                 id, task, 0, interval, -1, level, () -> !breakCondition.get(), timeMultiplier);
         tasks.put(id, scheduledTask);
 
         if (onFinish != null) {
-            UUID finishId = UUID.randomUUID();
+            UUID finishId = newId();
             ClientScheduler.ScheduledTask finishTask = new ClientScheduler.ScheduledTask(
                     finishId, onFinish, 0, 1, 1, level, breakCondition::get, timeMultiplier);
             tasks.put(finishId, finishTask);
@@ -280,6 +288,11 @@ public class ClientScheduler {
     // Tick handler
     // -------------------------------------------------------------------------
 
+    /** Drops all tasks; called on logout so they don't keep running against the old level. */
+    public static void clearAll() {
+        tasks.clear();
+    }
+
     @SubscribeEvent
     public static void onClientTick(ClientTickEvent.Pre event) {
         Iterator<Map.Entry<UUID, ScheduledTask>> iterator = tasks.entrySet().iterator();
@@ -303,8 +316,7 @@ public class ClientScheduler {
                     try {
                         task.task.run();
                     } catch (Exception e) {
-                        System.err.println("Error executing scheduled task: " + e.getMessage());
-                        e.printStackTrace();
+                        LOTMCraft.LOGGER.error("Error executing scheduled client task", e);
                     }
 
                     task.incrementExecutions();

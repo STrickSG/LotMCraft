@@ -32,6 +32,11 @@ import java.util.UUID;
 public class MarionetteUtils {
 
     public static boolean isMarionette(LivingEntity entity) {
+        // Chamado para toda entidade viva quase todo tick (onSanityDrop); sem componente não é marionete,
+        // e assim não se cria um componente de marionete para cada mob do mundo
+        if (!entity.hasData(ModAttachments.MARIONETTE_COMPONENT)) {
+            return false;
+        }
         MarionetteComponent component = entity.getData(ModAttachments.MARIONETTE_COMPONENT);
         return component.isMarionette();
     }
@@ -109,13 +114,9 @@ public class MarionetteUtils {
         try {
             UUID uuid = UUID.fromString(uuidString);
 
+            // a lista de jogadores do servidor já acha o jogador em qualquer dimensão (antes procurava nas ~15)
             if (marionette.getServer() != null) {
-                for (ServerLevel level : marionette.getServer().getAllLevels()) {
-                    Player player = level.getPlayerByUUID(uuid);
-                    if (player != null) {
-                        return player;
-                    }
-                }
+                return marionette.getServer().getPlayerList().getPlayer(uuid);
             }
         } catch (IllegalArgumentException e) {
         }

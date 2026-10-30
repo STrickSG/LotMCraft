@@ -14,9 +14,13 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import de.jakob.lotm.LOTMCraft;
 import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
 import org.jetbrains.annotations.NotNull;
 
+// Os handlers abaixo nunca eram registrados: o fim do efeito não era avisado aos jogadores
+@EventBusSubscriber(modid = LOTMCraft.MOD_ID)
 public class ConqueredEffect extends MobEffect {
     protected ConqueredEffect(MobEffectCategory category, int color) {
         super(category, color);

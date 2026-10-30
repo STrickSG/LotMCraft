@@ -66,6 +66,11 @@ public class SealedArtifactItem extends Item {
 
         // Get the currently selected ability
         int selectedIndex = stack.getOrDefault(ModDataComponents.SEALED_ARTIFACT_SELECTED, 0);
+        // The index is set from a client packet and can be stale; fall back to the first ability
+        if (selectedIndex < 0 || selectedIndex >= data.abilities().size()) {
+            selectedIndex = 0;
+            stack.set(ModDataComponents.SEALED_ARTIFACT_SELECTED, 0);
+        }
 
         Ability ability = data.abilities().get(selectedIndex);
 

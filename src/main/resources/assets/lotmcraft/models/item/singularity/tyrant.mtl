@@ -1,0 +1,17 @@
+
+newmtl espuma
+Kd 0.882353 0.960784 1.000000
+map_Kd lotmcraft:item/singularity/grain
+
+newmtl mar
+Kd 0.117647 0.470588 0.862745
+map_Kd lotmcraft:item/singularity/grain
+
+newmtl relampago
+Kd 0.784314 0.941176 1.000000
+map_Kd lotmcraft:item/singularity/grain
+
+newmtl tridente
+Kd 0.882353 0.725490 0.313726
+map_Kd lotmcraft:item/singularity/grain
+

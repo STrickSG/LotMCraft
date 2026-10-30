@@ -98,6 +98,10 @@ public class ExplodingFallingBlockHelper {
                 continue;
             }
 
+            // é chamado uma vez por dimensão: cada bloco só é tratado na dimensão em que está
+            // (antes cada um era processado ~15 vezes por tick e media o chão nas outras dimensões)
+            if (fallingBlock.level() != level) continue;
+
             // Check distance to ground
             double distanceToGround = AbilityUtil.distanceToGround(level, fallingBlock);
 

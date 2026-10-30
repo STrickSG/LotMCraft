@@ -24,9 +24,14 @@ public class AbilityHandler {
 
     private final HashSet<Ability> abilities = new HashSet<>();
     private final HashSet<Ability> disabledAbilities = new HashSet<>();
+    // getById is called from tick handlers, packet handlers and renderers; avoid scanning ~300 abilities each time
+    private final Map<String, Ability> abilitiesById = new HashMap<>();
 
     public AbilityHandler() {
         registerAbilities();
+        for (Ability ability : abilities) {
+            abilitiesById.putIfAbsent(ability.getId(), ability);
+        }
     }
 
     private void registerAbilities() {
@@ -95,6 +100,8 @@ public class AbilityHandler {
         abilities.add(new RagingBlowsAbility("raging_blows_ability"));
         abilities.add(new WaterManipulationAbility("water_manipulation_ability"));
         abilities.add(new WindManipulationAbility("wind_manipulation_ability"));
+        // voo da Manipulação do Vento (Sequência 4 em diante): escondida, o WindManipulationAbility busca pelo id
+        abilities.add(new de.jakob.lotm.beyonders.abilities.tyrant.WindManipulationFlightAbility("wind_manipulation_flight"));
         abilities.add(new BlessingsOfWIndAbility("blessings_of_wind_ability"));
         abilities.add(new LightningAbility("lightning_ability"));
         abilities.add(new SirenSongAbility("siren_song_ability"));
@@ -359,7 +366,7 @@ public class AbilityHandler {
     }
 
     public Ability getById(String id) {
-        return abilities.stream().filter(ability -> ability.getId().equals(id)).findFirst().orElse(null);
+        return id == null ? null : abilitiesById.get(id);
     }
 
     public HashSet<Ability> getByPathwayAndSequenceExact(String pathway, int sequence) {

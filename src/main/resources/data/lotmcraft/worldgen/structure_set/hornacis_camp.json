@@ -1,0 +1,13 @@
+{
+  "structures": [
+    {
+      "structure": "lotmcraft:hornacis_camp",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "lotmcraft:hornacis_site",
+    "salt": 239707041,
+    "site": "camp"
+  }
+}

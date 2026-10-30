@@ -1,0 +1,17 @@
+
+newmtl nucleo
+Kd 1.000000 0.925490 0.588235
+map_Kd lotmcraft:item/singularity/grain
+
+newmtl olhos_sol
+Kd 0.588235 0.274510 0.039216
+map_Kd lotmcraft:item/singularity/grain
+
+newmtl ouro_sol
+Kd 1.000000 0.768627 0.235294
+map_Kd lotmcraft:item/singularity/grain
+
+newmtl raio
+Kd 1.000000 0.549020 0.117647
+map_Kd lotmcraft:item/singularity/grain
+

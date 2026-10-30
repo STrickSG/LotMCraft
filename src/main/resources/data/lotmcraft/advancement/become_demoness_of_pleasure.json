@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:demoness_of_pleasure_potion"
     },
-    "title": "Sweet Temptations",
-    "description": "Consume a Potion and advance to Demoness of Pleasure.",
+    "title": {"translate": "advancements.lotmcraft.become_demoness_of_pleasure.title", "fallback": "Sweet Temptations"},
+    "description": {"translate": "advancements.lotmcraft.become_demoness_of_pleasure.description", "fallback": "Consume a Potion and advance to Demoness of Pleasure."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

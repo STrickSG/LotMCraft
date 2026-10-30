@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:seafarer_potion"
     },
-    "title": "Master of the Waves",
-    "description": "Consume a Potion and advance to Seafarer.",
+    "title": {"translate": "advancements.lotmcraft.become_seafarer.title", "fallback": "Master of the Waves"},
+    "description": {"translate": "advancements.lotmcraft.become_seafarer.description", "fallback": "Consume a Potion and advance to Seafarer."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

@@ -21,6 +21,8 @@ repositories {
     // Add here additional repositories if required by some of the dependencies below.
     mavenCentral()
     maven { url = 'https://maven.neoforged.net/releases/' }
+    // Curios (opcional): espaço para equipar as Cartas da Blasfêmia
+    maven { url = 'https://maven.theillusivec4.top/' }
     maven { url = 'https://libraries.minecraft.net' }
     maven { url = 'https://jitpack.io' }
     maven { url = "https://maven.firstdark.dev/snapshots" }
@@ -39,6 +41,11 @@ repositories {
     maven {
         name = "ModMaven"
         url = "https://modmaven.dev"
+    }
+    maven {
+        name = "GeckoLib"
+        url = "https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/"
+        content { includeGroup "software.bernie.geckolib" }
     }
 
     exclusiveContent {
@@ -163,6 +170,7 @@ dependencies {
     jarJar("curse.maven:terrablender-neoforge-940057:6054947")
 
     compileOnly "mezz.jei:jei-1.21.1-neoforge-api:19.27.0.340"
+    compileOnly "top.theillusivec4.curios:curios-neoforge:9.5.1+1.21.1:api"
 
     // LDLib2
     implementation("com.lowdragmc.ldlib2:ldlib2-neoforge-${minecraft_version}:${ldlib2_version}:all")
@@ -175,6 +183,10 @@ dependencies {
     jarJar("com.lowdragmc.photon:photon-neoforge-${minecraft_version}:${photon_version}") {
         transitive = false
     }
+
+    // GeckoLib (modelos 3D e animações feitos no Blockbench; embutido no jar, licença MIT)
+    implementation "software.bernie.geckolib:geckolib-neoforge-${minecraft_version}:4.9.3"
+    jarJar("software.bernie.geckolib:geckolib-neoforge-${minecraft_version}:4.9.3")
 
     jarJar("com.zigythebird.playeranim:PlayerAnimationLibNeo:1.1.3+mc.1.21.1") {
         exclude group: 'com.google.code.gson'

@@ -94,6 +94,14 @@ versionRange="[1.21.1-4.1.0.8,)"
 ordering="AFTER"
 side="BOTH"
 
+[[dependencies.${mod_id}]]
+modId="geckolib"
+type="required"
+reason="Modelos 3D e animações das armas (embutido no jar)"
+versionRange="[4.9,)"
+ordering="NONE"
+side="BOTH"
+
 [[mixins]]
 config="mixins.lotmcraft.json"
 

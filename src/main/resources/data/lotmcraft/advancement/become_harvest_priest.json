@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:harvest_priest_potion"
     },
-    "title": "Bountiful Harvest",
-    "description": "Consume a Potion and advance to Harvest Priest.",
+    "title": {"translate": "advancements.lotmcraft.become_harvest_priest.title", "fallback": "Bountiful Harvest"},
+    "description": {"translate": "advancements.lotmcraft.become_harvest_priest.description", "fallback": "Consume a Potion and advance to Harvest Priest."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

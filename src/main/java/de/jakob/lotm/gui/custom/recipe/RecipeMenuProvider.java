@@ -14,25 +14,31 @@ import java.util.List;
 
 public class RecipeMenuProvider implements MenuProvider {
     private final List<ItemStack> ingredients;
+    private final List<ItemStack> materials;
+    private final RecipeMenu.Layout layout;
 
     private final String pathway;
     private final int sequence;
 
 
 
-    public RecipeMenuProvider(List<ItemStack> ingredients, String pathway, int sequence) {
+    public RecipeMenuProvider(List<ItemStack> ingredients, List<ItemStack> materials, RecipeMenu.Layout layout) {
         this.ingredients = ingredients;
-        this.pathway = pathway;
-        this.sequence = sequence;
+        this.materials = materials;
+        this.layout = layout;
+        this.pathway = layout.pathway();
+        this.sequence = layout.sequence();
     }
 
     @Override
     public @NotNull Component getDisplayName() {
-        return Component.literal(BeyonderData.pathwayInfos.get(pathway).getSequenceName(sequence)).append(" ").append(Component.translatable("lotm.potion_recipe")).withStyle(ChatFormatting.BOLD, ChatFormatting.WHITE);
+        // só o pergaminho de ritual abre sem a receita: aí o título é o do ritual
+        String key = layout.recipe() ? "lotm.potion_recipe" : "lotm.advancement_ritual";
+        return Component.literal(BeyonderData.pathwayInfos.get(pathway).getSequenceName(sequence)).append(" ").append(Component.translatable(key)).withStyle(ChatFormatting.BOLD, ChatFormatting.WHITE);
     }
 
     @Override
     public AbstractContainerMenu createMenu(int containerId, Inventory playerInventory, Player player) {
-        return new RecipeMenu(ingredients, containerId, playerInventory);
+        return new RecipeMenu(ingredients, materials, containerId, playerInventory, layout);
     }
 }

@@ -80,6 +80,13 @@ public class ModItems {
                     .stacksTo(1)
             )
     );
+    // Registro Sagrado: registra aldeões como fiéis de quem usa (qualquer jogador, de qualquer Caminho)
+    public static final Supplier<Item> SACRED_REGISTER = ITEMS.register("sacred_register",
+            () -> new de.jakob.lotm.item.custom.SacredRegisterItem(new Item.Properties()
+                    .stacksTo(1)
+                    .rarity(Rarity.RARE)
+            )
+    );
     public static final Supplier<Item> MOON_ITEM = ITEMS.register("moon",
             () -> new MoonItem(new Item.Properties()
                     .stacksTo(1)

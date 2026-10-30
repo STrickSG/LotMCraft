@@ -63,13 +63,26 @@ public record WaypointSelectedPacket(WaypointComponent.ClientWaypoint waypoint, 
 
             if (server == null) return;
             if(packet.use.equals("teleport")) {
-                ServerLevel destinationLevel = resolveLevel(packet.waypoint.id(), server);
+                // Only teleport to a waypoint this player actually saved: the packet's coordinates and dimension
+                // come from the client and used to be trusted as-is (teleport anywhere, or an NPE on a bad dimension).
+                WaypointComponent waypointComponent = player.getData(ModAttachments.WAYPOINT_COMPONENT);
+                WaypointComponent.Waypoint waypoint = waypointComponent.findByClientWaypoint(packet.waypoint, server);
 
-                serverLevel.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENDERMAN_TELEPORT, SoundSource.BLOCKS, 1, 1);
-                player.teleportTo(destinationLevel, packet.waypoint.x(), packet.waypoint.y(), packet.waypoint.z(), Set.of(), player.getYRot(), player.getXRot());
-                serverLevel.playSound(null, packet.waypoint.x(), packet.waypoint.y(), packet.waypoint.z(), SoundEvents.ENDERMAN_TELEPORT, SoundSource.BLOCKS, 1, 1);
-                EffectManager.playEffect(EffectIds.WAYPOINT, packet.waypoint.x(), packet.waypoint.y() + 1, packet.waypoint.z(), serverLevel);
-                EffectManager.playEffect(EffectIds.WAYPOINT, player.getX(), player.getY() + 1, player.getZ(), serverLevel);
+                if(waypoint == null) {
+                    return;
+                }
+
+                ServerLevel destinationLevel = waypoint.serverLevel();
+                // Captured before teleporting, so one effect plays at the origin and one at the destination
+                double originX = player.getX();
+                double originY = player.getY();
+                double originZ = player.getZ();
+
+                serverLevel.playSound(null, originX, originY, originZ, SoundEvents.ENDERMAN_TELEPORT, SoundSource.BLOCKS, 1, 1);
+                player.teleportTo(destinationLevel, waypoint.x(), waypoint.y(), waypoint.z(), Set.of(), player.getYRot(), player.getXRot());
+                destinationLevel.playSound(null, waypoint.x(), waypoint.y(), waypoint.z(), SoundEvents.ENDERMAN_TELEPORT, SoundSource.BLOCKS, 1, 1);
+                EffectManager.playEffect(EffectIds.WAYPOINT, waypoint.x(), waypoint.y() + 1, waypoint.z(), destinationLevel);
+                EffectManager.playEffect(EffectIds.WAYPOINT, originX, originY + 1, originZ, serverLevel);
             }
             else if (packet.use.equals("delete")) {
                 WaypointComponent waypointComponent = player.getData(ModAttachments.WAYPOINT_COMPONENT);

@@ -1,0 +1,16 @@
+{
+  "type": "lotmcraft:surface_template",
+  "template": "lotmcraft:sun_altar",
+  "anchor": [
+    25,
+    1,
+    25
+  ],
+  "terrain_adjustment": "beard_box",
+  "ignore_biome": false,
+  "max_per_world": 12,
+  "biomes": "#lotmcraft:has_structure/sun_altar_biomes",
+  "step": "surface_structures",
+  "terrain_adaptation": "beard_box",
+  "spawn_overrides": {}
+}

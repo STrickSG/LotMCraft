@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:monster_potion"
     },
-    "title": "Luck of the Draw",
-    "description": "Consume a Potion and advance to Monster.",
+    "title": {"translate": "advancements.lotmcraft.become_monster.title", "fallback": "Luck of the Draw"},
+    "description": {"translate": "advancements.lotmcraft.become_monster.description", "fallback": "Consume a Potion and advance to Monster."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

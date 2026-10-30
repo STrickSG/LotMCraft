@@ -127,7 +127,7 @@ public class RitualManager extends SimpleJsonResourceReloadListener {
         Component minSequence = Component.literal("")
                 .append(Component.translatable("ritual.lotmcraft.min_sequence")
                         .withStyle(ChatFormatting.BOLD, color))
-                .append(Component.literal(String.valueOf(ritual.conditions().minSequence() > 9 ? "none" : ritual.conditions().minSequence())));
+                .append(ritual.conditions().minSequence() > 9 ? Component.translatable("lotmcraft.msg.none") : Component.literal(String.valueOf(ritual.conditions().minSequence())));
 
         Component pageOne = Component.literal("")
                 .append(generalDescription).append(Component.literal("\n\n"))

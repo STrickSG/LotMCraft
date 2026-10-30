@@ -1,0 +1,21 @@
+{
+  "structures": [
+    {
+      "structure": "lotmcraft:sun_altar",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "lotmcraft:exclusive_spread",
+    "salt": 31415926,
+    "spacing": 64,
+    "separation": 32,
+    "avoid": [
+      "minecraft:villages",
+      "minecraft:desert_pyramids",
+      "lotmcraft:tudor_trunsoest_ruins_set",
+      "lotmcraft:observatory_set"
+    ],
+    "avoid_chunks": 10
+  }
+}

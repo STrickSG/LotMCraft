@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:key_of_stars_potion"
     },
-    "title": "The Stars Align",
-    "description": "Consume a Potion and advance to Key of Stars.",
+    "title": {"translate": "advancements.lotmcraft.become_key_of_stars.title", "fallback": "The Stars Align"},
+    "description": {"translate": "advancements.lotmcraft.become_key_of_stars.description", "fallback": "Consume a Potion and advance to Key of Stars."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

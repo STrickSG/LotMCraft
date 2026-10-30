@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:traveler_potion"
     },
-    "title": "Roads Less Traveled",
-    "description": "Consume a Potion and advance to Traveler.",
+    "title": {"translate": "advancements.lotmcraft.become_traveler.title", "fallback": "Roads Less Traveled"},
+    "description": {"translate": "advancements.lotmcraft.become_traveler.description", "fallback": "Consume a Potion and advance to Traveler."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

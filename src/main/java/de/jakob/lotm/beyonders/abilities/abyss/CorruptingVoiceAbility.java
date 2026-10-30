@@ -155,7 +155,7 @@ CorruptingVoiceAbility extends ToggleAbility {
 
         int heartsDealt = (int) (damage / 2f);
         AbilityUtil.sendActionBar(player, Component.translatable("ability.lotmcraft.corrupting_voice.triggered")
-                .append(Component.literal(charCount + " chars \u2014 " + heartsDealt + " \u2665"))
+                .append(Component.translatable("lotmcraft.msg.ability.corrupting_voice.result", charCount, heartsDealt))
                 .withColor(0x6600cc));
     }
 

@@ -120,6 +120,7 @@ import de.jakob.lotm.particle.*;
 import de.jakob.lotm.beyonders.potions.BeyonderCharacteristicItemHandler;
 import de.jakob.lotm.beyonders.potions.PotionItemHandler;
 import de.jakob.lotm.beyonders.potions.PotionRecipeItemHandler;
+import de.jakob.lotm.beyonders.potions.BlasphemyCardItemHandler;
 import de.jakob.lotm.beyonders.quest.QuestRegistry;
 import de.jakob.lotm.rendering.GuidingBookRenderer;
 import de.jakob.lotm.beyonders.rituals.RitualManager;
@@ -231,12 +232,19 @@ public class LOTMCraft
         ModStructures.register(modEventBus);
         ModDataComponents.register(modEventBus);
         PotionRecipeItemHandler.registerRecipes(modEventBus);
+        BlasphemyCardItemHandler.registerCards(modEventBus);
+        de.jakob.lotm.beyonders.potions.RitualRecipeItemHandler.registerRituals(modEventBus);
+        // Curios é opcional: só registra as regras de equipar se ele estiver instalado
+        if (net.neoforged.fml.ModList.get().isLoaded("curios")) {
+            de.jakob.lotm.compat.curios.CuriosSetup.register(modEventBus);
+        }
         BeyonderCharacteristicItemHandler.registerCharacteristics(modEventBus);
         ModAttachments.register(modEventBus);
         ModDimensions.register(modEventBus);
         ModGameRules.register();
 
         SpiritPatchSetup.init(modEventBus);
+        de.jakob.lotm.hornacis.HornacisSetup.init(modEventBus);
 
         PotionItemHandler.registerPotions(modEventBus);
 
@@ -260,6 +268,10 @@ public class LOTMCraft
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
+        // Runs on both physical sides; it used to live in ClientModEvents (Dist.CLIENT only),
+        // so dedicated servers never initialized the recipes at startup.
+        event.enqueueWork(PotionRecipes::initPotionRecipes);
+        event.enqueueWork(PotionRecipeItemHandler::initializeRecipes);
     }
 
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
@@ -281,7 +293,16 @@ public class LOTMCraft
     @EventBusSubscriber(modid = MOD_ID, value = Dist.CLIENT)
     public static class ClientModEvents {
         @SubscribeEvent
+        public static void onRegisterAdditionalModels(net.neoforged.neoforge.client.event.ModelEvent.RegisterAdditional event) {
+            de.jakob.lotm.beyonders.singularity.SingularityModels.register(event);
+        }
+
+        @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
+            // Singularidades aparecem no corpo quando equipadas (só com o Curios instalado)
+            if (net.neoforged.fml.ModList.get().isLoaded("curios")) {
+                event.enqueueWork(de.jakob.lotm.compat.curios.client.CuriosClientSetup::registerRenderers);
+            }
             EntityRenderers.register(ModEntities.FLAMING_SPEAR.get(), FlamingSpearProjectileRenderer::new);
             EntityRenderers.register(ModEntities.FIRE_PLATE.get(), FirePlateRenderer::new);
             EntityRenderers.register(ModEntities.UNSHADOWED_SPEAR.get(), UnshadowedSpearProjectileRenderer::new);
@@ -361,6 +382,7 @@ public class LOTMCraft
             EntityRenderers.register(ModEntities.KNOWLEDGE_DEMON.get(), KnowledgeDemonRenderer::new);
             EntityRenderers.register(ModEntities.STONE_GOLEM.get(), StoneGolemRenderer::new);
             EntityRenderers.register(ModEntities.HEADLESS_BRIDE.get(), HeadlessBrideRenderer::new);
+            EntityRenderers.register(ModEntities.HORNACIS_GRAY_MOUNTAIN_GOAT.get(), de.jakob.lotm.entity.client.hornacis_goat.HornacisGoatRenderer::new);
 
 
             GuidingBookRenderer.loadPages(LOTMCraft.MOD_ID);
@@ -376,12 +398,6 @@ public class LOTMCraft
 
                 BossRegistry.registerBosses();
             });
-        }
-
-        @SubscribeEvent
-        public static void onCommonSetup(FMLCommonSetupEvent event) {
-            event.enqueueWork(PotionRecipes::initPotionRecipes);
-            event.enqueueWork(PotionRecipeItemHandler::initializeRecipes);
         }
 
         @SubscribeEvent
@@ -429,6 +445,7 @@ public class LOTMCraft
         @SubscribeEvent
         public static void registerBER(EntityRenderersEvent.RegisterRenderers event) {
             event.registerBlockEntityRenderer(ModBlockEntities.RITUALISTIC_TABLE_BE.get(), RitualisticTableBlockEntityRenderer::new);
+            event.registerBlockEntityRenderer(ModBlockEntities.BLASPHEMY_ALTAR_BE.get(), de.jakob.lotm.block.entity.renderer.BlasphemyAltarBlockEntityRenderer::new);
         }
     }
 

@@ -350,7 +350,7 @@ public class IntrospectScreen extends AbstractContainerScreen<IntrospectMenu> {
         private final boolean on;
 
         LeverButton(int x, int y, boolean on, OnPress onPress) {
-            super(x, y, 60, 16, Component.literal("All"), onPress, DEFAULT_NARRATION);
+            super(x, y, 60, 16, Component.translatable("lotmcraft.gui.introspect.all"), onPress, DEFAULT_NARRATION);
             this.on = on;
         }
 
@@ -361,11 +361,24 @@ public class IntrospectScreen extends AbstractContainerScreen<IntrospectMenu> {
             RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
             g.blitSprite(on ? SPR_LEVER_ON : SPR_LEVER_OFF, getX() + getWidth() - 24, getY(), 24, 16);
             int color = on ? 0xFF8FD694 : (isHoveredOrFocused() ? 0xFFFFFFFF : TEXT_DIM);
-            g.drawString(font, "All", getX() + 4, getY() + 4, color, true);
+            g.drawString(font, getMessage(), getX() + 4, getY() + 4, color, true);
         }
     }
 
     // =====================================================================================
+
+    /*
+     * A tela inteira (abas à esquerda + moldura + painéis à direita) precisa de ~423 x 264 pixels de interface.
+     * Com a escala automática do Minecraft, monitores 1440p, 4K, 1366x768 e 720p só têm 240-256 de altura e
+     * ~427-455 de largura: parte das habilidades, a roda e os botões ficavam fora da tela. Enquanto esta tela
+     * está aberta, a escala da interface desce o necessário (sempre um número inteiro, para a pixel art
+     * continuar nítida) e volta ao normal quando ela fecha.
+     */
+    private static final int CONTENT_LEFT = TAB_W + 6;
+    private static final int CONTENT_RIGHT = 192 + 5 + 140 + 2;
+    private static final int CONTENT_HEIGHT = 15 + 115 + 5 + 100 + 5 + 20 + 4;
+    private static final int COG_HEIGHT = 26;
+    private boolean scaleChanged = false;
 
     public IntrospectScreen(IntrospectMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
@@ -609,9 +622,28 @@ public class IntrospectScreen extends AbstractContainerScreen<IntrospectMenu> {
 
     @Override
     protected void init() {
+        if (this.minecraft != null) {
+            com.mojang.blaze3d.platform.Window window = this.minecraft.getWindow();
+            int wanted = window.calculateScale(this.minecraft.options.guiScale().get(), this.minecraft.isEnforceUnicode());
+            int fits = (int) Math.floor(Math.min(window.getWidth() / (double) (CONTENT_LEFT + CONTENT_RIGHT),
+                    window.getHeight() / (double) CONTENT_HEIGHT));
+            int scale = Math.max(1, Math.min(wanted, fits));
+            if (scale != (int) window.getGuiScale()) {
+                window.setGuiScale(scale);
+                scaleChanged = true;
+            }
+            this.width = window.getGuiScaledWidth();
+            this.height = window.getGuiScaledHeight();
+        }
         super.init();
 
         if (this.minecraft == null) return;
+
+        // centraliza o conjunto todo, não só a moldura (as abas e o painel da direita têm larguras diferentes)
+        this.leftPos = (this.width - (CONTENT_LEFT + CONTENT_RIGHT)) / 2 + CONTENT_LEFT;
+        this.topPos = this.height >= CONTENT_HEIGHT + COG_HEIGHT
+                ? (this.height - CONTENT_HEIGHT - COG_HEIGHT) / 2 + COG_HEIGHT
+                : Math.max(0, (this.height - CONTENT_HEIGHT) / 2);
 
         this.killCount = ClientSacrificeCache.getKillCount();
 
@@ -635,9 +667,9 @@ public class IntrospectScreen extends AbstractContainerScreen<IntrospectMenu> {
         int inputX = panelX + 5;
         int inputY = this.topPos + ALLY_PANEL_HEIGHT + 5;
 
-        allyNameInput = new EditBox(this.font, inputX, inputY, inputWidth, inputHeight, Component.literal("Ally name"));
+        allyNameInput = new EditBox(this.font, inputX, inputY, inputWidth, inputHeight, Component.translatable("lotmcraft.gui.introspect.ally_name"));
         allyNameInput.setMaxLength(32);
-        allyNameInput.setHint(Component.literal("Enter player name"));
+        allyNameInput.setHint(Component.translatable("lotmcraft.gui.introspect.enter_player_name"));
         this.addWidget(allyNameInput);
 
         updateCompletedQuestsScroll();
@@ -683,11 +715,11 @@ public class IntrospectScreen extends AbstractContainerScreen<IntrospectMenu> {
         updateButtonPositions();
     }
 
-    private void addSideTab(String label, ResourceLocation icon, int yOffset, boolean selected, Button.OnPress press) {
+    private void addSideTab(String labelKey, ResourceLocation icon, int yOffset, boolean selected, Button.OnPress press) {
         int growth = selected ? 4 : 0;
         int x = this.leftPos - TAB_W + 2 - growth;
         BrassButton b = new BrassButton(x, this.topPos + yOffset, TAB_W + growth, TAB_H,
-                Component.literal(label), icon, press)
+                Component.translatable(labelKey), icon, press)
                 .selected(selected)
                 .glow(accentRgb());
         this.addRenderableWidget(b);
@@ -704,13 +736,13 @@ public class IntrospectScreen extends AbstractContainerScreen<IntrospectMenu> {
         allyNameInput.setVisible(showAllies);
         allyNameInput.setEditable(showAllies);
 
-        addSideTab("Abilities", ICON_ABILITIES, 10, showAbilities, b -> togglePanel(SidePanel.ABILITIES));
-        addSideTab("Quests", ICON_QUESTS, 35, showQuests, b -> togglePanel(SidePanel.QUESTS));
-        addSideTab("Acting", ICON_ACTING, 60, showActing, b -> togglePanel(SidePanel.ACTING));
-        addSideTab("Missed", ICON_MISSED, 85, showMissedActing, b -> togglePanel(SidePanel.MISSED));
+        addSideTab("lotmcraft.gui.introspect.tab.abilities", ICON_ABILITIES, 10, showAbilities, b -> togglePanel(SidePanel.ABILITIES));
+        addSideTab("lotmcraft.gui.introspect.tab.quests", ICON_QUESTS, 35, showQuests, b -> togglePanel(SidePanel.QUESTS));
+        addSideTab("lotmcraft.gui.introspect.tab.acting", ICON_ACTING, 60, showActing, b -> togglePanel(SidePanel.ACTING));
+        addSideTab("lotmcraft.gui.introspect.tab.missed", ICON_MISSED, 85, showMissedActing, b -> togglePanel(SidePanel.MISSED));
 
         if (menu.getSequence() < 4) {
-            addSideTab("Honorific", ICON_HONORIFIC, 110, false, b -> openHonorificNamesMenu());
+            addSideTab("lotmcraft.gui.introspect.tab.honorific", ICON_HONORIFIC, 110, false, b -> openHonorificNamesMenu());
         }
 
         if (ClientUniquenessCache.hasUniqueness() && menu.getSequence() == 1) {
@@ -722,7 +754,7 @@ public class IntrospectScreen extends AbstractContainerScreen<IntrospectMenu> {
             final boolean finalCanApotheosize = canApotheosize;
 
             BrassButton apotheosisButton = new BrassButton(baseLeftPos - TAB_W + 2, this.topPos + 135, TAB_W, TAB_H,
-                    Component.literal("Apotheosis").withStyle(finalCanApotheosize ? ChatFormatting.GOLD : ChatFormatting.GRAY),
+                    Component.translatable("lotmcraft.gui.introspect.apotheosis").withStyle(finalCanApotheosize ? ChatFormatting.GOLD : ChatFormatting.GRAY),
                     ICON_APOTHEOSIS,
                     button -> {
                         if (finalCanApotheosize) PacketHandler.sendToServer(new RequestUniquenessApotheosisPacket());
@@ -742,7 +774,7 @@ public class IntrospectScreen extends AbstractContainerScreen<IntrospectMenu> {
             this.addRenderableWidget(lever);
         }
 
-        addSideTab("Allies", ICON_ALLIES, 185, showAllies, b -> togglePanel(SidePanel.ALLIES));
+        addSideTab("lotmcraft.gui.introspect.tab.allies", ICON_ALLIES, 185, showAllies, b -> togglePanel(SidePanel.ALLIES));
 
         if (showAbilities) {
             addAbilityButtons(baseLeftPos);
@@ -766,8 +798,9 @@ public class IntrospectScreen extends AbstractContainerScreen<IntrospectMenu> {
         return super.keyPressed(keyCode, scanCode, modifiers);
     }
 
-    private static String tabLabel(String full, String abbreviated, int width) {
-        return width >= 38 ? full : abbreviated;
+    // Recebe chaves de tradução: usa o rótulo completo se couber, senão o abreviado
+    private static Component tabLabel(String fullKey, String abbreviatedKey, int width) {
+        return Component.translatable(width >= 38 ? fullKey : abbreviatedKey);
     }
 
     private void addAbilityButtons(int baseLeftPos) {
@@ -791,7 +824,7 @@ public class IntrospectScreen extends AbstractContainerScreen<IntrospectMenu> {
         int tabX = panelX;
 
         this.addRenderableWidget(new BrassButton(tabX, tabButtonY, tabButtonWidth, 15,
-                Component.literal(tabLabel("Wheel", "Whl", tabButtonWidth)), null,
+                tabLabel("lotmcraft.gui.introspect.wheel", "lotmcraft.gui.introspect.wheel.short", tabButtonWidth), null,
                 button -> {
                     currentTab = Tab.ABILITY_WHEEL;
                     copiedScrollOffset = 0;
@@ -801,7 +834,7 @@ public class IntrospectScreen extends AbstractContainerScreen<IntrospectMenu> {
         tabX += tabButtonWidth;
 
         this.addRenderableWidget(new BrassButton(tabX, tabButtonY, tabButtonWidth, 15,
-                Component.literal("Bar"), null,
+                Component.translatable("lotmcraft.gui.introspect.bar"), null,
                 button -> {
                     currentTab = Tab.ABILITY_BAR;
                     copiedScrollOffset = 0;
@@ -812,7 +845,7 @@ public class IntrospectScreen extends AbstractContainerScreen<IntrospectMenu> {
 
         if (showSharedTab) {
             this.addRenderableWidget(new BrassButton(tabX, tabButtonY, tabButtonWidth, 15,
-                    Component.literal(tabLabel("Shared", "Shr", tabButtonWidth)), null,
+                    tabLabel("lotmcraft.gui.introspect.shared", "lotmcraft.gui.introspect.shared.short", tabButtonWidth), null,
                     button -> {
                         currentTab = Tab.SHARED_ABILITIES;
                         sharedPoolScrollOffset = 0;
@@ -827,7 +860,7 @@ public class IntrospectScreen extends AbstractContainerScreen<IntrospectMenu> {
 
         if (showCopiedTab) {
             this.addRenderableWidget(new BrassButton(tabX, tabButtonY, tabButtonWidth, 15,
-                    Component.literal("Cop").withStyle(ChatFormatting.LIGHT_PURPLE), null,
+                    Component.translatable("lotmcraft.gui.introspect.copied.short").withStyle(ChatFormatting.LIGHT_PURPLE), null,
                     button -> {
                         currentTab = Tab.RECORDED_ABILITIES;
                         copiedScrollOffset = 0;
@@ -843,7 +876,7 @@ public class IntrospectScreen extends AbstractContainerScreen<IntrospectMenu> {
         // Sub-abilities toggle — only for non-copied tabs
         if (showSubToggle) {
             this.addRenderableWidget(new BrassButton(panelX + ABILITIES_PANEL_WIDTH - subButtonWidth, tabButtonY, subButtonWidth, 15,
-                    Component.literal("Sub").withStyle(showSubAbilities ? ChatFormatting.AQUA : ChatFormatting.GRAY), null,
+                    Component.translatable("lotmcraft.gui.introspect.sub.short").withStyle(showSubAbilities ? ChatFormatting.AQUA : ChatFormatting.GRAY), null,
                     button -> {
                         showSubAbilities = !showSubAbilities;
                         initializeAbilities();
@@ -858,7 +891,7 @@ public class IntrospectScreen extends AbstractContainerScreen<IntrospectMenu> {
         if (currentTab == Tab.ABILITY_WHEEL) {
             clearButtonY = this.topPos + 15 + ABILITIES_PANEL_HEIGHT + 5 + ABILITY_WHEEL_HEIGHT + 5;
             this.addRenderableWidget(new BrassButton(clearButtonX, clearButtonY, ABILITIES_PANEL_WIDTH, 20,
-                    Component.literal("Clear Wheel").withStyle(ChatFormatting.RED), null,
+                    Component.translatable("lotmcraft.gui.introspect.clear_wheel").withStyle(ChatFormatting.RED), null,
                     button -> {
                         abilityWheelSlots.clear();
                         abilityWheelSubIndexes.clear();
@@ -868,7 +901,7 @@ public class IntrospectScreen extends AbstractContainerScreen<IntrospectMenu> {
         } else if (currentTab == Tab.ABILITY_BAR) {
             clearButtonY = this.topPos + 15 + ABILITIES_PANEL_HEIGHT + 5 + ABILITY_BAR_HEIGHT + 5;
             this.addRenderableWidget(new BrassButton(clearButtonX, clearButtonY, ABILITIES_PANEL_WIDTH, 20,
-                    Component.literal("Clear Bar").withStyle(ChatFormatting.RED), null,
+                    Component.translatable("lotmcraft.gui.introspect.clear_bar").withStyle(ChatFormatting.RED), null,
                     button -> {
                         abilityBarSlots.clear();
                         abilityBarSubIndexes.clear();
@@ -880,7 +913,7 @@ public class IntrospectScreen extends AbstractContainerScreen<IntrospectMenu> {
         else if (isCopiedTab(currentTab)) {
             clearButtonY = this.topPos + 15 + COPIED_PANEL_HEIGHT + 5 + ABILITY_WHEEL_HEIGHT + 5;
             this.addRenderableWidget(new BrassButton(clearButtonX, clearButtonY, ABILITIES_PANEL_WIDTH / 2 - 1, 20,
-                    Component.literal("Clear Wheel").withStyle(ChatFormatting.RED), null,
+                    Component.translatable("lotmcraft.gui.introspect.clear_wheel").withStyle(ChatFormatting.RED), null,
                     button -> {
                         abilityWheelSlots.clear();
                         abilityWheelSubIndexes.clear();
@@ -897,7 +930,7 @@ public class IntrospectScreen extends AbstractContainerScreen<IntrospectMenu> {
             int discardButtonY = this.topPos + COMPLETED_QUESTS_HEIGHT + 5 + ACTIVE_QUEST_HEIGHT + 5;
 
             this.addRenderableWidget(new BrassButton(panelX, discardButtonY, QUESTS_PANEL_WIDTH, 20,
-                    Component.literal("Discard Quest").withStyle(ChatFormatting.RED), null,
+                    Component.translatable("lotmcraft.gui.introspect.discard_quest").withStyle(ChatFormatting.RED), null,
                     button -> {
                         PacketHandler.sendToServer(new DiscardQuestPacket());
                         PacketHandler.sendToServer(new RequestQuestDataPacket());
@@ -930,6 +963,17 @@ public class IntrospectScreen extends AbstractContainerScreen<IntrospectMenu> {
     // =====================================================================================
     //  Render
     // =====================================================================================
+
+    /** Fechou (ou abriu outra tela por cima): a escala da interface volta a ser a das opções. */
+    @Override
+    public void removed() {
+        super.removed();
+        if (scaleChanged && this.minecraft != null) {
+            com.mojang.blaze3d.platform.Window window = this.minecraft.getWindow();
+            window.setGuiScale(window.calculateScale(this.minecraft.options.guiScale().get(), this.minecraft.isEnforceUnicode()));
+            scaleChanged = false;
+        }
+    }
 
     @Override
     public void render(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
@@ -1094,7 +1138,7 @@ public class IntrospectScreen extends AbstractContainerScreen<IntrospectMenu> {
                     .getFloat(de.jakob.lotm.beyonders.acting.ActingCapHelper.CAP_REDUCTION_KEY);
             if (capReduction > 0.001f) {
                 int capPct = Math.round((1f - capReduction) * 100);
-                g.drawString(this.font, Component.literal("Acting cap: " + capPct + "%").withStyle(ChatFormatting.GOLD),
+                g.drawString(this.font, Component.translatable("lotmcraft.gui.introspect.acting_cap", capPct).withStyle(ChatFormatting.GOLD),
                         tx, y + DIAL_Y + 26, 0xFFFFAA00, true);
             }
         }
@@ -1139,7 +1183,7 @@ public class IntrospectScreen extends AbstractContainerScreen<IntrospectMenu> {
     private void renderBottomRow(GuiGraphics g, int x, int y) {
         // Red priest kill counter (right aligned)
         if (menu.getPathway().equals("red_priest") && menu.getSequence() <= 3) {
-            Component text = Component.literal("Kills: " + killCount).withStyle(ChatFormatting.BOLD);
+            Component text = Component.translatable("lotmcraft.gui.introspect.kills", killCount).withStyle(ChatFormatting.BOLD);
             int w = this.font.width(text);
             g.drawString(this.font, text, x + PAD_X + CONTENT_W - w, y + BOTTOM_Y + 5, TEXT_BODY, true);
         }
@@ -1157,7 +1201,7 @@ public class IntrospectScreen extends AbstractContainerScreen<IntrospectMenu> {
         g.blit(textureLocation, x + PAD_X + 1, y + BOTTOM_Y + 1, 0, 0, 16, 16, 16, 16);
 
         int kills = ClientUniquenessCache.getKillCount();
-        Component killText = Component.literal(kills + "/" + RequestUniquenessApotheosisPacket.KILLS_REQUIRED_FOR_APOTHEOSIS + " kills")
+        Component killText = Component.translatable("lotmcraft.gui.introspect.kills_progress", kills, RequestUniquenessApotheosisPacket.KILLS_REQUIRED_FOR_APOTHEOSIS)
                 .withStyle(ChatFormatting.GOLD);
         g.drawString(this.font, killText, x + PAD_X + 22, y + BOTTOM_Y + 5, 0xFFFFAA00, true);
     }
@@ -1190,7 +1234,7 @@ public class IntrospectScreen extends AbstractContainerScreen<IntrospectMenu> {
         int panelY = this.topPos;
 
         drawDrawer(guiGraphics, panelX, panelY, ACTING_PANEL_WIDTH, ACTING_PANEL_HEIGHT);
-        heading(guiGraphics, Component.literal("Acting"), panelX + 5, panelY + 5);
+        heading(guiGraphics, Component.translatable("lotmcraft.gui.introspect.tab.acting"), panelX + 5, panelY + 5);
         drawTitleRule(guiGraphics, panelX, panelY, ACTING_PANEL_WIDTH);
 
         int listY = panelY + 15;
@@ -1229,7 +1273,7 @@ public class IntrospectScreen extends AbstractContainerScreen<IntrospectMenu> {
         }
 
         if (actingRequirements.isEmpty()) {
-            Component noReqs = Component.literal("No acting requirements yet").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC);
+            Component noReqs = Component.translatable("lotmcraft.gui.introspect.no_acting_requirements").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC);
             int textWidth = this.font.width(noReqs);
             guiGraphics.drawString(this.font, noReqs, panelX + (ACTING_PANEL_WIDTH - textWidth) / 2,
                     panelY + ACTING_PANEL_HEIGHT / 2 - this.font.lineHeight / 2, TEXT_DIM, false);
@@ -1325,7 +1369,7 @@ public class IntrospectScreen extends AbstractContainerScreen<IntrospectMenu> {
         int buttonY = inputY + 16 + 5;
 
         BrassButton requestAllyButton = new BrassButton(inputX, buttonY, inputWidth, 20,
-                Component.literal("Request Ally"), null,
+                Component.translatable("lotmcraft.gui.introspect.request_ally"), null,
                 button -> {
                     String targetName = allyNameInput.getValue();
                     if (!targetName.isBlank()) {
@@ -1344,7 +1388,7 @@ public class IntrospectScreen extends AbstractContainerScreen<IntrospectMenu> {
         int panelY = this.topPos;
 
         drawDrawer(guiGraphics, panelX, panelY, ALLY_PANEL_WIDTH, ALLY_PANEL_HEIGHT);
-        heading(guiGraphics, Component.literal("Allies"), panelX + 5, panelY + 5);
+        heading(guiGraphics, Component.translatable("lotmcraft.gui.introspect.tab.allies"), panelX + 5, panelY + 5);
         drawTitleRule(guiGraphics, panelX, panelY, ALLY_PANEL_WIDTH);
 
         List<AllyComponent.AllyInfo> allies = playerAllies(false);
@@ -1352,13 +1396,13 @@ public class IntrospectScreen extends AbstractContainerScreen<IntrospectMenu> {
             drawAllyRow(guiGraphics, panelX, allyRowY(panelY, i), allies.get(i).playerName());
         }
         if (allies.isEmpty()) {
-            guiGraphics.drawString(this.font, Component.literal("No allies yet").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC),
+            guiGraphics.drawString(this.font, Component.translatable("lotmcraft.gui.introspect.no_allies").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC),
                     panelX + 8, allyRowY(panelY, 0) + 2, TEXT_DIM, false);
         }
 
         int requestsY = allyRequestsLabelY(panelY);
         guiGraphics.fill(panelX + 4, requestsY - 4, panelX + ALLY_PANEL_WIDTH - 4, requestsY - 3, 0x66D9A94F);
-        heading(guiGraphics, Component.literal("Ally Requests"), panelX + 5, requestsY);
+        heading(guiGraphics, Component.translatable("lotmcraft.gui.introspect.ally_requests"), panelX + 5, requestsY);
 
         List<AllyComponent.AllyInfo> requests = playerAllies(true);
         for (int i = 0; i < Math.min(requests.size(), ALLY_MAX_REQUESTS); i++) {
@@ -1385,7 +1429,7 @@ public class IntrospectScreen extends AbstractContainerScreen<IntrospectMenu> {
         int panelHeight = ACTING_PANEL_HEIGHT + 40;
 
         drawDrawer(guiGraphics, panelX, panelY, ACTING_PANEL_WIDTH, panelHeight);
-        heading(guiGraphics, Component.literal("Missed Acting"), panelX + 5, panelY + 5);
+        heading(guiGraphics, Component.translatable("lotmcraft.gui.introspect.missed_acting"), panelX + 5, panelY + 5);
         drawTitleRule(guiGraphics, panelX, panelY, ACTING_PANEL_WIDTH);
 
         net.minecraft.nbt.CompoundTag missed = new net.minecraft.nbt.CompoundTag();
@@ -1399,7 +1443,7 @@ public class IntrospectScreen extends AbstractContainerScreen<IntrospectMenu> {
         int maxY = panelY + panelHeight - 4;
 
         if (missed.isEmpty()) {
-            Component none = Component.literal("No missed acting").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC);
+            Component none = Component.translatable("lotmcraft.gui.introspect.no_missed_acting").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC);
             int textWidth = this.font.width(none);
             guiGraphics.drawString(this.font, none,
                     panelX + (ACTING_PANEL_WIDTH - textWidth) / 2,
@@ -1429,7 +1473,7 @@ public class IntrospectScreen extends AbstractContainerScreen<IntrospectMenu> {
                 MutableComponent taskName = getActingTaskName(taskId).withStyle(ChatFormatting.OBFUSCATED);
                 guiGraphics.drawString(this.font,
                         Component.literal("- ").withStyle(ChatFormatting.YELLOW)
-                                .append(Component.literal("[Seq " + seqStr + "] ")
+                                .append(Component.translatable("lotmcraft.gui.introspect.seq_tag", seqStr)
                                         .withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD))
                                 .append(taskName),
                         panelX + 5, currentY, 0xFFCCCCCC, false);
@@ -1493,7 +1537,7 @@ public class IntrospectScreen extends AbstractContainerScreen<IntrospectMenu> {
 
     private void renderCompletedQuestsSection(GuiGraphics guiGraphics, int panelX, int panelY) {
         drawDrawer(guiGraphics, panelX, panelY, QUESTS_PANEL_WIDTH, COMPLETED_QUESTS_HEIGHT);
-        heading(guiGraphics, Component.literal("Completed Quests"), panelX + 5, panelY + 5);
+        heading(guiGraphics, Component.translatable("lotmcraft.gui.introspect.completed_quests"), panelX + 5, panelY + 5);
         drawTitleRule(guiGraphics, panelX, panelY, QUESTS_PANEL_WIDTH);
 
         int listY = panelY + 15;
@@ -1517,7 +1561,7 @@ public class IntrospectScreen extends AbstractContainerScreen<IntrospectMenu> {
         }
 
         if (maxCompletedQuestsScroll > 0) {
-            Component scrollHint = Component.literal("(Scroll)").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC);
+            Component scrollHint = Component.translatable("lotmcraft.gui.introspect.scroll").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC);
             int hintWidth = this.font.width(scrollHint);
             guiGraphics.drawString(this.font, scrollHint, panelX + QUESTS_PANEL_WIDTH - hintWidth - 5,
                     panelY + COMPLETED_QUESTS_HEIGHT - 12, TEXT_DIM, false);
@@ -1526,11 +1570,11 @@ public class IntrospectScreen extends AbstractContainerScreen<IntrospectMenu> {
 
     private void renderActiveQuestSection(GuiGraphics guiGraphics, int panelX, int panelY) {
         drawDrawer(guiGraphics, panelX, panelY, QUESTS_PANEL_WIDTH, ACTIVE_QUEST_HEIGHT);
-        heading(guiGraphics, Component.literal("Active Quest"), panelX + 5, panelY + 5);
+        heading(guiGraphics, Component.translatable("lotmcraft.gui.introspect.active_quest"), panelX + 5, panelY + 5);
         drawTitleRule(guiGraphics, panelX, panelY, QUESTS_PANEL_WIDTH);
 
         if (!ClientQuestData.hasActiveQuest()) {
-            Component noQuest = Component.literal("No active quest").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC);
+            Component noQuest = Component.translatable("lotmcraft.gui.introspect.no_active_quest").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC);
             int textWidth = this.font.width(noQuest);
             guiGraphics.drawString(this.font, noQuest, panelX + (QUESTS_PANEL_WIDTH - textWidth) / 2,
                     panelY + 40, TEXT_DIM, false);
@@ -1573,7 +1617,7 @@ public class IntrospectScreen extends AbstractContainerScreen<IntrospectMenu> {
 
         contentY += TUBE_H + 5;
 
-        Component rewardsLabel = Component.literal("Rewards:").withStyle(ChatFormatting.BOLD);
+        Component rewardsLabel = Component.translatable("lotmcraft.gui.introspect.rewards").withStyle(ChatFormatting.BOLD);
         guiGraphics.drawString(this.font, rewardsLabel, panelX + 5, contentY, TEXT_HEADING, false);
         contentY += this.font.lineHeight + 3;
 
@@ -1596,7 +1640,7 @@ public class IntrospectScreen extends AbstractContainerScreen<IntrospectMenu> {
 
         int digestion = ClientQuestData.getActiveQuestDigestionReward();
         if (digestion > 0) {
-            Component digestionText = Component.literal("+" + digestion + " Digestion").withStyle(ChatFormatting.GOLD);
+            Component digestionText = Component.translatable("lotmcraft.gui.introspect.digestion_reward", digestion).withStyle(ChatFormatting.GOLD);
             guiGraphics.drawString(this.font, digestionText, panelX + 5, contentY, 0xFFFFAA00, false);
         }
     }
@@ -1734,13 +1778,13 @@ public class IntrospectScreen extends AbstractContainerScreen<IntrospectMenu> {
 
             float cooldown = hoveredAbility.getCooldown(menu.getSequence());
             if (cooldown > 0) {
-                tooltipLines.add(Component.literal("Cooldown: ").withStyle(ChatFormatting.DARK_GRAY)
+                tooltipLines.add(Component.translatable("lotmcraft.gui.introspect.cooldown").withStyle(ChatFormatting.DARK_GRAY)
                         .append(Component.literal(Math.round(cooldown / 20f) + "s").withStyle(ChatFormatting.BLUE)));
             }
 
             float spiritualityCost = hoveredAbility.spiritualityCost(menu.getSequence());
             if (spiritualityCost > 0) {
-                tooltipLines.add(Component.literal("Spirituality Cost: ").withStyle(ChatFormatting.DARK_GRAY)
+                tooltipLines.add(Component.translatable("lotmcraft.gui.introspect.spirituality_cost").withStyle(ChatFormatting.DARK_GRAY)
                         .append(Component.literal(spiritualityCost + "").withStyle(ChatFormatting.DARK_PURPLE)));
             }
 
@@ -1783,7 +1827,7 @@ public class IntrospectScreen extends AbstractContainerScreen<IntrospectMenu> {
         }
 
         drawDrawer(guiGraphics, panelX, panelY, ABILITIES_PANEL_WIDTH, ABILITIES_PANEL_HEIGHT);
-        heading(guiGraphics, Component.literal("Abilities"), panelX + 5, panelY + 5);
+        heading(guiGraphics, Component.translatable("lotmcraft.gui.introspect.tab.abilities"), panelX + 5, panelY + 5);
 
         int hoverIdx = draggedAbility == null ? getAbilityIndexAt(mouseX, mouseY, panelX, panelY) : -1;
         renderAvailableAbilities(guiGraphics, panelX, panelY + 15, hoverIdx);
@@ -1805,12 +1849,11 @@ public class IntrospectScreen extends AbstractContainerScreen<IntrospectMenu> {
         List<String> ids = AbilityWheelClientData.getCopiedAbilityIds();
         List<Integer> remainingUses = AbilityWheelClientData.getCopiedAbilityRemainingUses();
 
-        String tabLabel = "Copied";
 
         // Upper panel – copied ability pool
         drawDrawer(guiGraphics, panelX, panelY, ABILITIES_PANEL_WIDTH, COPIED_PANEL_HEIGHT);
         guiGraphics.drawString(this.font,
-                Component.literal(tabLabel).withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.LIGHT_PURPLE),
+                Component.translatable("lotmcraft.gui.introspect.copied").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.LIGHT_PURPLE),
                 panelX + 5, panelY + 5, 0xFFFFFFFF, true);
 
         int iconsPerRow = (ABILITIES_PANEL_WIDTH - 10) / (ABILITY_ICON_SIZE + 2);
@@ -1837,7 +1880,7 @@ public class IntrospectScreen extends AbstractContainerScreen<IntrospectMenu> {
         }
 
         if (ids.isEmpty()) {
-            Component empty = Component.literal("No " + tabLabel.toLowerCase() + " abilities")
+            Component empty = Component.translatable("lotmcraft.gui.introspect.no_copied")
                     .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC);
             int w = this.font.width(empty);
             guiGraphics.drawString(this.font, empty,
@@ -1847,7 +1890,7 @@ public class IntrospectScreen extends AbstractContainerScreen<IntrospectMenu> {
         }
 
         if (maxCopiedScroll > 0) {
-            Component scrollHint = Component.literal("(Scroll)").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC);
+            Component scrollHint = Component.translatable("lotmcraft.gui.introspect.scroll").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC);
             int hintWidth = this.font.width(scrollHint);
             guiGraphics.drawString(this.font, scrollHint,
                     panelX + ABILITIES_PANEL_WIDTH - hintWidth - 5,
@@ -1937,14 +1980,14 @@ public class IntrospectScreen extends AbstractContainerScreen<IntrospectMenu> {
 
     private void renderAbilityWheelSection(GuiGraphics guiGraphics, int panelX, int wheelY, int mouseX, int mouseY) {
         drawDrawer(guiGraphics, panelX, wheelY, ABILITIES_PANEL_WIDTH, ABILITY_WHEEL_HEIGHT);
-        heading(guiGraphics, Component.literal("Ability Wheel"), panelX + 5, wheelY + 5);
+        heading(guiGraphics, Component.translatable("lotm.ability_wheel.title"), panelX + 5, wheelY + 5);
 
         renderAbilityWheel(guiGraphics, panelX, wheelY + 15, mouseX, mouseY);
     }
 
     private void renderAbilityBarSection(GuiGraphics guiGraphics, int panelX, int barY, int mouseX, int mouseY) {
         drawDrawer(guiGraphics, panelX, barY, ABILITIES_PANEL_WIDTH, ABILITY_BAR_HEIGHT);
-        heading(guiGraphics, Component.literal("Ability Bar"), panelX + 5, barY + 5);
+        heading(guiGraphics, Component.translatable("lotmcraft.gui.introspect.ability_bar"), panelX + 5, barY + 5);
 
         renderAbilityBar(guiGraphics, panelX, barY, mouseX, mouseY);
     }
@@ -2010,7 +2053,7 @@ public class IntrospectScreen extends AbstractContainerScreen<IntrospectMenu> {
         List<String> allPooled = getAllPooledAbilities();
 
         drawDrawer(guiGraphics, panelX, sectionY, ABILITIES_PANEL_WIDTH, SHARED_POOL_HEIGHT);
-        guiGraphics.drawString(this.font, Component.literal("Sharing").withStyle(ChatFormatting.BOLD), panelX + 5, sectionY + 3, TEXT_HEADING, true);
+        guiGraphics.drawString(this.font, Component.translatable("lotmcraft.gui.introspect.sharing").withStyle(ChatFormatting.BOLD), panelX + 5, sectionY + 3, TEXT_HEADING, true);
 
         int iconsPerRow = (ABILITIES_PANEL_WIDTH - 10) / (ABILITY_ICON_SIZE + 2);
 
@@ -2054,7 +2097,7 @@ public class IntrospectScreen extends AbstractContainerScreen<IntrospectMenu> {
 
         int wheelY = sectionY + SHARED_POOL_HEIGHT + 5;
         drawDrawer(guiGraphics, panelX, wheelY, ABILITIES_PANEL_WIDTH, SHARED_WHEEL_HEIGHT);
-        guiGraphics.drawString(this.font, Component.literal("Shared Wheel").withStyle(ChatFormatting.BOLD), panelX + 5, wheelY + 3, TEXT_HEADING, true);
+        guiGraphics.drawString(this.font, Component.translatable("lotmcraft.gui.introspect.shared_wheel").withStyle(ChatFormatting.BOLD), panelX + 5, wheelY + 3, TEXT_HEADING, true);
 
         int startX = panelX + 5;
         int startY = wheelY + 14;
@@ -2062,7 +2105,7 @@ public class IntrospectScreen extends AbstractContainerScreen<IntrospectMenu> {
         int maxWheelSlots = iconsPerRowW * 2;
 
         if (allPooled.isEmpty()) {
-            Component empty = Component.literal("No shared abilities").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC);
+            Component empty = Component.translatable("lotmcraft.gui.introspect.no_shared").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC);
             int w = this.font.width(empty);
             guiGraphics.drawString(this.font, empty, panelX + (ABILITIES_PANEL_WIDTH - w) / 2, wheelY + 28, TEXT_DIM, false);
         } else {
@@ -2617,7 +2660,7 @@ public class IntrospectScreen extends AbstractContainerScreen<IntrospectMenu> {
                             int reqSeq = draggedAbility.lowestSequenceUsable();
                             if (reqSeq >= 0 && mySeq > reqSeq) {
                                 this.minecraft.player.displayClientMessage(
-                                        Component.literal("Your sequence is too low to use this ability.").withStyle(ChatFormatting.RED), true);
+                                        Component.translatable("lotmcraft.gui.introspect.sequence_too_low").withStyle(ChatFormatting.RED), true);
                             } else {
                                 if (targetWheelSlot < sharedWheelSlots.size()) {
                                     sharedWheelSlots.add(targetWheelSlot, draggedId);

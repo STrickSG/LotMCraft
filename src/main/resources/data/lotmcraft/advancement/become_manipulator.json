@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:manipulator_potion"
     },
-    "title": "Strings Attached",
-    "description": "Consume a Potion and advance to Manipulator.",
+    "title": {"translate": "advancements.lotmcraft.become_manipulator.title", "fallback": "Strings Attached"},
+    "description": {"translate": "advancements.lotmcraft.become_manipulator.description", "fallback": "Consume a Potion and advance to Manipulator."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

@@ -49,6 +49,8 @@ public final class BossEvents {
                 BossRuntime.tickRetaliation(mob, definition);
             },
             () -> {
+                // roda para todo mob do mundo: só procura o que desfazer se algum chefe estiver ativo
+                if (!BossRuntime.hasAnyState()) return;
                 BossRuntime.unapplyGoals(mob);
                 BossRuntime.removeBossBar(mob);
             }

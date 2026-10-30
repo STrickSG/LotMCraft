@@ -6,12 +6,17 @@
     }
   ],
   "placement": {
-    "type": "minecraft:random_spread",
-
+    "type": "lotmcraft:exclusive_spread",
     "salt": 41670986,
     "spacing": 38,
     "separation": 12,
-    "heightmap": "MOTION_BLOCKING_NO_LEAVES",
-    "max_tries": 30
+    "avoid": [
+      "minecraft:villages",
+      "lotmcraft:tudor_trunsoest_ruins_set",
+      "lotmcraft:observatory_set",
+      "lotmcraft:sun_altar_set",
+      "lotmcraft:red_priest_castle_set"
+    ],
+    "avoid_chunks": 10
   }
 }

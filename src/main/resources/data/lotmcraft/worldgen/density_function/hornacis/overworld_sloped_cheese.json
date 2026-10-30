@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:cache_once",
+  "argument": {
+    "type": "lotmcraft:hornacis_terrain",
+    "input": "minecraft:overworld/sloped_cheese"
+  }
+}

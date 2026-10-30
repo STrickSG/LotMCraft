@@ -1,0 +1,14 @@
+{
+  "type": "lotmcraft:surface_template",
+  "template": "lotmcraft:observatory",
+  "anchor": [
+    18,
+    1,
+    18
+  ],
+  "terrain_adjustment": "beard_box",
+  "biomes": "#lotmcraft:has_structure/observatory_biomes",
+  "step": "surface_structures",
+  "terrain_adaptation": "beard_box",
+  "spawn_overrides": {}
+}

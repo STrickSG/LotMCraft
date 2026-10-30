@@ -2,6 +2,7 @@ package de.jakob.lotm.util.helper;
 
 import com.zigythebird.playeranimcore.math.Vec3f;
 import de.jakob.lotm.LOTMCraft;
+import de.jakob.lotm.addons.rituals.RitualChecks;
 import de.jakob.lotm.addons.rituals.RitualEffectHandlerEvent;
 import de.jakob.lotm.attachments.FogComponent;
 import de.jakob.lotm.attachments.ModAttachments;
@@ -158,8 +159,16 @@ public class AdvancementUtil {
 
 
         if(entity instanceof ServerPlayer player) {
-            if (hasRitual(sequence)) {
+            if (hasRitual(pathway, sequence)) {
                 var component = player.getData(ModAttachments.RITUALS.get());
+
+                // sem o pergaminho do ritual ou a Carta da Blasfêmia na Sequência certa, o ritual não vale
+                if (!RitualChecks.knowsRitual(player, pathway, sequence)) {
+                    component.setCompleted(false);
+                    player.displayClientMessage(net.minecraft.network.chat.Component.translatable("lotmcraft.ritual.unknown").withColor(0xFF7A7A), false);
+                }
+                // rituais feitos na hora de beber a poção são conferidos agora
+                else if (RitualChecks.completedWhileDrinking(player, pathway, sequence)) component.setCompleted(true);
 
                 if(entity.level() instanceof ServerLevel level) {
                     if(level.getGameRules().getBoolean(ModGameRules.APPLY_RITUALS)) {
@@ -209,7 +218,8 @@ public class AdvancementUtil {
 
     private static void scheduleAdvancementEffects(LivingEntity entity, String pathway, int duration, int sequence) {
         scheduleAdvancementParticles(entity, pathway, duration);
-        scheduleFloating(entity, duration);
+        // o jogador só levita na apoteose (avanço para a Sequência 0)
+        if (sequence == 0 && getSequence(entity) > 0) scheduleFloating(entity, duration);
         scheduleThirdPerson(entity, duration);
         scheduleFog(entity, duration, pathway);
         scheduleRandomDamage(entity, duration, sequence);

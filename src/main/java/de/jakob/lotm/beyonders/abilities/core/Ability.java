@@ -155,7 +155,8 @@ public abstract class Ability {
         // Handle Cooldown
         AbilityCooldownComponent component = newUser.getData(ModAttachments.COOLDOWN_COMPONENT);
 
-        int inflatedCooldown = getCooldown(seq);
+        // a Singularidade do próprio Caminho encurta a recarga das habilidades do Caminho
+        int inflatedCooldown = Math.round(getCooldown(seq) * de.jakob.lotm.beyonders.singularity.SingularityBonuses.cooldownFactor(newUser, this));
         component.setCooldown(id, inflatedCooldown);
 
         // Use ability client and server sided
@@ -206,7 +207,8 @@ public abstract class Ability {
 
     public float getInflatedSpiritualityCost(LivingEntity entity, ServerLevel level, int seq) {
         float base = spiritualityCost(seq);
-        return base;
+        // a Singularidade do próprio Caminho deixa as habilidades do Caminho mais baratas
+        return base * de.jakob.lotm.beyonders.singularity.SingularityBonuses.costFactor(entity, this);
     }
 
     public float multiplier(LivingEntity entity) {
@@ -215,6 +217,20 @@ public abstract class Ability {
 
     public void onHold(Level level, LivingEntity entity) {
 
+    }
+
+    private Boolean hasOnHold;
+
+    /** A habilidade tem efeito ao ser segurada (sobrescreve onHold)? Sem isso não há o que rodar nem sincronizar. */
+    public boolean hasOnHold() {
+        if (hasOnHold == null) {
+            try {
+                hasOnHold = getClass().getMethod("onHold", Level.class, LivingEntity.class).getDeclaringClass() != Ability.class;
+            } catch (NoSuchMethodException e) {
+                hasOnHold = true;
+            }
+        }
+        return hasOnHold;
     }
 
     public boolean shouldUseAbility(LivingEntity entity) {
@@ -236,15 +252,19 @@ public abstract class Ability {
         String pathway = BeyonderData.getPathway(entity, true);
         int sequence = BeyonderData.getSequence(entity, false, true);
 
+        // getRequirements() and getPathwayHistory() allocate on every call; this method used to call them
+        // inside the loops below, so fetch both once.
+        Map<String, Integer> requirements = getRequirements();
+
         if(entity instanceof Player player && player.isCreative() && player.hasPermissions(2) && !ignoreCreativeMode) {
-            return getRequirements().values().stream().anyMatch(reqSeq -> reqSeq >= sequence);
+            return requirements.values().stream().anyMatch(reqSeq -> reqSeq >= sequence);
         }
 
         if (entity instanceof Player player && ControllingUtils.isControlling(player)) {
             ControllingUtils.PathwayData pathwayData = ControllingUtils.currentlyControlling(player);
             boolean canUseOwnAbilities = ControllingUtils.canUseOwnAbilitiesWhileControlling(player);
 
-            boolean hasTargetAbility = getRequirements().containsKey(pathwayData.pathway()) && getRequirements().get(pathwayData.pathway()) >= pathwayData.sequence();
+            boolean hasTargetAbility = requirements.containsKey(pathwayData.pathway()) && requirements.get(pathwayData.pathway()) >= pathwayData.sequence();
 
             if (!canUseOwnAbilities) {
                 return hasTargetAbility;
@@ -255,15 +275,17 @@ public abstract class Ability {
 
         DiscernmentComponent discernmentComponent = entity.getData(ModAttachments.DISCERNMENT_DATA.get());
         if(discernmentComponent.isDiscerning()){
-            if(getRequirements().containsKey(pathway) && getRequirements().get(pathway) >= sequence)
+            if(requirements.containsKey(pathway) && requirements.get(pathway) >= sequence)
                 return true;
         }
 
         // Check pathway
-        for(int i = sequence; i < BeyonderData.getPathwayHistory(entity).length; i++) {
-            if(BeyonderData.getPathwayHistory(entity)[i] == null) continue;
-            String userPath = BeyonderData.getPathwayHistory(entity)[i];
-            if(getRequirements().containsKey(userPath) && getRequirements().get(userPath) == i) {
+        String[] pathwayHistory = BeyonderData.getPathwayHistory(entity);
+        for(int i = sequence; i < pathwayHistory.length; i++) {
+            String userPath = pathwayHistory[i];
+            if(userPath == null) continue;
+            Integer requiredSequence = requirements.get(userPath);
+            if(requiredSequence != null && requiredSequence == i) {
                 return true;
             }
         }
@@ -272,10 +294,13 @@ public abstract class Ability {
         if(entity instanceof Player player) {
             String[] sefirotPathways = SefirahHandler.getAdditionalPathwaysForPlayer(player);
             for (String sefirotPathway : sefirotPathways) {
-                if (getRequirements().containsKey(sefirotPathway) && getRequirements().get(sefirotPathway) >= sequence) {
+                if (requirements.containsKey(sefirotPathway) && requirements.get(sefirotPathway) >= sequence) {
                     return true;
                 }
             }
+
+            // a Singularidade de um Caminho vizinho empresta uma habilidade alta do Caminho dela
+            if (de.jakob.lotm.beyonders.singularity.SingularityBonuses.grantsAbility(player, id)) return true;
         }
 
         return false;

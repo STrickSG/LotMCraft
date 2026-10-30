@@ -136,7 +136,7 @@ public class AdvancementsEventHandler {
                 grantAdvancement(player, "obtain_characteristic");
                 needCharacteristic = false;
             }
-            if (needRecipe && stack.getItem() instanceof PotionRecipeItem) {
+            if (needRecipe && (stack.getItem() instanceof PotionRecipeItem || stack.getItem() instanceof de.jakob.lotm.beyonders.potions.BlasphemyCardItem)) {
                 grantAdvancement(player, "obtain_recipe");
                 needRecipe = false;
             }

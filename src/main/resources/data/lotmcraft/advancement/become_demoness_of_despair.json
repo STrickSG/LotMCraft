@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:demoness_of_despair_potion"
     },
-    "title": "No Hope Remains",
-    "description": "Consume a Potion and advance to Demoness of Despair.",
+    "title": {"translate": "advancements.lotmcraft.become_demoness_of_despair.title", "fallback": "No Hope Remains"},
+    "description": {"translate": "advancements.lotmcraft.become_demoness_of_despair.description", "fallback": "Consume a Potion and advance to Demoness of Despair."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

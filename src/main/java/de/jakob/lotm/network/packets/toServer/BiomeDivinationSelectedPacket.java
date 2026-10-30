@@ -39,7 +39,7 @@ public record BiomeDivinationSelectedPacket(String biomeId) implements CustomPac
         ResourceLocation biomeKey = ResourceLocation.tryParse(packet.biomeId());
 
         if (biomeKey == null) {
-            player.sendSystemMessage(Component.literal("§cInvalid biome id"));
+            player.sendSystemMessage(Component.translatable("lotmcraft.msg.divination.invalid_biome"));
             return;
         }
 
@@ -71,7 +71,7 @@ public record BiomeDivinationSelectedPacket(String biomeId) implements CustomPac
 
             context.enqueueWork(() -> {
                 if (result == null) {
-                    player.sendSystemMessage(Component.literal("§cNo such biome nearby in the sensed area"));
+                    player.sendSystemMessage(Component.translatable("lotmcraft.msg.divination.no_biome"));
                     return;
                 }
 
@@ -91,12 +91,11 @@ public record BiomeDivinationSelectedPacket(String biomeId) implements CustomPac
                 }
                 biomeName = biomeName.replace('_', ' ');
 
-                player.sendSystemMessage(Component.literal(String.format(
-                        "§5You sense §d%s§5 to the §d%s§5, about §d%d blocks §5away...",
+                player.sendSystemMessage(Component.translatable("lotmcraft.msg.divination.sense_distance",
                         biomeName,
-                        direction,
+                        Component.translatable("lotmcraft.msg.direction." + direction.toLowerCase(java.util.Locale.ROOT).replace('-', '_')),
                         distance
-                )));
+                ));
             });
         });
     }

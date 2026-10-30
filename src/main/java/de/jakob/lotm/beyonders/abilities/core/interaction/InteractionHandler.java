@@ -13,6 +13,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 
 import java.util.HashSet;
 
@@ -83,6 +84,13 @@ public class InteractionHandler {
 
     private static boolean isInteractionOfSameOrHigherSequence(AbilityUsedEvent event, int sequenceToCompare) {
         return BeyonderData.getSequence(event.getEntity()) <= sequenceToCompare;
+    }
+
+    @SubscribeEvent
+    public static void onServerStopped(ServerStoppedEvent event) {
+        // Entries reference the stopped server's levels; their game time no longer advances,
+        // so cleanupInteractions would never drop them in the next singleplayer world.
+        recentInteractions.clear();
     }
 
     public static void cleanupInteractions() {

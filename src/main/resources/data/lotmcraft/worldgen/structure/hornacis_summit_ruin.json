@@ -1,0 +1,25 @@
+{
+  "type": "lotmcraft:hornacis_site",
+  "biomes": "#lotmcraft:hornacis",
+  "spawn_overrides": {},
+  "step": "surface_structures",
+  "terrain_adaptation": "beard_thin",
+  "site": "summit_ruin",
+  "templates": [
+    "lotmcraft:hornacis/praca_neve"
+  ],
+  "houses": [
+    "lotmcraft:hornacis/casa_capela",
+    "lotmcraft:hornacis/casa_alicerce",
+    "lotmcraft:hornacis/casa_escriba",
+    "lotmcraft:hornacis/casa_sobrado"
+  ],
+  "house_count": 3,
+  "house_ring": 17,
+  "extras": [
+    "lotmcraft:hornacis/resto_canto",
+    "lotmcraft:hornacis/resto_muro"
+  ],
+  "extra_count": 2,
+  "extra_ring": 26
+}

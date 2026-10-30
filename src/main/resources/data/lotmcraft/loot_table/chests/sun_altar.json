@@ -1,0 +1,141 @@
+{
+  "type": "minecraft:chest",
+  "random_sequence": "lotmcraft:chests/sun_altar",
+  "pools": [
+    {
+      "comment": "--- POÇÕES (só do Caminho do Sol) ---",
+      "rolls": {
+        "type": "minecraft:uniform",
+        "min": 1,
+        "max": 2
+      },
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "lotmcraft:bard_potion",
+          "weight": 14
+        },
+        {
+          "type": "minecraft:item",
+          "name": "lotmcraft:light_supplicant_potion",
+          "weight": 11
+        },
+        {
+          "type": "minecraft:item",
+          "name": "lotmcraft:solar_high_priest_potion",
+          "weight": 8
+        },
+        {
+          "type": "minecraft:item",
+          "name": "lotmcraft:notary_potion",
+          "weight": 6
+        },
+        {
+          "type": "minecraft:item",
+          "name": "lotmcraft:priest_of_light_potion",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "lotmcraft:unshadowed_potion",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 40
+        }
+      ]
+    },
+    {
+      "comment": "--- CARACTERÍSTICAS ---",
+      "rolls": {
+        "type": "minecraft:uniform",
+        "min": 0,
+        "max": 2
+      },
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "lotmcraft:bard_characteristic",
+          "weight": 18
+        },
+        {
+          "type": "minecraft:item",
+          "name": "lotmcraft:light_supplicant_characteristic",
+          "weight": 15
+        },
+        {
+          "type": "minecraft:item",
+          "name": "lotmcraft:solar_high_priest_characteristic",
+          "weight": 12
+        },
+        {
+          "type": "minecraft:item",
+          "name": "lotmcraft:notary_characteristic",
+          "weight": 9
+        },
+        {
+          "type": "minecraft:item",
+          "name": "lotmcraft:priest_of_light_characteristic",
+          "weight": 6
+        },
+        {
+          "type": "minecraft:item",
+          "name": "lotmcraft:unshadowed_characteristic",
+          "weight": 3
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 70
+        }
+      ]
+    },
+    {
+      "comment": "--- RECEITAS ---",
+      "rolls": {
+        "type": "minecraft:uniform",
+        "min": 0,
+        "max": 2
+      },
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "lotmcraft:bard",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "name": "lotmcraft:light_supplicant",
+          "weight": 17
+        },
+        {
+          "type": "minecraft:item",
+          "name": "lotmcraft:solar_high_priest",
+          "weight": 14
+        },
+        {
+          "type": "minecraft:item",
+          "name": "lotmcraft:notary",
+          "weight": 11
+        },
+        {
+          "type": "minecraft:item",
+          "name": "lotmcraft:priest_of_light",
+          "weight": 8
+        },
+        {
+          "type": "minecraft:item",
+          "name": "lotmcraft:unshadowed",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 55
+        }
+      ]
+    }
+  ]
+}

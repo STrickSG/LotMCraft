@@ -112,7 +112,7 @@ public class HonorificNamesScreen extends AbstractContainerScreen<HonorificNames
         if (menu.getSequence() < 4) {
             this.addRenderableWidget(new MysticButton(
                     leftPos + W - PADDING - 80, topPos + TITLE_H + OWN_NAME_H - 20, 80, 16,
-                    Component.literal("Set Name"),
+                    Component.translatable("lotmcraft.msg.gui.honorific.set_name"),
                     btn -> Minecraft.getInstance().setScreen(
                             new SetHonorificNameScreen(menu.getPathway(), menu.getSequence()))));
         }
@@ -130,12 +130,12 @@ public class HonorificNamesScreen extends AbstractContainerScreen<HonorificNames
 
             this.addRenderableWidget(new MysticButton(
                     leftPos + PADDING + 8, entryY + 22, 108, 16,
-                    Component.literal("Send Message"),
+                    Component.translatable("lotmcraft.msg.gui.honorific.send_message"),
                     btn -> respondToPrayer(btnIdx, false)));
 
             this.addRenderableWidget(new MysticButton(
                     leftPos + PADDING + 8 + 112, entryY + 22, 108, 16,
-                    Component.literal("Teleport"),
+                    Component.translatable("lotmcraft.msg.gui.teleport"),
                     btn -> respondToPrayer(btnIdx, true)));
         }
 
@@ -313,7 +313,7 @@ public class HonorificNamesScreen extends AbstractContainerScreen<HonorificNames
 
     private void renderOwnNameSection(GuiGraphics gfx) {
         int sectionY = TITLE_H + 6;
-        gfx.drawString(font, "Your Honorific Name:", PADDING, sectionY, COL_LABEL, false);
+        gfx.drawString(font, Component.translatable("lotmcraft.msg.gui.honorific.your_name"), PADDING, sectionY, COL_LABEL, false);
 
         HonorificName name = menu.getOwnName();
         if (name.isEmpty()) {
@@ -339,7 +339,7 @@ public class HonorificNamesScreen extends AbstractContainerScreen<HonorificNames
 
     private void renderPendingPrayersSection(GuiGraphics gfx) {
         int sectionLabelY = TITLE_H + OWN_NAME_H + DIVIDER_H;
-        gfx.drawString(font, "Pending Prayers:", PADDING, sectionLabelY, COL_LABEL, false);
+        gfx.drawString(font, Component.translatable("lotmcraft.msg.gui.honorific.pending"), PADDING, sectionLabelY, COL_LABEL, false);
 
         List<PendingPrayer> prayers = menu.getPendingPrayers();
 

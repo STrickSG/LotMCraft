@@ -44,6 +44,8 @@ import net.minecraft.world.entity.LivingEntity;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class PassiveAbilityHandler {
 
@@ -126,9 +128,18 @@ public class PassiveAbilityHandler {
         passiveAbilities.add(new PureIdealism("pure_idealism_ability"));
     }
 
+    // Several passives look themselves up through getById from damage/tick event handlers
+    private static final Map<String, PassiveAbility> passiveAbilitiesById = new ConcurrentHashMap<>();
+
     public static PassiveAbility getById(String id) {
+        if (id == null) return null;
+        PassiveAbility indexed = passiveAbilitiesById.get(id);
+        if (indexed != null) {
+            return indexed;
+        }
         for (PassiveAbility ability : passiveAbilities) {
             if (ability.getId().equals(id)) {
+                passiveAbilitiesById.put(id, ability);
                 return ability;
             }
         }

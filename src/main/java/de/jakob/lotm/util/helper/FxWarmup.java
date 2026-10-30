@@ -73,7 +73,7 @@ public class FxWarmup {
         private int settle = 0;
         private boolean closed = false;
 
-        public WarmupScreen() { super(Component.literal("Loading effects")); }
+        public WarmupScreen() { super(Component.translatable("lotmcraft.msg.fx.loading")); }
 
         @Override
         public void tick() {
@@ -116,8 +116,8 @@ public class FxWarmup {
         @Override
         public void render(GuiGraphics g, int mx, int my, float pt) {
             super.render(g, mx, my, pt);
-            g.drawCenteredString(font, "Pre-Loading heavy effects to reduce lag when they play...", width / 2, height / 2, 0xFFFFFF);
-            g.drawCenteredString(font, "Skip this screen by disabling the gamerule preLoadEffects", width / 2, height / 2 + 10, 0xFFFFFF);
+            g.drawCenteredString(font, Component.translatable("lotmcraft.msg.fx.preloading"), width / 2, height / 2, 0xFFFFFF);
+            g.drawCenteredString(font, Component.translatable("lotmcraft.msg.fx.skip_hint"), width / 2, height / 2 + 10, 0xFFFFFF);
         }
 
         @Override public boolean shouldCloseOnEsc() { return false; }

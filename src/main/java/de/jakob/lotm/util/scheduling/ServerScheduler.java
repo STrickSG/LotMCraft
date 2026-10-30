@@ -1,8 +1,10 @@
 package de.jakob.lotm.util.scheduling;
 
+import de.jakob.lotm.LOTMCraft;
 import net.minecraft.server.level.ServerLevel;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,6 +16,14 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Supplier;
 
 public class ServerScheduler {
+    // IDs só precisam ser únicos dentro deste agendador: um contador é muito mais rápido que UUID.randomUUID(),
+    // que usa um gerador criptográfico (as habilidades agendam milhares de tarefas, ex.: partículas)
+    private static final java.util.concurrent.atomic.AtomicLong NEXT_ID = new java.util.concurrent.atomic.AtomicLong();
+
+    private static UUID newId() {
+        return new UUID(0x4C4F544D53434845L, NEXT_ID.incrementAndGet());
+    }
+
     private static final Map<UUID, ScheduledTask> tasks = new ConcurrentHashMap<>();
     private static boolean registered = false;
 
@@ -44,7 +54,7 @@ public class ServerScheduler {
                                        @Nullable ServerLevel level,
                                        Supplier<Double> timeMultiplier) {
         if (delay < 0) delay = 0;
-        UUID id = UUID.randomUUID();
+        UUID id = newId();
         tasks.put(id, new ScheduledTask(id, task, delay, 0, 1, level, () -> true, timeMultiplier));
         return id;
     }
@@ -70,7 +80,7 @@ public class ServerScheduler {
                                          Runnable task, @Nullable ServerLevel level,
                                          Supplier<Boolean> condition,
                                          Supplier<Double> timeMultiplier) {
-        UUID id = UUID.randomUUID();
+        UUID id = newId();
         tasks.put(id, new ScheduledTask(id, task, initialDelay, interval, maxExecutions,
                 level, condition, timeMultiplier));
         return id;
@@ -110,13 +120,13 @@ public class ServerScheduler {
                                            Runnable task, @Nullable Runnable onFinish,
                                            @Nullable ServerLevel level,
                                            Supplier<Double> timeMultiplier) {
-        UUID id = UUID.randomUUID();
+        UUID id = newId();
         ScheduledTask scheduledTask = new ScheduledTask(
                 id, task, initialDelay, interval, -1, level, () -> true, timeMultiplier);
         scheduledTask.setEndTime(duration);
 
         if (onFinish != null) {
-            UUID finishId = UUID.randomUUID();
+            UUID finishId = newId();
             ScheduledTask finishTask = new ScheduledTask(
                     finishId, onFinish, duration + 1, 0, 1, level, () -> true, timeMultiplier);
             tasks.put(finishId, finishTask);
@@ -156,7 +166,7 @@ public class ServerScheduler {
                                      @Nullable Runnable onFinish,
                                      Supplier<Boolean> breakCondition,
                                      Supplier<Double> timeMultiplier) {
-        UUID id = UUID.randomUUID();
+        UUID id = newId();
         ScheduledTask scheduledTask = new ScheduledTask(
                 id, task, 0, interval, -1, level, () -> !breakCondition.get(), timeMultiplier);
         scheduledTask.setOnFinish(onFinish);
@@ -202,6 +212,13 @@ public class ServerScheduler {
     // -------------------------------------------------------------------------
 
     @SubscribeEvent
+    public static void onServerStopped(ServerStoppedEvent event) {
+        // Tasks capture levels and entities of the server that just stopped. In singleplayer the JVM lives on,
+        // and they would otherwise keep running (on dead levels) inside the next world that gets opened.
+        tasks.clear();
+    }
+
+    @SubscribeEvent
     public static void onServerTick(ServerTickEvent.Pre event) {
         Iterator<Map.Entry<UUID, ScheduledTask>> iterator = tasks.entrySet().iterator();
 
@@ -224,8 +241,7 @@ public class ServerScheduler {
                     try {
                         task.task.run();
                     } catch (Exception e) {
-                        System.err.println("Error executing scheduled task: " + e.getMessage());
-                        e.printStackTrace();
+                        LOTMCraft.LOGGER.error("Error executing scheduled task", e);
                     }
 
                     task.incrementExecutions();
@@ -305,8 +321,7 @@ public class ServerScheduler {
             try {
                 onFinish.run();
             } catch (Exception e) {
-                System.err.println("Error executing onFinish task: " + e.getMessage());
-                e.printStackTrace();
+                LOTMCraft.LOGGER.error("Error executing onFinish task", e);
             }
         }
 

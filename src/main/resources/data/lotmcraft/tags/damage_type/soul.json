@@ -13,7 +13,7 @@
     "lotmcraft:black_flame",
     "lotmcraft:curse",
     "lotmcraft:darkness",
-    "lotmcraft:corruption",
-    "lotmcraft:abyss"
+    { "id": "lotmcraft:corruption", "required": false },
+    { "id": "lotmcraft:abyss", "required": false }
   ]
 }

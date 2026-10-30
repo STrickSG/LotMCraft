@@ -69,19 +69,19 @@ public class UniquenessProximityHandler {
 
         // Determine message based on proximity
         if (distance <= 50) {
-            message = "You feel the uniqueness VERY strongly nearby... It's almost within reach!";
+            message = "lotmcraft.msg.uniqueness.proximity.1";
         } else if (distance <= 100) {
-            message = "You feel the uniqueness strongly nearby. It draws closer...";
+            message = "lotmcraft.msg.uniqueness.proximity.2";
         } else if (distance <= 200) {
-            message = "You sense the uniqueness is nearby...";
+            message = "lotmcraft.msg.uniqueness.proximity.3";
         } else if (distance <= 350) {
-            message = "You faintly feel the uniqueness in this world...";
+            message = "lotmcraft.msg.uniqueness.proximity.4";
         } else {
-            message = "You vaguely sense your uniqueness exists somewhere in this realm...";
+            message = "lotmcraft.msg.uniqueness.proximity.5";
         }
 
         player.sendSystemMessage(
-                Component.literal(message).withColor(color),
+                Component.translatable(message).withColor(color),
                 true
         );
     }

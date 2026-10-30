@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:chest",
+  "random_sequence": "lotmcraft:trial/ritual_scroll",
+  "pools": [
+    {
+      "comment": "Recompensa dos Spawners de Desafios das estruturas das cartas: 1 pergaminho de ritual sorteado entre todos (tag lotmcraft:ritual_scrolls)",
+      "rolls": 1,
+      "bonus_rolls": 0.0,
+      "entries": [
+        { "type": "minecraft:tag", "name": "lotmcraft:ritual_scrolls", "expand": true }
+      ]
+    }
+  ]
+}

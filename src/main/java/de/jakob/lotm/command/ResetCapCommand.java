@@ -17,7 +17,7 @@ public class ResetCapCommand {
             .executes(context -> {
                 CommandSourceStack source = context.getSource();
                 if (!(source.getEntity() instanceof Player player)) {
-                    source.sendFailure(Component.literal("Must be run by a player."));
+                    source.sendFailure(Component.translatable("lotmcraft.msg.cmd.must_be_player"));
                     return 0;
                 }
                 return executeReset(source, (ServerPlayer) player);
@@ -34,7 +34,7 @@ public class ResetCapCommand {
 
     private static int executeReset(CommandSourceStack source, ServerPlayer target) {
         ActingCapHelper.clearCap(target);
-        source.sendSuccess(() -> Component.literal("Reset acting cap for " + target.getGameProfile().getName()), true);
+        source.sendSuccess(() -> Component.translatable("lotmcraft.msg.cmd.reset_cap", target.getGameProfile().getName()), true);
         return 1;
     }
 }

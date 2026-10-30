@@ -43,7 +43,7 @@ public class ExcavatedAreaItem extends Item {
         String centerStr = itemStack.getOrDefault(ModDataComponents.EXCAVATION_CENTER, "");
 
         if (blockData.isEmpty() || centerStr.isEmpty()) {
-            player.displayClientMessage(Component.literal("No area data found!").withStyle(ChatFormatting.RED), true);
+            player.displayClientMessage(Component.translatable("lotmcraft.msg.excavated.no_data").withStyle(ChatFormatting.RED), true);
             return InteractionResultHolder.fail(itemStack);
         }
 
@@ -188,10 +188,10 @@ public class ExcavatedAreaItem extends Item {
         Map<String, String> blockData = stack.getOrDefault(ModDataComponents.EXCAVATED_BLOCKS, Map.of());
 
         if (!blockData.isEmpty()) {
-            tooltipComponents.add(Component.literal("Blocks: " + blockData.size()).withStyle(ChatFormatting.GRAY));
-            tooltipComponents.add(Component.literal("Right-click to place").withStyle(ChatFormatting.GOLD));
+            tooltipComponents.add(Component.translatable("lotmcraft.msg.excavated.blocks", blockData.size()).withStyle(ChatFormatting.GRAY));
+            tooltipComponents.add(Component.translatable("lotmcraft.msg.excavated.place").withStyle(ChatFormatting.GOLD));
         } else {
-            tooltipComponents.add(Component.literal("Empty excavation").withStyle(ChatFormatting.DARK_GRAY));
+            tooltipComponents.add(Component.translatable("lotmcraft.msg.excavated.empty").withStyle(ChatFormatting.DARK_GRAY));
         }
     }
 }

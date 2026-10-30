@@ -14,7 +14,7 @@ public class WaypointMenuScreen extends ButtonListGui<String> {
     private final List<WaypointComponent.ClientWaypoint> waypoints;
 
     public WaypointMenuScreen(List<WaypointComponent.ClientWaypoint> waypoints, String use) {
-        super(Component.literal("Select Dimension"), waypoints.stream().map(WaypointMenuScreen::convertToString).toList());
+        super(Component.translatable("lotmcraft.msg.gui.select.dimension"), waypoints.stream().map(WaypointMenuScreen::convertToString).toList());
         this.use = use;
         this.waypoints = waypoints;
     }

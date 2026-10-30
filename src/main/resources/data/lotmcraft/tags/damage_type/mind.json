@@ -10,6 +10,6 @@
     "lotmcraft:trial_of_madness",
     "lotmcraft:torture",
     "lotmcraft:horror",
-    "lotmcraft:degeneration"
+    { "id": "lotmcraft:degeneration", "required": false }
   ]
 }

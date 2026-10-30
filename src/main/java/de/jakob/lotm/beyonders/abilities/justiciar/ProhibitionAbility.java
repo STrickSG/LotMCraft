@@ -126,7 +126,7 @@ public class ProhibitionAbility extends SelectableAbility {
         }, null, serverLevel);
 
         String typeName = type.displayName;
-        Component message = Component.literal("§6⚖ §fProhibition declared: §e" + typeName + " §6⚖")
+        Component message = Component.translatable("lotmcraft.msg.ability.prohibition.declared", typeName)
                 .withStyle(ChatFormatting.WHITE);
 
         serverLevel.getServer().getPlayerList().getPlayers().forEach(p -> {

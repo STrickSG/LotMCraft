@@ -241,6 +241,7 @@ public class BeyonderData {
 
         component.setPathway(pathway);
         component.setSequence(sequence);
+        refreshPassives(entity);
         if(clearCharStack) component.clearCharacteristicStack();
         else component.setCharacteristicStack(0, sequence - 1);
         if (resetSpirituality) {
@@ -312,11 +313,12 @@ public class BeyonderData {
     }
 
     public static boolean hasRitual(LivingEntity entity){
-        return hasRitual(getSequence(entity) - 1);
+        return hasRitual(getPathway(entity), getSequence(entity) - 1);
     }
 
-    public static boolean hasRitual(int seq){
-        return false;
+    // Os rituais ligados ficam em AdvancementRituals (por enquanto só o do Sol, para virar Sequência 5)
+    public static boolean hasRitual(String pathway, int seq){
+        return de.jakob.lotm.addons.rituals.AdvancementRituals.get(pathway, seq) != null;
     }
 
     public static int getMaxWormAmount(int sequence) {
@@ -372,6 +374,10 @@ public class BeyonderData {
             PacketHandler.requestBeyonderSync();
             return ClientBeyonderCache.getPathway(entity.getUUID());
         }
+        // Same answer as a default component, without attaching one to every entity that gets queried
+        if(!entity.hasData(ModAttachments.BEYONDER_COMPONENT)) {
+            return LOTMCraft.NON_BEYONDER_PATHWAY;
+        }
         BeyonderComponent component = entity.getData(ModAttachments.BEYONDER_COMPONENT);
         String pathway = component.getPathway();
         return pathway == null || pathway.isEmpty() ? LOTMCraft.NON_BEYONDER_PATHWAY : pathway;
@@ -421,6 +427,9 @@ public class BeyonderData {
 //            }
 //        }
 
+        if(!entity.hasData(ModAttachments.BEYONDER_COMPONENT)) {
+            return LOTMCraft.NON_BEYONDER_SEQ;
+        }
         BeyonderComponent component = entity.getData(ModAttachments.BEYONDER_COMPONENT);
         return component.getSequence();
     }
@@ -519,10 +528,14 @@ public class BeyonderData {
 
         float current = getSpirituality(player);
         float newAmount = Math.min(getMaxSpirituality(getPathway(player, true), getSequence(player, false, true), player), current + amount);
-        player.getData(ModAttachments.BEYONDER_COMPONENT).setSpirituality(newAmount);
+        BeyonderComponent component = player.getData(ModAttachments.BEYONDER_COMPONENT);
+        float previous = component.getSpirituality();
+        component.setSpirituality(newAmount);
 
-        // Sync to client if this is server-side
-        if (!player.level().isClientSide() && player instanceof ServerPlayer serverPlayer) {
+        // Sync to client if this is server-side. This runs every tick for spirituality regen, so only send
+        // the packet when the value actually changed (e.g. not when already full); BeyonderDataTickHandler
+        // still sends the full data to the player once per second.
+        if (newAmount != previous && !player.level().isClientSide() && player instanceof ServerPlayer serverPlayer) {
             PacketHandler.syncBeyonderDataToPlayer(serverPlayer);
         }
     }
@@ -541,7 +554,9 @@ public class BeyonderData {
 
     // for getting the spirituality of the main body instead, works on both client and server side
     public static float getMaxSpirituality(String path, int seq, Player player){
-        return getMaxSpirituality(path, seq) * ActingCapHelper.getEffectiveCap(player);
+        // a Singularidade do próprio Caminho aumenta a espiritualidade máxima
+        return getMaxSpirituality(path, seq) * ActingCapHelper.getEffectiveCap(player)
+                * de.jakob.lotm.beyonders.singularity.SingularityBonuses.maxSpiritualityFactor(player);
     }
 
     public static float getMaxSpirituality(String path, int seq){
@@ -565,10 +580,22 @@ public class BeyonderData {
         return spiritualityLookup[sequence] * mult;
     }
 
+    /**
+     * Caminho ou Sequência mudaram: as passivas em cache e os aprimoramentos físicos do Caminho antigo
+     * são refeitos na hora (antes só a cada 10 segundos).
+     */
+    private static void refreshPassives(LivingEntity entity) {
+        if (!(entity.level() instanceof ServerLevel)) return;
+        de.jakob.lotm.events.BeyonderDataTickHandler.invalidateCache(entity);
+        de.jakob.lotm.beyonders.abilities.core.PhysicalEnhancementsAbility.resetEnhancements(entity.getUUID(), entity, false);
+        de.jakob.lotm.events.BeyonderDataTickHandler.invalidateCache(entity);
+    }
+
     public static void clearBeyonderData(LivingEntity entity) {
         BeyonderComponent component = entity.getData(ModAttachments.BEYONDER_COMPONENT);
         component.setPathway("none");
         component.setSequence(LOTMCraft.NON_BEYONDER_SEQ);
+        refreshPassives(entity);
         component.setSpirituality(0);
         component.setGriefingEnabled(true);
         component.setDigestionProgress(0);
@@ -595,6 +622,11 @@ public class BeyonderData {
     public static boolean isBeyonder(LivingEntity entity) {
         if (entity.level().isClientSide) {
             return ClientBeyonderCache.isBeyonder(entity.getUUID());
+        }
+
+        // Called for every living entity every tick; a missing component means "not a beyonder"
+        if (!entity.hasData(ModAttachments.BEYONDER_COMPONENT)) {
+            return false;
         }
 
         BeyonderComponent component = entity.getData(ModAttachments.BEYONDER_COMPONENT);

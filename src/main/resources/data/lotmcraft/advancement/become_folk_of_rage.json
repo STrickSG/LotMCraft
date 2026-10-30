@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:folk_of_rage_potion"
     },
-    "title": "Sea of Fury",
-    "description": "Consume a Potion and advance to Folk of Rage.",
+    "title": {"translate": "advancements.lotmcraft.become_folk_of_rage.title", "fallback": "Sea of Fury"},
+    "description": {"translate": "advancements.lotmcraft.become_folk_of_rage.description", "fallback": "Consume a Potion and advance to Folk of Rage."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

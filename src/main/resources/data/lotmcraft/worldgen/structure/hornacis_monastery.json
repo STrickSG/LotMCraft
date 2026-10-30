@@ -1,0 +1,11 @@
+{
+  "type": "lotmcraft:hornacis_site",
+  "biomes": "#lotmcraft:hornacis",
+  "spawn_overrides": {},
+  "step": "surface_structures",
+  "terrain_adaptation": "beard_thin",
+  "site": "monastery",
+  "templates": [
+    "lotmcraft:hornacis/monastery"
+  ]
+}

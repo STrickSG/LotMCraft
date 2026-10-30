@@ -213,6 +213,11 @@ public class PsychologicalInvisibilityAbility extends ToggleAbility {
 
     @SubscribeEvent
     public static void onEntityTickPre(EntityTickEvent.Post event) {
+        // Só no servidor: "hits" é do servidor (vem do evento de dano). Em singleplayer a cópia do jogador
+        // no cliente também decrementava o contador, que caía 2x mais rápido do que no multiplayer.
+        if (event.getEntity().level().isClientSide) {
+            return;
+        }
         if (event.getEntity() instanceof LivingEntity entity) {
             int tickCount = entity.tickCount;
 

@@ -3,18 +3,30 @@ package de.jakob.lotm.gui.custom.recipe;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import de.jakob.lotm.LOTMCraft;
+import de.jakob.lotm.addons.rituals.AdvancementRituals;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.FormattedText;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class RecipeScreen extends AbstractContainerScreen<RecipeMenu> {
     private static final ResourceLocation BACKGROUND =
             ResourceLocation.fromNamespaceAndPath(LOTMCraft.MOD_ID, "textures/gui/recipes/recipe.png");
     private static final ResourceLocation GLOW =
             ResourceLocation.fromNamespaceAndPath(LOTMCraft.MOD_ID, "textures/gui/recipes/recipe_glow.png");
+    // painel do ritual: mesmo estilo do painel da receita, em lilás
+    private static final ResourceLocation RITUAL_BACKGROUND =
+            ResourceLocation.fromNamespaceAndPath(LOTMCraft.MOD_ID, "textures/gui/recipes/ritual.png");
+    private static final ResourceLocation RITUAL_SLOT =
+            ResourceLocation.fromNamespaceAndPath(LOTMCraft.MOD_ID, "textures/gui/recipes/ritual_slot.png");
 
     private static final int PANEL_W = 192;
     private static final int PANEL_H = 144;
@@ -31,6 +43,13 @@ public class RecipeScreen extends AbstractContainerScreen<RecipeMenu> {
     private static final int LAVENDER = 0xB894FF;
     private static final int PULSE = 0xEBD8FF;
 
+    private static final int RITUAL_TITLE_COLOR = 0xE6D6FF;
+    private static final int RITUAL_CAPTION_COLOR = 0xB8A6E0;
+    private static final int RITUAL_TEXT_COLOR = 0xDDD3F0;
+    private static final int RITUAL_BULLET_COLOR = 0xC9A8F0;
+    private static final int RITUAL_FAIL_COLOR = 0xFF7A7A;
+    private static final int RITUAL_TEXT_TOP = 64, RITUAL_TEXT_MARGIN = 12, RITUAL_PARAGRAPH_GAP = 3;
+
     private static final int STAR_COUNT = 28;
     private final int[] starX = new int[STAR_COUNT];
     private final int[] starY = new int[STAR_COUNT];
@@ -41,17 +60,76 @@ public class RecipeScreen extends AbstractContainerScreen<RecipeMenu> {
     private final float[] glow = new float[RecipeMenu.SLOT_COUNT];
     private final float[] glowO = new float[RecipeMenu.SLOT_COUNT];
 
+    // o que este menu mostra (receita, ritual ou os dois) e onde fica cada painel
+    private final RecipeMenu.Layout layout;
+    private final int recipeY;
+    private final int ritualX;
+
+    /** Uma linha já quebrada do texto do ritual */
+    private record RitualLine(FormattedCharSequence text, int indent, int color, boolean bullet, int gapBefore) {}
+
+    private final List<RitualLine> ritualLines = new ArrayList<>();
+    private float ritualTextScale = 1f;
+
     public RecipeScreen(RecipeMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
-        this.imageWidth = PANEL_W;
-        this.imageHeight = PANEL_H;
+        this.layout = menu.getLayout();
+        this.recipeY = layout.recipeY();
+        this.ritualX = layout.ritualX();
+        this.imageWidth = layout.width();
+        this.imageHeight = layout.height();
         generateStars();
+    }
+
+    @Override
+    protected void init() {
+        super.init();
+        if (layout.ritual()) layoutRitualText();
+    }
+
+    /** Quebra o texto do ritual na largura do painel; se não couber na altura, diminui a letra até caber */
+    private void layoutRitualText() {
+        AdvancementRituals.Ritual ritual = AdvancementRituals.get(layout.pathway(), layout.sequence());
+        List<Component> paragraphs = new ArrayList<>();
+        if (ritual != null) {
+            for (int i = 1; Language.getInstance().has(ritual.textKey() + i); i++) {
+                paragraphs.add(Component.translatable(ritual.textKey() + i));
+            }
+        }
+        int width = RecipeMenu.RITUAL_W - 2 * RITUAL_TEXT_MARGIN;
+        int height = RecipeMenu.RITUAL_H - RITUAL_TEXT_TOP - RITUAL_TEXT_MARGIN;
+        for (float scale = 1f; scale >= 0.6f; scale -= 0.05f) {
+            ritualLines.clear();
+            ritualTextScale = scale;
+            int lineWidth = (int) (width / scale);
+            int bulletWidth = this.font.width("• ");
+            boolean first = true;
+            for (Component paragraph : paragraphs) {
+                String text = paragraph.getString();
+                boolean bullet = text.startsWith("• ");
+                String body = bullet ? text.substring(2) : text;
+                List<FormattedCharSequence> wrapped = this.font.split(FormattedText.of(body), lineWidth - (bullet ? bulletWidth : 0));
+                for (int l = 0; l < wrapped.size(); l++) {
+                    ritualLines.add(new RitualLine(wrapped.get(l), bullet ? bulletWidth : 0, RITUAL_TEXT_COLOR, bullet && l == 0,
+                            l == 0 && !first ? RITUAL_PARAGRAPH_GAP : 0));
+                }
+                first = false;
+            }
+            List<FormattedCharSequence> fail = this.font.split(Component.translatable("lotmcraft.ritual.fail"), lineWidth);
+            for (int l = 0; l < fail.size(); l++) {
+                ritualLines.add(new RitualLine(fail.get(l), 0, RITUAL_FAIL_COLOR, false, l == 0 ? RITUAL_PARAGRAPH_GAP + 2 : 0));
+            }
+            int total = 0;
+            for (RitualLine line : ritualLines) total += this.font.lineHeight + line.gapBefore();
+            if (total * scale <= height) break;
+        }
     }
 
     @Override
     protected void containerTick() {
         super.containerTick();
         tickCount++;
+        if (!layout.recipe()) return;
         for (int i = 0; i < glow.length; i++) {
             glowO[i] = glow[i];
             glow[i] += ((hasItem(i) ? 1f : 0f) - glow[i]) * 0.2f;
@@ -94,30 +172,76 @@ public class RecipeScreen extends AbstractContainerScreen<RecipeMenu> {
 
     @Override
     protected void renderLabels(GuiGraphics g, int mouseX, int mouseY) {
-        int tw = this.font.width(this.title);
-        g.drawString(this.font, this.title, (PANEL_W - tw) / 2, 9, TITLE_COLOR, true);
+        if (layout.recipe()) {
+            drawFrameTitle(g, this.title, PANEL_W / 2f, 9 + recipeY, TITLE_COLOR);
 
-        drawCentered(g, "Supplementary Ingredients", 28);
-        drawCentered(g, "Main Ingredient", 129);
+            drawCentered(g, Component.translatable("lotmcraft.recipe.supplementary"), 0, 28 + recipeY, CAPTION_COLOR);
+            drawCentered(g, Component.translatable("lotmcraft.recipe.main"), 0, 129 + recipeY, CAPTION_COLOR);
+        }
+        if (layout.ritual()) renderRitualLabels(g);
     }
 
-    private void drawCentered(GuiGraphics g, String text, int y) {
-        g.drawString(this.font, text, (PANEL_W - this.font.width(text)) / 2, y, CAPTION_COLOR, false);
+    private void drawCentered(GuiGraphics g, Component text, int panelX, int y, int color) {
+        g.drawString(this.font, text, panelX + (PANEL_W - this.font.width(text)) / 2, y, color, false);
+    }
+
+    /** Título centralizado dentro da moldura de cima do painel (diminui se for comprido demais para ela) */
+    private void drawFrameTitle(GuiGraphics g, Component text, float centerX, int y, int color) {
+        float scale = Math.min(1f, 104f / this.font.width(text));
+        g.pose().pushPose();
+        g.pose().translate(centerX, y + (1 - scale) * 4, 0);
+        g.pose().scale(scale, scale, 1f);
+        g.drawString(this.font, text, -this.font.width(text) / 2, 0, color, true);
+        g.pose().popPose();
+    }
+
+    private void renderRitualLabels(GuiGraphics g) {
+        drawFrameTitle(g, Component.translatable("lotm.advancement_ritual").withStyle(net.minecraft.ChatFormatting.BOLD),
+                ritualX + RecipeMenu.RITUAL_W / 2f, 9, RITUAL_TITLE_COLOR);
+
+        // ao lado da receita basta dizer o que o ritual pede; sozinho (pergaminho), diz de qual Sequência ele é
+        Component caption = layout.recipe() ? Component.translatable("lotmcraft.ritual.needs")
+                : Component.translatable("lotmcraft.ritual.for", Component.translatable("lotm.sequence." + de.jakob.lotm.util.BeyonderData.pathwayInfos.get(layout.pathway()).sequenceNames()[layout.sequence()]), layout.sequence());
+        drawCentered(g, caption, ritualX, 28, RITUAL_CAPTION_COLOR);
+
+        g.pose().pushPose();
+        g.pose().translate(ritualX + RITUAL_TEXT_MARGIN, RITUAL_TEXT_TOP, 0);
+        g.pose().scale(ritualTextScale, ritualTextScale, 1f);
+        int y = 0;
+        for (RitualLine line : ritualLines) {
+            y += line.gapBefore();
+            if (line.bullet()) g.drawString(this.font, "•", 0, y, RITUAL_BULLET_COLOR, false);
+            g.drawString(this.font, line.text(), line.indent(), y, line.color(), false);
+            y += this.font.lineHeight;
+        }
+        g.pose().popPose();
     }
 
     @Override
     protected void renderBg(GuiGraphics g, float pt, int mouseX, int mouseY) {
         int x = this.leftPos;
-        int y = this.topPos;
+        int y = this.topPos + recipeY;
         float anim = tickCount + pt;
         float appear = Mth.clamp(anim / 10f, 0f, 1f);
 
-        draw(g, BACKGROUND, x, y, 0, 0, PANEL_W, PANEL_H, PANEL_W, PANEL_H, 1f, 1f, 1f, 1f, false);
+        if (layout.recipe()) {
+            draw(g, BACKGROUND, x, y, 0, 0, PANEL_W, PANEL_H, PANEL_W, PANEL_H, 1f, 1f, 1f, 1f, false);
 
-        renderStars(g, x, y, anim, appear);
-        renderFeedLines(g, x, y, pt, anim, appear);
-        renderRing(g, x, y, pt, anim, appear);
-        renderSlots(g, x, y, pt, anim, appear);
+            renderStars(g, x, y, anim, appear);
+            renderFeedLines(g, x, y, pt, anim, appear);
+            renderRing(g, x, y, pt, anim, appear);
+            renderSlots(g, x, y, pt, anim, appear);
+        }
+        if (layout.ritual()) {
+            int rx = this.leftPos + ritualX;
+            draw(g, RITUAL_BACKGROUND, rx, this.topPos, 0, 0, RecipeMenu.RITUAL_W, RecipeMenu.RITUAL_H,
+                    RecipeMenu.RITUAL_W, RecipeMenu.RITUAL_H, 1f, 1f, 1f, 1f, false);
+            // moldura em volta de cada item que o ritual pede
+            for (int i = 0; i < layout.ritualSlots(); i++) {
+                draw(g, RITUAL_SLOT, this.leftPos + layout.ritualSlotX(i) - 2, this.topPos + RecipeMenu.RITUAL_SLOT_Y - 2,
+                        0, 0, 20, 20, 20, 20, 1f, 1f, 1f, 1f, false);
+            }
+        }
 
         g.setColor(1f, 1f, 1f, 1f);
         RenderSystem.defaultBlendFunc();
