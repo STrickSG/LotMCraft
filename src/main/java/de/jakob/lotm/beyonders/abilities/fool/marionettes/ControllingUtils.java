@@ -127,9 +127,23 @@ public class ControllingUtils {
         target.setHealth(Math.min(sourceHealth, maxHealth));
     }
 
+    // Client side: these methods are called by BeyonderData.getPathway/getSequence, including from
+    // HUDs and renderers every frame. Each call used to send a sync request to the
+    // server (and the server answered every one); now the request goes out at most once per second.
+    private static volatile long lastControllingSyncRequest = 0;
+
+    private static void requestControllingSync() {
+        long now = System.currentTimeMillis();
+        if (now - lastControllingSyncRequest < 1000) {
+            return;
+        }
+        lastControllingSyncRequest = now;
+        PacketHandler.sendToServer(new RequestControllingSyncPacket());
+    }
+
     public static PathwayData currentlyControlling(Player player) {
         if(player.level().isClientSide()) {
-            PacketHandler.sendToServer(new RequestControllingSyncPacket());
+            requestControllingSync();
         }
         EntityControllingComponent component = player.getData(ModAttachments.ENTITY_CONTROLLING_COMPONENT);
         return new PathwayData(component.getControlledEntityPathway(), component.getControlledEntitySequence());
@@ -137,14 +151,14 @@ public class ControllingUtils {
 
     public static boolean isControlling(Player player) {
         if (player.level().isClientSide()) {
-            PacketHandler.sendToServer(new RequestControllingSyncPacket());
+            requestControllingSync();
         }
         return player.getData(ModAttachments.ENTITY_CONTROLLING_COMPONENT).isControlling();
     }
 
     public static boolean canUseOwnAbilitiesWhileControlling(Player player) {
         if(player.level().isClientSide()) {
-            PacketHandler.sendToServer(new RequestControllingSyncPacket());
+            requestControllingSync();
         }
         return player.getData(ModAttachments.ENTITY_CONTROLLING_COMPONENT).isCanUseOwnAbilities();
     }
@@ -210,6 +224,9 @@ public class ControllingUtils {
         component.getActiveToggles().forEach(toggle -> toggle.useAbility(level, player));
 
         component.reset();
+
+        // Tell the client right away that the control ended (it used to find out only through the constant requests)
+        syncControllingData(player);
     }
 
     public static void syncControllingData(ServerPlayer player) {

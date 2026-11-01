@@ -97,6 +97,9 @@ public class FireArmorAbility extends ToggleAbility {
                     plates.add(firePlateEntity);
                 }
                 ServerScheduler.scheduleRepeating(0, INTERVAL, MAX, () -> {
+                    // If the armor is turned off (stop() clears the list) or loses plates before all of them
+                    // appeared, the index went past the end of the list and the task threw IndexOutOfBounds
+                    if (j.get() >= plates.size()) return;
                     FirePlateEntity firePlateEntity = plates.get(j.get());
                     level.addFreshEntity(firePlateEntity);
                     j.getAndIncrement();

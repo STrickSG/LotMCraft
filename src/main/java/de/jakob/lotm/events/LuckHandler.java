@@ -243,6 +243,8 @@ public class LuckHandler {
     public static void onEntityTick(EntityTickEvent.Post event) {
         if (!(event.getEntity() instanceof LivingEntity entity)) return;
         if (!(entity.level() instanceof ServerLevel level)) return;
+        // Without the component luck is 0 (default); avoids creating it for every entity every tick
+        if (!entity.hasData(ModAttachments.LUCK_COMPONENT)) return;
 
         int luck = getLuck(entity);
         if (luck == 0) return;

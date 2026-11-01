@@ -213,6 +213,11 @@ public class PsychologicalInvisibilityAbility extends ToggleAbility {
 
     @SubscribeEvent
     public static void onEntityTickPre(EntityTickEvent.Post event) {
+        // Server only: "hits" is server state (it comes from the damage event). In singleplayer the client copy
+        // of the player also decremented the counter, which went down twice as fast as in multiplayer.
+        if (event.getEntity().level().isClientSide) {
+            return;
+        }
         if (event.getEntity() instanceof LivingEntity entity) {
             int tickCount = entity.tickCount;
 

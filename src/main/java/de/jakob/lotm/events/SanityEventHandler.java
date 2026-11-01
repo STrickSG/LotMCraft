@@ -33,6 +33,12 @@ public class SanityEventHandler {
             return;
         }
 
+        // Mobs that aren't Beyonders and never had their sanity changed are at the default (1.0) and have
+        // nothing to do here; this avoids attaching (and saving) a sanity component to every mob in the world.
+        if(!(entity instanceof Player) && !entity.hasData(ModAttachments.SANITY_COMPONENT) && !BeyonderData.isBeyonder(entity)) {
+            return;
+        }
+
         SanityComponent sanityComp = entity.getData(ModAttachments.SANITY_COMPONENT);
 
         boolean isBeyonder = BeyonderData.isBeyonder(entity);
