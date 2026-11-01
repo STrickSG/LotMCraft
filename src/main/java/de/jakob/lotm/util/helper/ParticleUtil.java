@@ -27,17 +27,19 @@ public class ParticleUtil {
         RandomSource random = level.random;
 
         ServerScheduler.scheduleForDuration(0, interval, duration, () -> {
+            ParticleBatch batch = new ParticleBatch(level, particleType);
             for (int i = 0; i < particlesPerSpawn; i++) {
                 double offsetX = (random.nextDouble() - 0.5) * spread;
                 double offsetY = (random.nextDouble() - 0.5) * spread;
                 double offsetZ = (random.nextDouble() - 0.5) * spread;
 
-                level.sendParticles(particleType,
+                batch.add(
                         position.x,
                         position.y,
                         position.z,
                         particlesPerSpawn, offsetX, offsetY, offsetZ, 0);
             }
+            batch.send();
         }, level);
     }
 
@@ -47,6 +49,7 @@ public class ParticleUtil {
 
         RandomSource random = level.random;
 
+        ParticleBatch batch = new ParticleBatch(level, particleType);
         for (int i = 0; i < particleCount; i++) {
             double theta = 2 * Math.PI * random.nextDouble(); // Azimuthal angle
             double phi = Math.acos(2 * random.nextDouble() - 1); // Polar angle
@@ -55,8 +58,9 @@ public class ParticleUtil {
             double y = center.y + radius * Math.sin(phi) * Math.sin(theta);
             double z = center.z + radius * Math.cos(phi);
 
-            level.sendParticles(particleType, x, y, z, 1, 0, 0, 0, 0);
+            batch.add(x, y, z, 1, 0, 0, 0, 0);
         }
+        batch.send();
     }
 
     public static void spawnSphereParticles(ClientLevel level, ParticleOptions particleType, Vec3 center,
@@ -83,6 +87,7 @@ public class ParticleUtil {
 
         RandomSource random = level.random;
 
+        ParticleBatch batch = new ParticleBatch(level, particleType);
         for (int i = 0; i < particleCount; i++) {
             double theta = 2 * Math.PI * random.nextDouble(); // Azimuthal angle
             double phi = Math.acos(2 * random.nextDouble() - 1); // Polar angle
@@ -91,8 +96,9 @@ public class ParticleUtil {
             double y = center.y + radius * Math.sin(phi) * Math.sin(theta);
             double z = center.z + radius * Math.cos(phi);
 
-            level.sendParticles(particleType, x, y, z, 1, 0, 0, 0, speed);
+            batch.add(x, y, z, 1, 0, 0, 0, speed);
         }
+        batch.send();
     }
 
     public static void drawParticleLine(ServerLevel level, ParticleOptions particleType, Vec3 start, Vec3 end, double step, int particleCount) {
@@ -102,12 +108,14 @@ public class ParticleUtil {
         double distance = start.distanceTo(end);
         int steps = (int) Math.ceil(distance / step);
 
+        ParticleBatch batch = new ParticleBatch(level, particleType);
         for (int i = 0; i < steps; i++) {
             double t = (double) i / (steps - 1);
             Vec3 position = start.add(direction.scale(t * distance));
 
-            level.sendParticles(particleType, position.x, position.y, position.z, particleCount, 0, 0, 0, 0);
+            batch.add(position.x, position.y, position.z, particleCount, 0, 0, 0, 0);
         }
+        batch.send();
     }
 
     public static void drawParticleLine(ServerLevel level, ParticleOptions particleType, Vec3 start, Vec3 end, double step, int particleCount, double offset) {
@@ -117,12 +125,14 @@ public class ParticleUtil {
         double distance = start.distanceTo(end);
         int steps = (int) Math.ceil(distance / step);
 
+        ParticleBatch batch = new ParticleBatch(level, particleType);
         for (int i = 0; i < steps; i++) {
             double t = (double) i / (steps - 1);
             Vec3 position = start.add(direction.scale(t * distance));
 
-            level.sendParticles(particleType, position.x, position.y, position.z, particleCount, offset, offset, offset, 0);
+            batch.add(position.x, position.y, position.z, particleCount, offset, offset, offset, 0);
         }
+        batch.send();
     }
 
     public static void drawParticleLine(ServerLevel level, ParticleOptions particleType, Vec3 start, Vec3 direction, double length, double step, int particleCount) {
@@ -145,13 +155,15 @@ public class ParticleUtil {
         if (level == null) return;
 
         ServerScheduler.scheduleForDuration(0, interval, duration, () -> {
+            ParticleBatch batch = new ParticleBatch(level, particleType);
             for (int i = 0; i < particleCount; i++) {
                 double angle = (2 * Math.PI * i) / particleCount;
                 double x = center.x + radius * Math.cos(angle);
                 double z = center.z + radius * Math.sin(angle);
 
-                level.sendParticles(particleType, x, center.y, z, 1, 0, 0, 0, 0);
+                batch.add(x, center.y, z, 1, 0, 0, 0, 0);
             }
+            batch.send();
         }, level);
     }
 
@@ -171,6 +183,7 @@ public class ParticleUtil {
 
         tangent2 = normal.cross(tangent1).normalize();
 
+        ParticleBatch batch = new ParticleBatch(level, particleType);
         for (int i = 0; i < particleCount; i++) {
             double angle = (2 * Math.PI * i) / particleCount;
             double cosAngle = Math.cos(angle);
@@ -179,8 +192,9 @@ public class ParticleUtil {
             Vec3 offset = tangent1.scale(radius * cosAngle).add(tangent2.scale(radius * sinAngle));
             Vec3 particlePos = center.add(offset);
 
-            level.sendParticles(particleType, particlePos.x, particlePos.y, particlePos.z, 1, 0, 0, 0, 0);
+            batch.add(particlePos.x, particlePos.y, particlePos.z, 1, 0, 0, 0, 0);
         }
+        batch.send();
     }
 
     public static void spawnParticles(ServerLevel level, ParticleOptions particleType, Vec3 position,
@@ -576,13 +590,15 @@ public class ParticleUtil {
                                                        double radius, int particleCount) {
         if (level == null) return;
 
+        ParticleBatch batch = new ParticleBatch(level, particleType);
         for (int i = 0; i < particleCount; i++) {
             double angle = (2 * Math.PI * i) / particleCount;
             double x = center.x + radius * Math.cos(angle);
             double z = center.z + radius * Math.sin(angle);
 
-            level.sendParticles(particleType, x, center.y, z,0, 0, 0, 0, 0);
+            batch.add(x, center.y, z,0, 0, 0, 0, 0);
         }
+        batch.send();
     }
 
 
@@ -604,6 +620,7 @@ public class ParticleUtil {
         tangent2 = normal.cross(tangent1).normalize();
 
         ServerScheduler.scheduleForDuration(0, interval, duration, () -> {
+            ParticleBatch batch = new ParticleBatch(level, particleType);
             for (int i = 0; i < particleCount; i++) {
                 double angle = (2 * Math.PI * i) / particleCount;
                 double cosAngle = Math.cos(angle);
@@ -612,8 +629,9 @@ public class ParticleUtil {
                 Vec3 offset = tangent1.scale(radius * cosAngle).add(tangent2.scale(radius * sinAngle));
                 Vec3 particlePos = center.add(offset);
 
-                level.sendParticles(particleType, particlePos.x, particlePos.y, particlePos.z, particleCount, 0, 0, 0, 0);
+                batch.add(particlePos.x, particlePos.y, particlePos.z, particleCount, 0, 0, 0, 0);
             }
+            batch.send();
         }, level);
     }
 

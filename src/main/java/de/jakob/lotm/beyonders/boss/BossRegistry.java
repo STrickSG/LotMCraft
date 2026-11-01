@@ -15,6 +15,8 @@ import net.minecraft.world.entity.Mob;
 public final class BossRegistry {
     private static final String INSTANCE_KEY = "neoboss_instance_config";
     private static final Map<EntityType<?>, BossDefinition> DEFINITIONS = new ConcurrentHashMap<>();
+    private record Loaded(CompoundTag tag, Component name, BossDefinition definition) {}
+    private static final Map<Mob, Loaded> LOADED = new java.util.WeakHashMap<>();
 
     private BossRegistry() {
     }
@@ -34,7 +36,16 @@ public final class BossRegistry {
             if (!instance.getBoolean("enabled")) {
                 return Optional.empty();
             }
-            return Optional.of(BossDefinition.load(mob, instance));
+            // the config is read every tick: only rebuild it (with the JSON texts) when it changes
+            synchronized (LOADED) {
+                Loaded cached = LOADED.get(mob);
+                // without its own title the bar uses the mob's name, so renaming rebuilds it too
+                if (cached == null || !cached.tag().equals(instance) || !java.util.Objects.equals(cached.name(), mob.getCustomName())) {
+                    cached = new Loaded(instance.copy(), mob.getCustomName(), BossDefinition.load(mob, instance));
+                    LOADED.put(mob, cached);
+                }
+                return Optional.of(cached.definition());
+            }
         }
         return Optional.ofNullable(DEFINITIONS.get(mob.getType()));
     }

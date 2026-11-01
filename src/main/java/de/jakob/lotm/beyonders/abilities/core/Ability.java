@@ -217,6 +217,20 @@ public abstract class Ability {
 
     }
 
+    private Boolean hasOnHold;
+
+    /** Does this ability do anything while held (overrides onHold)? If not, there is nothing to run or sync. */
+    public boolean hasOnHold() {
+        if (hasOnHold == null) {
+            try {
+                hasOnHold = getClass().getMethod("onHold", Level.class, LivingEntity.class).getDeclaringClass() != Ability.class;
+            } catch (NoSuchMethodException e) {
+                hasOnHold = true;
+            }
+        }
+        return hasOnHold;
+    }
+
     public boolean shouldUseAbility(LivingEntity entity) {
         return true;
     }

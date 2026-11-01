@@ -49,6 +49,8 @@ public final class BossEvents {
                 BossRuntime.tickRetaliation(mob, definition);
             },
             () -> {
+                // runs for every mob in the world: only look for something to undo if a boss is active
+                if (!BossRuntime.hasAnyState()) return;
                 BossRuntime.unapplyGoals(mob);
                 BossRuntime.removeBossBar(mob);
             }
