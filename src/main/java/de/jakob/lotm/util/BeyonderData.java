@@ -6,6 +6,7 @@ import de.jakob.lotm.beyonders.abilities.fool.marionettes.ControllingUtils;
 import de.jakob.lotm.beyonders.acting.ActingCapHelper;
 import de.jakob.lotm.beyonders.abilities.core.PassiveAbilityHandler;
 import de.jakob.lotm.beyonders.abilities.core.PassiveAbility;
+import de.jakob.lotm.beyonders.abilities.core.PhysicalEnhancementsAbility;
 import de.jakob.lotm.attachments.LuckComponent;
 import de.jakob.lotm.attachments.ModAttachments;
 import de.jakob.lotm.attachments.MultiplierModifierComponent;
@@ -269,6 +270,7 @@ public class BeyonderData {
         }
 
         BeyonderDataTickHandler.invalidateCache(entity);
+        resetPhysicalEnhancements(entity);
 
         if(clearPathwayHistory) {
             component.setPathwayHistory(new String[10]);
@@ -517,12 +519,13 @@ public class BeyonderData {
     }
 
 
+    // Callers pass the sequence of any entity, including non-beyonders (sequence 10), so clamp the index
     public static double getMultiplierForSequence(int sequence) {
-        return multiplier[sequence];
+        return multiplier[Math.clamp(sequence, 0, multiplier.length - 1)];
     }
 
     public static double getSanityDecreaseMultiplierForSequence(int sequence) {
-        return sanityDecreaseMultiplier[sequence];
+        return sanityDecreaseMultiplier[Math.clamp(sequence, 0, sanityDecreaseMultiplier.length - 1)];
     }
 
     public static void incrementSpirituality(LivingEntity entity, float amount) {
@@ -581,10 +584,22 @@ public class BeyonderData {
         return spiritualityLookup[sequence] * mult;
     }
 
+    /**
+     * The physical enhancements of the previous pathway/sequence are cached and were only recomputed
+     * every 10 seconds; drop them so the new ones apply right away.
+     */
+    private static void resetPhysicalEnhancements(LivingEntity entity) {
+        if (entity.level() instanceof ServerLevel) {
+            PhysicalEnhancementsAbility.resetEnhancements(entity.getUUID(), entity, false);
+        }
+    }
+
     public static void clearBeyonderData(LivingEntity entity) {
         BeyonderComponent component = entity.getData(ModAttachments.BEYONDER_COMPONENT);
         component.setPathway("none");
         component.setSequence(LOTMCraft.NON_BEYONDER_SEQ);
+        BeyonderDataTickHandler.invalidateCache(entity);
+        resetPhysicalEnhancements(entity);
         component.setSpirituality(0);
         component.setGriefingEnabled(true);
         component.setDigestionProgress(0);
