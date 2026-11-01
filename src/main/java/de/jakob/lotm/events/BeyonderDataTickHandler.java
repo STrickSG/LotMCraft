@@ -26,6 +26,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.EntityLeaveLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
@@ -48,6 +49,9 @@ public class BeyonderDataTickHandler {
 
     public static void invalidateCache(LivingEntity entity) {
         cachedAbilities.remove(entity.getUUID());
+        // Without this, PassiveAbility#shouldApplyTo keeps answering from its own cache for up to
+        // 20 ticks, so the recomputed set (and setBeyonder's onPassiveAbilityGained calls) used stale data.
+        PassiveAbility.invalidateCache(entity);
     }
 
     private static final Object INIT_LOCK = new Object();
@@ -77,9 +81,16 @@ public class BeyonderDataTickHandler {
             return;
         }
 
+        boolean clientSide = livingEntity.level().isClientSide;
+
+        // This runs for every living entity in the world, so components are only read when present:
+        // getData() would attach a default copy to every mob, which then also gets saved with the chunk.
+        // A missing component behaves exactly like a default one in all checks below.
+
         // Tick cooldowns
-        AbilityCooldownComponent component = livingEntity.getData(ModAttachments.COOLDOWN_COMPONENT);
-        component.tick();
+        if(livingEntity.hasData(ModAttachments.COOLDOWN_COMPONENT)) {
+            livingEntity.getData(ModAttachments.COOLDOWN_COMPONENT).tick();
+        }
 
         //Virtual Personas heal
         if(livingEntity instanceof ServerPlayer player) {
@@ -88,14 +99,17 @@ public class BeyonderDataTickHandler {
         }
 
         // Tick flight cooldown
-        DisabledFlightComponent disabledFlightComponent = livingEntity.getData(ModAttachments.FLIGHT_DISABLE_COMPONENT);
-        if(disabledFlightComponent.getCooldownTicks() > 0) {
-            disabledFlightComponent.setCooldownTicks(disabledFlightComponent.getCooldownTicks() - 1);
+        if(livingEntity.hasData(ModAttachments.FLIGHT_DISABLE_COMPONENT)) {
+            DisabledFlightComponent disabledFlightComponent = livingEntity.getData(ModAttachments.FLIGHT_DISABLE_COMPONENT);
+            if(disabledFlightComponent.getCooldownTicks() > 0) {
+                disabledFlightComponent.setCooldownTicks(disabledFlightComponent.getCooldownTicks() - 1);
+            }
         }
 
-        if (!livingEntity.level().isClientSide) {
-            FoolingComponent foolingComponent = livingEntity.getData(ModAttachments.FOOLING_COMPONENT);
-            if (foolingComponent.isFooled()) {
+        if (!clientSide) {
+            FoolingComponent foolingComponent = livingEntity.hasData(ModAttachments.FOOLING_COMPONENT)
+                    ? livingEntity.getData(ModAttachments.FOOLING_COMPONENT) : null;
+            if (foolingComponent != null && foolingComponent.isFooled()) {
                 if (foolingComponent.getTicksRemaining() % FoolingEffect.STUN_INTERVAL_TICKS == 0) {
                     foolingComponent.applyStun(FoolingEffect.STUN_DURATION_TICKS);
                 }
@@ -113,7 +127,7 @@ public class BeyonderDataTickHandler {
             }
         }
 
-        if(entity.getData(ModAttachments.SANITY_COMPONENT.get()).getSanity() == 0.0f){
+        if(entity.hasData(ModAttachments.SANITY_COMPONENT) && entity.getData(ModAttachments.SANITY_COMPONENT.get()).getSanity() == 0.0f){
             entity.kill();
         }
 
@@ -123,7 +137,9 @@ public class BeyonderDataTickHandler {
                 entity.getData(ModAttachments.REGEN_DISABLER.get()).incrementCount();
             }
 
-            if(entity.tickCount % 200 == 0) {
+            // Server only: the enhancement maps are static and keyed by UUID, so in singleplayer the
+            // client copy of the player used to wipe the server's entries on its own schedule.
+            if(!clientSide && entity.tickCount % 200 == 0) {
                 invalidateCache(livingEntity);
                 PhysicalEnhancementsAbility.resetEnhancements(event.getEntity().getUUID(), livingEntity, false);
                 invalidateCache(livingEntity);
@@ -151,19 +167,50 @@ public class BeyonderDataTickHandler {
 
             tickOnHold(livingEntity, entity.tickCount);
 
-            // Tick Toggle Abilities
-            ToggleAbility.getActiveAbilitiesForEntity(livingEntity).forEach(toggleAbility -> {
-                if(entity.tickCount % toggleAbility.tickRate != 0) {
-                    return;
-                }
-                toggleAbility.prepareTick(livingEntity.level(), livingEntity);
-                PacketHandler.sendToTrackingAndSelf(livingEntity, new SyncToggleAbilityPacket(livingEntity.getId(), toggleAbility.getId(), SyncToggleAbilityPacket.Action.TICK.getValue()));
-            });
+            // Tick Toggle Abilities (server only; clients tick them through SyncToggleAbilityPacket TICK.
+            // In singleplayer the client thread used to read the server's map here and tick them twice.)
+            if(!clientSide) {
+                ToggleAbility.getActiveAbilitiesForEntity(livingEntity).forEach(toggleAbility -> {
+                    if(entity.tickCount % toggleAbility.tickRate != 0) {
+                        return;
+                    }
+                    toggleAbility.prepareTick(livingEntity.level(), livingEntity);
+                    PacketHandler.sendToTrackingAndSelf(livingEntity, new SyncToggleAbilityPacket(livingEntity.getId(), toggleAbility.getId(), SyncToggleAbilityPacket.Action.TICK.getValue()));
+                });
+            }
         }
-        if(entity.tickCount % 20 == 0) {
-            BeyonderComponent beyonderComponent = entity.getData(ModAttachments.BEYONDER_COMPONENT);
-            SyncBeyonderDataPacket packet = new SyncBeyonderDataPacket(entity.getUUID(), BeyonderData.getPathway(livingEntity), BeyonderData.getSequence(livingEntity), beyonderComponent.getSpirituality(), false, 0.0f, beyonderComponent.getPathwayHistory(), beyonderComponent.getCharacteristicStack(), getMaxWormAmount(BeyonderData.getSequence(livingEntity)));
-            PacketHandler.sendToTrackingAndSelf(entity, packet);
+        // Periodic sync. Packets can only be sent from the server, and entities without a beyonder
+        // component have never been beyonders, so the client already assumes the right defaults for them.
+        if(!clientSide && entity.tickCount % 20 == 0 && livingEntity.hasData(ModAttachments.BEYONDER_COMPONENT)) {
+            // Non-beyonder mobs only need the occasional refresh; this used to send one packet per mob per second
+            if(entity instanceof Player || BeyonderData.isBeyonder(livingEntity) || entity.tickCount % 200 == 0) {
+                BeyonderComponent beyonderComponent = entity.getData(ModAttachments.BEYONDER_COMPONENT);
+                SyncBeyonderDataPacket packet = new SyncBeyonderDataPacket(entity.getUUID(), BeyonderData.getPathway(livingEntity), BeyonderData.getSequence(livingEntity), beyonderComponent.getSpirituality(), false, 0.0f, beyonderComponent.getPathwayHistory(), beyonderComponent.getCharacteristicStack(), getMaxWormAmount(BeyonderData.getSequence(livingEntity)));
+                if(entity instanceof ServerPlayer serverPlayer) {
+                    // Other players keep receiving the same data as before. The player's own client gets the full
+                    // data instead: this packet carries griefing=false / digestion=0, which used to overwrite
+                    // their HUD values every second until the next per-tick spirituality sync fixed them.
+                    PacketHandler.sendToTracking(serverPlayer, packet);
+                    PacketHandler.syncBeyonderDataToPlayer(serverPlayer);
+                }
+                else {
+                    PacketHandler.sendToTrackingAndSelf(entity, packet);
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onEntityLeaveLevel(EntityLeaveLevelEvent event) {
+        // Drop per-entity caches of entities that are gone for good (killed / discarded mobs),
+        // otherwise these maps grow for every beyonder mob that ever existed.
+        Entity entity = event.getEntity();
+        if(!(entity instanceof LivingEntity livingEntity) || entity instanceof Player) {
+            return;
+        }
+        Entity.RemovalReason reason = entity.getRemovalReason();
+        if(reason != null && reason.shouldDestroy()) {
+            invalidateCache(livingEntity);
         }
     }
 
