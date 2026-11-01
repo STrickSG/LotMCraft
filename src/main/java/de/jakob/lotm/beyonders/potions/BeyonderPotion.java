@@ -2,6 +2,7 @@ package de.jakob.lotm.beyonders.potions;
 
 import de.jakob.lotm.beyonders.abilities.fool.marionettes.ControllingUtils;
 import de.jakob.lotm.util.BeyonderData;
+import de.jakob.lotm.util.data.PathwayInfos;
 import de.jakob.lotm.util.helper.AdvancementUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -57,7 +58,16 @@ public class BeyonderPotion extends Item {
 
     @Override
     public @NotNull Component getName(ItemStack stack) {
-        return Component.literal(BeyonderData.getSequenceName(pathway, sequence) + " ").append(Component.translatable("lotm.potion"));
+        // One translatable format for the whole name: the word order differs between languages
+        // ("Seer Potion" / "Poção de Vidente"), so "<sequence> " + "Potion" read wrong in Portuguese
+        return Component.translatable("lotm.potion.named", sequenceName(pathway, sequence));
+    }
+
+    /** Sequence name as a translatable component, so it is localized where the name is displayed */
+    private static Component sequenceName(String pathway, int sequence) {
+        PathwayInfos infos = BeyonderData.pathwayInfos.get(pathway);
+        String raw = infos == null ? "" : infos.getRawSequenceName(sequence);
+        return raw.isEmpty() ? Component.literal(BeyonderData.getSequenceName(pathway, sequence)) : Component.translatable("lotm.sequence." + raw);
     }
 
     @Override
@@ -67,7 +77,7 @@ public class BeyonderPotion extends Item {
                                 TooltipFlag tooltipFlag) {
         super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
 
-        tooltipComponents.add(Component.literal(BeyonderData.getSequenceName(pathway, 9) + " ").append(Component.translatable("lotm.pathway")).withStyle(ChatFormatting.DARK_GRAY));
+        tooltipComponents.add(Component.translatable("lotm.pathway.named", sequenceName(pathway, 9)).withStyle(ChatFormatting.DARK_GRAY));
         tooltipComponents.add(Component.translatable("lotm.sequence").append(Component.literal(" " + sequence)).withStyle(ChatFormatting.DARK_GRAY));
     }
 
