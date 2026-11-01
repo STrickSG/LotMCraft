@@ -17,6 +17,12 @@ public final class JusticeProvocation {
 
     private JusticeProvocation() {}
 
+    /** Called when the server stops: the links hold game times of the old world. */
+    public static void reset() {
+        links.clear();
+        lastSweep = 0;
+    }
+
     public static boolean registerHit(LivingEntity attacker, LivingEntity victim) {
         long now = attacker.level().getGameTime();
         sweep(now);

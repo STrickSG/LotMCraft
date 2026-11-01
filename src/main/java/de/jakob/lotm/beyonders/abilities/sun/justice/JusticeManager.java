@@ -57,6 +57,11 @@ public final class JusticeManager {
 
     private JusticeManager() {}
 
+    /** Called when the server stops: the re-fail cooldowns hold game times of the old world. */
+    public static void reset() {
+        lastOngoingFail.clear();
+    }
+
     public static boolean isMentor(LivingEntity entity) {
         return entity instanceof Player && BeyonderData.getPathway(entity).equals("sun") && BeyonderData.getSequence(entity) <= 3;
     }

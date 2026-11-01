@@ -29,6 +29,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.level.BlockEvent;
+import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -204,6 +205,13 @@ public class FlamingJumpAbility extends SelectableAbility {
                 .min(Comparator.comparing(b -> b.distToCenterSqr(entity.position()))).orElse(null);
     }
 
+
+    // FIRE_MAP is filled from the world's saved data; without this, fires of the previous singleplayer world
+    // stayed in it (and were saved into the next world) and could be jumped to where there is no fire
+    @SubscribeEvent
+    public static void onServerStopped(ServerStoppedEvent event) {
+        FIRE_MAP.clear();
+    }
 
     @SubscribeEvent
     public static void onBlockPlace(BlockEvent.EntityPlaceEvent event) {

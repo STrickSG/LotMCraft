@@ -130,6 +130,10 @@ public class InextinguishableLightAbility extends PassiveAbility {
     }
 
     private static BlockPos findSafeYSurface(ServerLevel level, int x, int z) {
+        // The destination is 200-500 blocks away, almost always outside the loaded area (view distance ~160 blocks).
+        // Level#getHeight returns the minimum build height for an unloaded chunk, so every attempt failed and the
+        // escape only moved the entity one block up. Load the chunk first (getBlockState already does this).
+        level.getChunk(x >> 4, z >> 4);
         int y = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
         BlockPos pos = new BlockPos(x, y, z);
         return isSafe(level, pos) ? pos : null;
