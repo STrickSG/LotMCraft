@@ -69,16 +69,24 @@ public class SealedArtifactHandler {
         List<Ability> pathwayAbilities = new ArrayList<>();
 
         // always add one ability from the same sequence
-        pathwayAbilities.add(getPathwayAbilities(pathway, sequence, true, pathwayAbilities));
+        addIfPresent(pathwayAbilities, getPathwayAbilities(pathway, sequence, true, pathwayAbilities));
 
         if (sequence <= 2) {
-            pathwayAbilities.add(getPathwayAbilities(pathway, sequence, false, pathwayAbilities));
-            pathwayAbilities.add(getPathwayAbilities(pathway, sequence, false, pathwayAbilities));
+            addIfPresent(pathwayAbilities, getPathwayAbilities(pathway, sequence, false, pathwayAbilities));
+            addIfPresent(pathwayAbilities, getPathwayAbilities(pathway, sequence, false, pathwayAbilities));
         } else if (sequence <= 4) {
-            pathwayAbilities.add(getPathwayAbilities(pathway, sequence, false, pathwayAbilities));
+            addIfPresent(pathwayAbilities, getPathwayAbilities(pathway, sequence, false, pathwayAbilities));
         }
 
         return pathwayAbilities;
+    }
+
+    /**
+     * When the pathway has no ability left to pick, getPathwayAbilities falls back to "ally_ability",
+     * which is not registered (null); don't put a null ability into the artifact.
+     */
+    private static void addIfPresent(List<Ability> list, Ability ability) {
+        if (ability != null) list.add(ability);
     }
 
     /**

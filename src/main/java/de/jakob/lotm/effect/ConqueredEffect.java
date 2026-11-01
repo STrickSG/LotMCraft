@@ -1,5 +1,6 @@
 package de.jakob.lotm.effect;
 
+import de.jakob.lotm.LOTMCraft;
 import de.jakob.lotm.attachments.DisabledAbilitiesComponent;
 import de.jakob.lotm.attachments.ModAttachments;
 import de.jakob.lotm.util.BeyonderData;
@@ -14,9 +15,12 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
 import org.jetbrains.annotations.NotNull;
 
+// Without this annotation the handlers below were never registered: clients were not told when the effect ended
+@EventBusSubscriber(modid = LOTMCraft.MOD_ID)
 public class ConqueredEffect extends MobEffect {
     protected ConqueredEffect(MobEffectCategory category, int color) {
         super(category, color);
@@ -58,8 +62,8 @@ public class ConqueredEffect extends MobEffect {
 
     @SubscribeEvent
     public static void onEffectRemoved(MobEffectEvent.Remove event) {
-        event.getEffect();
-        if (event.getEffect() != ModEffects.CONQUERED) {
+        // Compare the effects themselves: after a reload the holder is the registry's, not ModEffects.CONQUERED
+        if (event.getEffect().value() != ModEffects.CONQUERED.value()) {
             return;
         }
 
