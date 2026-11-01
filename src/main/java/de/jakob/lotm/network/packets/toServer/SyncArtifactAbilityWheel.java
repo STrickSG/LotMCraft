@@ -1,6 +1,7 @@
 package de.jakob.lotm.network.packets.toServer;
 
 import de.jakob.lotm.LOTMCraft;
+import de.jakob.lotm.beyonders.artifacts.SealedArtifactData;
 import de.jakob.lotm.data.ModDataComponents;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -36,7 +37,11 @@ public record SyncArtifactAbilityWheel (int index) implements CustomPacketPayloa
             }
 
             if (stack.has(ModDataComponents.SEALED_ARTIFACT_DATA)) {
-                stack.set(ModDataComponents.SEALED_ARTIFACT_SELECTED, packet.index());
+                SealedArtifactData data = stack.get(ModDataComponents.SEALED_ARTIFACT_DATA);
+                // Client-provided index: only store it if it points at an existing ability
+                if (data != null && packet.index() >= 0 && packet.index() < data.abilities().size()) {
+                    stack.set(ModDataComponents.SEALED_ARTIFACT_SELECTED, packet.index());
+                }
             }
         });
     }

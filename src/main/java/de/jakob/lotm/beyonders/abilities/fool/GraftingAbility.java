@@ -103,7 +103,7 @@ public class GraftingAbility extends SelectableAbility {
             }
 
             UUID targetUUID = targetEntity.getUUID();
-            if(graftingTargetsPairs.stream().anyMatch(pair -> pair.getA() == targetUUID)) {
+            if(graftingTargetsPairs.stream().anyMatch(pair -> targetUUID.equals(pair.getA()))) {
                 AbilityUtil.sendActionBar(entity, Component.translatable("ability.lotmcraft.grafting.already_grafted").withColor(color));
                 return;
             }
@@ -149,7 +149,7 @@ public class GraftingAbility extends SelectableAbility {
         graftingTargetsPairs.add(new Pair<>(graftingStartEntity.getUUID(), targetLocation));
         graftingTargetsEntities.remove(entity.getUUID());
 
-        ServerScheduler.scheduleDelayed(20 * 10, () -> graftingTargetsPairs.removeIf(pair -> pair.getA() == graftingStartEntity.getUUID() || pair.getB() == targetLocation));
+        ServerScheduler.scheduleDelayed(20 * 10, () -> graftingTargetsPairs.removeIf(pair -> graftingStartEntity.getUUID().equals(pair.getA()) || pair.getB() == targetLocation));
     }
 
     private void graftAbilities(Level level, LivingEntity entity) {
@@ -164,7 +164,7 @@ public class GraftingAbility extends SelectableAbility {
 
         UUID targetUUID = targetEntity.getUUID();
         int color = BeyonderData.pathwayInfos.get("fool").color();
-        if(graftingAbilitiesPairs.stream().anyMatch(pair -> pair.getA() == targetUUID || pair.getB() == targetUUID)) {
+        if(graftingAbilitiesPairs.stream().anyMatch(pair -> targetUUID.equals(pair.getA()) || targetUUID.equals(pair.getB()))) {
             AbilityUtil.sendActionBar(entity, Component.translatable("ability.lotmcraft.grafting.already_grafted").withColor(color));
             return;
         }
@@ -180,7 +180,7 @@ public class GraftingAbility extends SelectableAbility {
 
         LivingEntity graftingStartEntity = graftingAbilitiesEntities.get(entity.getUUID());
 
-        if(targetUUID == graftingStartEntity.getUUID()) {
+        if(targetUUID.equals(graftingStartEntity.getUUID())) {
             graftingAbilitiesEntities.remove(entity.getUUID());
             AbilityUtil.sendActionBar(entity, Component.translatable("ability.lotmcraft.grafting.same_entity", targetEntity.getName().getString()).withColor(color));
             return;
@@ -232,7 +232,7 @@ public class GraftingAbility extends SelectableAbility {
 
         UUID targetUUID = targetEntity.getUUID();
         int color = BeyonderData.pathwayInfos.get("fool").color();
-        if(graftingDamagePairs.stream().anyMatch(pair -> pair.getA() == targetUUID || pair.getB() == targetUUID)) {
+        if(graftingDamagePairs.stream().anyMatch(pair -> targetUUID.equals(pair.getA()) || targetUUID.equals(pair.getB()))) {
             AbilityUtil.sendActionBar(entity, Component.translatable("ability.lotmcraft.grafting.already_grafted").withColor(color));
             return;
         }
@@ -249,7 +249,7 @@ public class GraftingAbility extends SelectableAbility {
 //        LivingEntity graftingStartEntity = graftingDamageEntities.get(entity.getUUID());
 
         LivingEntity graftingStartEntity = entity;
-        if(targetUUID == graftingStartEntity.getUUID()) {
+        if(targetUUID.equals(graftingStartEntity.getUUID())) {
             //graftingDamageEntities.remove(entity.getUUID());
             AbilityUtil.sendActionBar(entity, Component.translatable("ability.lotmcraft.grafting.same_entity", targetEntity.getName().getString()).withColor(color));
             return;
@@ -348,8 +348,8 @@ public class GraftingAbility extends SelectableAbility {
         LivingEntity hurt = event.getEntity();
         if(!(hurt.level() instanceof ServerLevel serverLevel)) return;
 
-        if(graftingDamagePairs.stream().anyMatch(pair -> pair.getA() == hurt.getUUID())) {
-            UUID otherEntityUUID = graftingDamagePairs.stream().filter(pair -> pair.getA() == hurt.getUUID()).findFirst().map(Pair::getB).orElse(null);
+        if(graftingDamagePairs.stream().anyMatch(pair -> hurt.getUUID().equals(pair.getA()))) {
+            UUID otherEntityUUID = graftingDamagePairs.stream().filter(pair -> hurt.getUUID().equals(pair.getA())).findFirst().map(Pair::getB).orElse(null);
             if(otherEntityUUID == null) return;
 
             LivingEntity otherEntity = (LivingEntity) serverLevel.getEntity(otherEntityUUID);
@@ -373,10 +373,10 @@ public class GraftingAbility extends SelectableAbility {
     public static void onAbilityUse(TargetLocationEvent event) {
         LivingEntity source = event.getSourceEntity();
         if(!(source.level() instanceof ServerLevel serverLevel)) return;
-        if(graftingTargetsPairs.stream().anyMatch(pair -> pair.getA() == source.getUUID())) {
-            Location loc = graftingTargetsPairs.stream().filter(pair -> pair.getA() == source.getUUID()).findFirst().map(Pair::getB).orElse(null);
+        if(graftingTargetsPairs.stream().anyMatch(pair -> source.getUUID().equals(pair.getA()))) {
+            Location loc = graftingTargetsPairs.stream().filter(pair -> source.getUUID().equals(pair.getA())).findFirst().map(Pair::getB).orElse(null);
             if(loc == null || loc.getLevel() != source.level()) {
-                graftingTargetsPairs.removeIf(pair -> pair.getA() == source.getUUID());
+                graftingTargetsPairs.removeIf(pair -> source.getUUID().equals(pair.getA()));
                 return;
             }
 
@@ -388,10 +388,10 @@ public class GraftingAbility extends SelectableAbility {
     public static void onAbilityUse(TargetEntityEvent event) {
         LivingEntity source = event.getSourceEntity();
         if(!(source.level() instanceof ServerLevel serverLevel)) return;
-        if(graftingTargetsPairs.stream().anyMatch(pair -> pair.getA() == source.getUUID())) {
-            Location loc = graftingTargetsPairs.stream().filter(pair -> pair.getA() == source.getUUID()).findFirst().map(Pair::getB).orElse(null);
+        if(graftingTargetsPairs.stream().anyMatch(pair -> source.getUUID().equals(pair.getA()))) {
+            Location loc = graftingTargetsPairs.stream().filter(pair -> source.getUUID().equals(pair.getA())).findFirst().map(Pair::getB).orElse(null);
             if(loc == null || loc.getLevel() != source.level()) {
-                graftingTargetsPairs.removeIf(pair -> pair.getA() == source.getUUID());
+                graftingTargetsPairs.removeIf(pair -> source.getUUID().equals(pair.getA()));
                 return;
             }
 
@@ -407,8 +407,8 @@ public class GraftingAbility extends SelectableAbility {
     public static void onAbilityUse(AbilityUseEvent event) {
         LivingEntity used = event.getEntity();
         if(!(used.level() instanceof ServerLevel serverLevel)) return;
-        if(graftingAbilitiesPairs.stream().anyMatch(pair -> pair.getA() == used.getUUID())) {
-            UUID otherEntityUUID = graftingAbilitiesPairs.stream().filter(pair -> pair.getA() == used.getUUID()).findFirst().map(Pair::getB).orElse(null);
+        if(graftingAbilitiesPairs.stream().anyMatch(pair -> used.getUUID().equals(pair.getA()))) {
+            UUID otherEntityUUID = graftingAbilitiesPairs.stream().filter(pair -> used.getUUID().equals(pair.getA())).findFirst().map(Pair::getB).orElse(null);
             if(otherEntityUUID == null) return;
 
             LivingEntity otherEntity = (LivingEntity) serverLevel.getEntity(otherEntityUUID);

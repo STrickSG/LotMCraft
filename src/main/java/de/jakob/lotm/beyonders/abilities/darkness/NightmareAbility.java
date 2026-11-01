@@ -368,16 +368,18 @@ public class NightmareAbility extends SelectableAbility {
         PacketHandler.sendToAllPlayers(new SyncNightmareAbilityPacket(0, 0, 0, 0, false));
     }
 
+    // These pick the map by logical side (the entity's level). FMLEnvironment.dist is the physical side,
+    // which is CLIENT in singleplayer, so the integrated server used to read the client map.
     public static boolean hasActiveNightmare(LivingEntity entity) {
-        if(FMLEnvironment.dist == Dist.CLIENT)
+        if(entity.level().isClientSide)
             return activeNightmaresClient.containsKey(entity.getUUID());
         return activeNightmaresServer.containsKey(entity.getUUID());
     }
 
     public static boolean isAffectedByNightmare(LivingEntity entity) {
-        if(FMLEnvironment.dist == Dist.CLIENT) {
+        if(entity.level().isClientSide) {
             for(Map.Entry<UUID, NightmareCenter> entry : activeNightmaresClient.entrySet()) {
-                if(entity.getUUID() == entry.getKey())
+                if(entity.getUUID().equals(entry.getKey()))
                     continue;
 
                 if(entity.position().distanceToSqr(entry.getValue().pos()) <= entry.getValue().radiusSquared())
@@ -387,7 +389,7 @@ public class NightmareAbility extends SelectableAbility {
         }
         else {
             for(Map.Entry<UUID, NightmareCenter> entry : activeNightmaresServer.entrySet()) {
-                if(entity.getUUID() == entry.getKey())
+                if(entity.getUUID().equals(entry.getKey()))
                     continue;
 
                 if(entity.position().distanceToSqr(entry.getValue().pos()) <= entry.getValue().radiusSquared())

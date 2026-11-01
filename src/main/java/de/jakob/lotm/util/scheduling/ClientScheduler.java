@@ -280,6 +280,11 @@ public class ClientScheduler {
     // Tick handler
     // -------------------------------------------------------------------------
 
+    /** Drops all tasks; called on logout so they don't keep running against the old level. */
+    public static void clearAll() {
+        tasks.clear();
+    }
+
     @SubscribeEvent
     public static void onClientTick(ClientTickEvent.Pre event) {
         Iterator<Map.Entry<UUID, ScheduledTask>> iterator = tasks.entrySet().iterator();
@@ -303,8 +308,7 @@ public class ClientScheduler {
                     try {
                         task.task.run();
                     } catch (Exception e) {
-                        System.err.println("Error executing scheduled task: " + e.getMessage());
-                        e.printStackTrace();
+                        LOTMCraft.LOGGER.error("Error executing scheduled client task", e);
                     }
 
                     task.incrementExecutions();

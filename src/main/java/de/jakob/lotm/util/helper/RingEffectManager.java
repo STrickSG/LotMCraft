@@ -1,6 +1,7 @@
 package de.jakob.lotm.util.helper;
 
 import de.jakob.lotm.network.packets.toClient.RingEffectPacket;
+import de.jakob.lotm.util.scheduling.ServerScheduler;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.AABB;
@@ -95,17 +96,11 @@ public class RingEffectManager {
                                                float ringThickness, float ringHeight,
                                                ServerLevel level) {
         for (int i = 0; i < pulseCount; i++) {
-            // Schedule each pulse with a delay
-            int finalI = i;
-            level.getServer().execute(() -> {
-                try {
-                    Thread.sleep(finalI * delayBetweenPulses * 50L); // Convert ticks to ms
+            // Schedule each pulse with a delay. This used to Thread.sleep inside server.execute(),
+            // i.e. on the server thread, freezing the whole server for the length of the effect.
+            ServerScheduler.scheduleDelayed(i * delayBetweenPulses, () ->
                     createRingForAll(center, maxRadius, pulseDuration, red, green, blue, alpha,
-                            ringThickness, ringHeight, level);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
-            });
+                            ringThickness, ringHeight, level), level);
         }
     }
 
