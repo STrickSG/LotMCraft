@@ -18,7 +18,10 @@ public class PotionRecipes {
 
     public static boolean initialized = false;
 
-    public static void initPotionRecipes() {
+    public static synchronized void initPotionRecipes() {
+        // Called eagerly at common setup and lazily as a fallback; ItemStack has no equals(),
+        // so a second run would fill RECIPES with duplicates.
+        if (initialized) return;
         initialized = true;
 
         // ===== FOOL =====
