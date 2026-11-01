@@ -1,5 +1,6 @@
 package de.jakob.lotm.beyonders.abilities.core;
 
+import de.jakob.lotm.LOTMCraft;
 import de.jakob.lotm.network.PacketHandler;
 import de.jakob.lotm.network.packets.toClient.SyncToggleAbilityPacket;
 import de.jakob.lotm.util.BeyonderData;
@@ -8,7 +9,10 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.Level;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -94,7 +98,9 @@ public abstract class ToggleAbility extends Ability {
             return activeAbilities.containsKey(entity.getUUID()) && activeAbilities.get(entity.getUUID()).contains(this);
         }
         else {
-            return activeAbilitiesClientCache.containsKey(entity.getUUID()) && activeAbilities.get(entity.getUUID()) != null && activeAbilities.get(entity.getUUID()).contains(this);
+            // Must read the client cache: the server map is empty on a remote client
+            HashSet<ToggleAbility> cached = activeAbilitiesClientCache.get(entity.getUUID());
+            return cached != null && cached.contains(this);
         }
     }
 
@@ -125,5 +131,20 @@ public abstract class ToggleAbility extends Ability {
         cleanUp((ServerLevel) entity.level(), entity);
 
         activeAbilities.put(entity.getUUID(), newAbilities);
+    }
+
+    @EventBusSubscriber(modid = LOTMCraft.MOD_ID)
+    public static class LifecycleHandler {
+        @SubscribeEvent
+        public static void onServerStopped(ServerStoppedEvent event) {
+            // Same behaviour as a dedicated server restart: nothing stays toggled on. In singleplayer this
+            // map outlives the integrated server and kept the old world's toggles ticking in the next one.
+            activeAbilities.clear();
+        }
+    }
+
+    /** Client side: forget toggle states of the world being left (called on logout). */
+    public static void clearClientCache() {
+        activeAbilitiesClientCache.clear();
     }
 }

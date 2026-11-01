@@ -1,8 +1,10 @@
 package de.jakob.lotm.util.scheduling;
 
+import de.jakob.lotm.LOTMCraft;
 import net.minecraft.server.level.ServerLevel;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import org.jetbrains.annotations.Nullable;
 
@@ -202,6 +204,13 @@ public class ServerScheduler {
     // -------------------------------------------------------------------------
 
     @SubscribeEvent
+    public static void onServerStopped(ServerStoppedEvent event) {
+        // Tasks capture levels and entities of the server that just stopped. In singleplayer the JVM lives on,
+        // and they would otherwise keep running (on dead levels) inside the next world that gets opened.
+        tasks.clear();
+    }
+
+    @SubscribeEvent
     public static void onServerTick(ServerTickEvent.Pre event) {
         Iterator<Map.Entry<UUID, ScheduledTask>> iterator = tasks.entrySet().iterator();
 
@@ -224,8 +233,7 @@ public class ServerScheduler {
                     try {
                         task.task.run();
                     } catch (Exception e) {
-                        System.err.println("Error executing scheduled task: " + e.getMessage());
-                        e.printStackTrace();
+                        LOTMCraft.LOGGER.error("Error executing scheduled task", e);
                     }
 
                     task.incrementExecutions();
@@ -305,8 +313,7 @@ public class ServerScheduler {
             try {
                 onFinish.run();
             } catch (Exception e) {
-                System.err.println("Error executing onFinish task: " + e.getMessage());
-                e.printStackTrace();
+                LOTMCraft.LOGGER.error("Error executing onFinish task", e);
             }
         }
 

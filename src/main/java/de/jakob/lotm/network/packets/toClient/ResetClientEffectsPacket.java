@@ -1,6 +1,7 @@
 package de.jakob.lotm.network.packets.toClient;
 
 import de.jakob.lotm.LOTMCraft;
+import de.jakob.lotm.beyonders.abilities.core.ToggleAbility;
 import de.jakob.lotm.rendering.*;
 import de.jakob.lotm.util.ClientBeyonderCache;
 import de.jakob.lotm.util.data.AbilityWheelClientData;
@@ -23,17 +24,24 @@ public record ResetClientEffectsPacket() implements CustomPacketPayload {
     }
 
     public static void handle(ResetClientEffectsPacket payload, IPayloadContext context) {
-        context.enqueueWork(() -> {
-            ClientBeyonderCache.clearCache();
-            AbilityWheelClientData.clearCache();
-            StatusPanelRenderer.clearCache();
-            CullOverlay.clearCache();
-            DecryptionOverlayRenderer.clearCache();
-            EyeOfDeathOverlayRenderer.clearCache();
-            MarionettePanelRenderer.clearCache();
-            SpectatingOverlayRenderer.clearCache();
-            SpiritVisionOverlayRenderer.clearCache();
-            TelepathyOverlayRenderer.clearCache();
-        });
+        context.enqueueWork(ResetClientEffectsPacket::resetClientCaches);
+    }
+
+    /**
+     * Also called from the client logout event: the server sends this packet from PlayerLoggedOutEvent,
+     * when the connection is usually already closing, so it often never arrives.
+     */
+    public static void resetClientCaches() {
+        ClientBeyonderCache.clearCache();
+        AbilityWheelClientData.clearCache();
+        StatusPanelRenderer.clearCache();
+        CullOverlay.clearCache();
+        DecryptionOverlayRenderer.clearCache();
+        EyeOfDeathOverlayRenderer.clearCache();
+        MarionettePanelRenderer.clearCache();
+        SpectatingOverlayRenderer.clearCache();
+        SpiritVisionOverlayRenderer.clearCache();
+        TelepathyOverlayRenderer.clearCache();
+        ToggleAbility.clearClientCache();
     }
 }

@@ -21,13 +21,17 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class PassiveAbility {
 
     protected final Random random = new Random();
     private final String id;
 
-    private HashMap<UUID, Boolean> cached = new HashMap<>();
+    // Separate caches per logical side: in singleplayer the client and the integrated server
+    // share these objects (and the player UUID), and run on different threads.
+    private final Map<UUID, Boolean> cachedServer = new ConcurrentHashMap<>();
+    private final Map<UUID, Boolean> cachedClient = new ConcurrentHashMap<>();
 
     public PassiveAbility(String id) {
         this.id = id;
@@ -35,10 +39,28 @@ public abstract class PassiveAbility {
 
     public abstract Map<String, Integer> getRequirements();
 
-    public boolean shouldApplyTo(LivingEntity entity) {
-        if(entity.tickCount % 20 != 0 && cached.containsKey(entity.getUUID())) {
-            return cached.get(entity.getUUID());
+    /**
+     * Drops the cached shouldApplyTo results of every passive ability for this entity,
+     * so the next check reflects pathway/sequence changes immediately.
+     */
+    public static void invalidateCache(LivingEntity entity) {
+        UUID uuid = entity.getUUID();
+        boolean clientSide = entity.level().isClientSide;
+        for (PassiveAbility ability : PassiveAbilityHandler.passiveAbilities) {
+            (clientSide ? ability.cachedClient : ability.cachedServer).remove(uuid);
         }
+    }
+
+    public boolean shouldApplyTo(LivingEntity entity) {
+        Map<UUID, Boolean> cached = entity.level().isClientSide ? cachedClient : cachedServer;
+        if(entity.tickCount % 20 != 0) {
+            Boolean cachedResult = cached.get(entity.getUUID());
+            if (cachedResult != null) {
+                return cachedResult;
+            }
+        }
+        // getRequirements() builds a new map on every call, so fetch it once
+        Map<String, Integer> requirements = getRequirements();
         if(
                 entity instanceof Player player &&
                 ControllingUtils.isControlling(player)
@@ -47,8 +69,8 @@ public abstract class PassiveAbility {
             int sequence = ControllingUtils.getControlledSequence(player);
 
             if(pathway != null) {
-                if(getRequirements().containsKey(pathway)) {
-                    Integer minSeq = getRequirements().get(pathway);
+                if(requirements.containsKey(pathway)) {
+                    Integer minSeq = requirements.get(pathway);
                     if (minSeq != null && sequence <= minSeq) {
                         cached.put(entity.getUUID(), true);
                         return true;
@@ -68,8 +90,8 @@ public abstract class PassiveAbility {
         String pathway = BeyonderData.getPathway(entity);
         int sequence = BeyonderData.getSequence(entity);
 
-        if(getRequirements().containsKey(pathway)) {
-            Integer minSeq = getRequirements().get(pathway);
+        if(requirements.containsKey(pathway)) {
+            Integer minSeq = requirements.get(pathway);
             if (minSeq != null && sequence <= minSeq) {
                 cached.put(entity.getUUID(), true);
                 return true;
@@ -81,7 +103,7 @@ public abstract class PassiveAbility {
             for (int i = sequence + 1; i < history.length; i++) {
                 String histPathway = history[i];
                 if (histPathway == null || histPathway.isEmpty()) continue;
-                Integer minSeq = getRequirements().get(histPathway);
+                Integer minSeq = requirements.get(histPathway);
                 if (minSeq != null && i <= minSeq) {
                     cached.put(entity.getUUID(), true);
                     return true;
