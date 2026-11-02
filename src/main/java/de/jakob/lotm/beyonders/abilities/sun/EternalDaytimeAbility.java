@@ -53,6 +53,7 @@ public class EternalDaytimeAbility extends Ability {
             "identity_concealment_ability",
             "concealed_domain_ability",
             "shadow_concealment_ability",
+            "shadow_hiding_ability",
             "invisibility_ability",
             "space_concealment_ability",
             "psychological_invisibility_ability",

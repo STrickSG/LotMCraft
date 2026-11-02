@@ -96,6 +96,8 @@ public class PassiveAbilityHandler {
 
         // Wheel of fortune
         passiveAbilities.add(new PassiveLuckAbility("passive_luck_ability"));
+        passiveAbilities.add(new de.jakob.lotm.beyonders.abilities.hanged_man.passives.PhysicalEnhancementsHangedManAbility("physical_enhancements_hanged_man_ability"));
+        passiveAbilities.add(new de.jakob.lotm.beyonders.abilities.hanged_man.passives.WhispersAbility("whispers_ability"));
         passiveAbilities.add(new PassiveCalamityAttraction("passive_calamity_attraction_ability"));
         passiveAbilities.add(new PassiveLuckAccumulationAbility("passive_luck_accumulation_ability"));
 

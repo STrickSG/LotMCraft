@@ -1294,6 +1294,35 @@ public class PotionRecipes {
                                 .selectCharacteristicOfPathwayAndSequence("justiciar", 1)
                 ))
         ));
+
+        // ===== HANGED MAN (Sequences 9-7) =====
+        // Formulas from the novel; like the other pathways, one of the two main ingredients is used
+        RECIPES.add(new PotionRecipe(
+                (BeyonderPotion) PotionItemHandler.SECRETS_SUPPLICANT_POTION.get(),
+                new ItemStack(ModIngredients.RED_WINE.get()),
+                new ItemStack(ModIngredients.CHURCH_BLESSED_CANDLE.get()),
+                new ItemStack(ModIngredients.POISONOUS_MUSHROOM.get()),
+                new ItemStack(ModIngredients.VERBENA_POWDER.get()),
+                new ItemStack(ModIngredients.DARKNESS_BAT.get())
+        ));
+
+        RECIPES.add(new PotionRecipe(
+                (BeyonderPotion) PotionItemHandler.LISTENER_POTION.get(),
+                new ItemStack(ModIngredients.RED_WINE.get()),
+                new ItemStack(Items.BREAD),
+                new ItemStack(ModIngredients.BLACK_CAT_OF_MISFORTUNE_HEART.get()),
+                new ItemStack(ModIngredients.BEGONIA_ESSENTIAL_OIL.get()),
+                new ItemStack(ModIngredients.BURROW_CRAWLER_HEART.get())
+        ));
+
+        RECIPES.add(new PotionRecipe(
+                (BeyonderPotion) PotionItemHandler.SHADOW_ASCETIC_POTION.get(),
+                new ItemStack(ModIngredients.ANOTHER_BLOOD.get()),
+                new ItemStack(ModIngredients.RED_EYED_BLACK_GOAT_TAIL.get()),
+                new ItemStack(ModIngredients.CHURCH_DESECRATING_ITEM.get()),
+                new ItemStack(ModIngredients.WILD_ROSE_HYDROSOL.get()),
+                new ItemStack(ModIngredients.SHADOW_WORM.get())
+        ));
     }
 
     private record StackKey(Item item, int count) {

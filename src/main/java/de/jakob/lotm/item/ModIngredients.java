@@ -24,7 +24,7 @@ public class ModIngredients {
     public static final DeferredItem<Item> ANCIENT_WRAITH_ARTIFACT = ITEMS.registerItem("ancient_wraith_artifact", (properties) -> new PotionIngredient(properties, 6, true, "door"), new Item.Properties());
     public static final DeferredItem<Item> ANCIENT_WRAITH_DUST = ITEMS.registerItem("ancient_wraith_dust", (properties) -> new PotionIngredient(properties, 5, true, "fool"), new Item.Properties());
     public static final DeferredItem<Item> ANKH_GATE_ASHES = ITEMS.registerItem("ankh_gate_ashes", (properties) -> new PotionIngredient(properties, 9, false, "door,darkness"), new Item.Properties());
-    public static final DeferredItem<Item> ANOTHER_BLOOD = ITEMS.registerItem("another_blood", (properties) -> new PotionIngredient(properties, 9, false, "error,darkness"), new Item.Properties());
+    public static final DeferredItem<Item> ANOTHER_BLOOD = ITEMS.registerItem("another_blood", (properties) -> new PotionIngredient(properties, 9, false, "error,darkness,hanged_man"), new Item.Properties());
     public static final DeferredItem<Item> ANOTHER_TEARS = ITEMS.registerItem("another_tears", (properties) -> new PotionIngredient(properties, 8, false, "error,darkness"), new Item.Properties());
     public static final DeferredItem<Item> ANOTHER_TEARS_SHED_DUE_TO_SHATTERED_IDEALS = ITEMS.registerItem("another_tears_shed_due_to_shattered_ideals", (properties) -> new PotionIngredient(properties, 7, false, "wheel"), new Item.Properties());
     public static final DeferredItem<Item> AQUA_FERN_JUICE = ITEMS.registerItem("aqua_fern_juice", (properties) -> new PotionIngredient(properties, 6, false, "abyss,sun"), new Item.Properties());
@@ -197,7 +197,7 @@ public class ModIngredients {
     public static final DeferredItem<Item> REAL_ANCIENT_HISTORICAL_RECORDS = ITEMS.registerItem("real_ancient_historical_records", (properties) -> new PotionIngredient(properties, 3, false, "fool,mother"), new Item.Properties());
     public static final DeferredItem<Item> RED_CHESTNUT_FLOWER = ITEMS.registerItem("red_chestnut_flower", (properties) -> new PotionIngredient(properties, 9, false, "red_priest"), new Item.Properties());
     public static final DeferredItem<Item> RED_HAIR_BIRCH_BARK = ITEMS.registerItem("red_hair_birch_bark", (properties) -> new PotionIngredient(properties, 4, false, "fool,mother"), new Item.Properties());
-    public static final DeferredItem<Item> RED_WINE = ITEMS.registerItem("red_wine", (properties) -> new PotionIngredient(properties, 9, false, "red_priest,death,sun,justiciar"), new Item.Properties());
+    public static final DeferredItem<Item> RED_WINE = ITEMS.registerItem("red_wine", (properties) -> new PotionIngredient(properties, 9, false, "red_priest,death,sun,justiciar,hanged_man"), new Item.Properties());
     public static final DeferredItem<Item> REDCROWN_BALSAM_POWDER = ITEMS.registerItem("redcrown_balsam_powder", (properties) -> new PotionIngredient(properties, 9, true, "red_priest"), new Item.Properties());
     public static final DeferredItem<Item> REMNANT_SPIRITUALITY_OF_ANCIENT_WRAITHS = ITEMS.registerItem("remnant_spirituality_of_ancient_wraiths", (properties) -> new PotionIngredient(properties, 5, false, "fool,mother"), new Item.Properties());
     public static final DeferredItem<Item> ROOT_OF_MIST_TREANT = ITEMS.registerItem("true_root_of_mist_treant", (properties) -> new PotionIngredient(properties, 7, true, "fool"), new Item.Properties());
@@ -266,7 +266,7 @@ public class ModIngredients {
     public static final DeferredItem<Item> TREE_OF_ELDER_FRUIT = ITEMS.registerItem("tree_of_elder_fruit", (properties) -> new PotionIngredient(properties, 7, true, "visionary"), new Item.Properties());
     public static final DeferredItem<Item> TREE_OF_ELDERS_FRUIT = ITEMS.registerItem("tree_of_elders_fruit", (properties) -> new PotionIngredient(properties, 7, true, "visionary"), new Item.Properties());
     public static final DeferredItem<Item> USED_ALMANAC = ITEMS.registerItem("used_almanac", (properties) -> new PotionIngredient(properties, 2, false, "error,wheel,justiciar"), new Item.Properties());
-    public static final DeferredItem<Item> VERBENA_POWDER = ITEMS.registerItem("verbena_powder", (properties) -> new PotionIngredient(properties, 9, false, "error,darkness"), new Item.Properties());
+    public static final DeferredItem<Item> VERBENA_POWDER = ITEMS.registerItem("verbena_powder", (properties) -> new PotionIngredient(properties, 9, false, "error,darkness,hanged_man"), new Item.Properties());
     public static final DeferredItem<Item> WALNUT = ITEMS.registerItem("walnut", (properties) -> new PotionIngredient(properties, 8, false, "door,darkness"), new Item.Properties());
     public static final DeferredItem<Item> WANDERING_ASTEROID_CORE = ITEMS.registerItem("wandering_asteroid_core", (properties) -> new PotionIngredient(properties, 6, false, "door,darkness"), new Item.Properties());
     public static final DeferredItem<Item> WANDERING_SKIN = ITEMS.registerItem("wandering_skin", (properties) -> new PotionIngredient(properties, 3, true, "door"), new Item.Properties());
@@ -279,6 +279,18 @@ public class ModIngredients {
     public static final DeferredItem<Item> WHITE_FROST_CRYSTAL_OF_DEMONIC_WOLF_OF_FOG = ITEMS.registerItem("white_frost_crystal_of_demonic_wolf_of_fog", (properties) -> new PotionIngredient(properties, 3, false, "fool,mother"), new Item.Properties());
     public static final DeferredItem<Item> WHITE_MUSTARD_SEEDS = ITEMS.registerItem("white_mustard_seeds", (properties) -> new PotionIngredient(properties, 7, false, "door,darkness"), new Item.Properties());
     public static final DeferredItem<Item> WILD_ROSE = ITEMS.registerItem("wild_rose", (properties) -> new PotionIngredient(properties, 7, false, "error,darkness"), new Item.Properties());
+
+    // ===== Hanged Man (Sequences 9-7) =====
+    public static final DeferredItem<Item> DARKNESS_BAT = ITEMS.registerItem("darkness_bat", (properties) -> new PotionIngredient(properties, 9, true, "hanged_man"), new Item.Properties());
+    public static final DeferredItem<Item> CHURCH_BLESSED_CANDLE = ITEMS.registerItem("church_blessed_candle", (properties) -> new PotionIngredient(properties, 9, false, "hanged_man"), new Item.Properties());
+    public static final DeferredItem<Item> POISONOUS_MUSHROOM = ITEMS.registerItem("poisonous_mushroom", (properties) -> new PotionIngredient(properties, 9, false, "hanged_man"), new Item.Properties());
+    public static final DeferredItem<Item> BURROW_CRAWLER_HEART = ITEMS.registerItem("burrow_crawler_heart", (properties) -> new PotionIngredient(properties, 8, true, "hanged_man"), new Item.Properties());
+    public static final DeferredItem<Item> BLACK_CAT_OF_MISFORTUNE_HEART = ITEMS.registerItem("black_cat_of_misfortune_heart", (properties) -> new PotionIngredient(properties, 8, false, "hanged_man"), new Item.Properties());
+    public static final DeferredItem<Item> BEGONIA_ESSENTIAL_OIL = ITEMS.registerItem("begonia_essential_oil", (properties) -> new PotionIngredient(properties, 8, false, "hanged_man"), new Item.Properties());
+    public static final DeferredItem<Item> SHADOW_WORM = ITEMS.registerItem("shadow_worm", (properties) -> new PotionIngredient(properties, 7, true, "hanged_man"), new Item.Properties());
+    public static final DeferredItem<Item> RED_EYED_BLACK_GOAT_TAIL = ITEMS.registerItem("red_eyed_black_goat_tail", (properties) -> new PotionIngredient(properties, 7, false, "hanged_man"), new Item.Properties());
+    public static final DeferredItem<Item> CHURCH_DESECRATING_ITEM = ITEMS.registerItem("church_desecrating_item", (properties) -> new PotionIngredient(properties, 7, false, "hanged_man"), new Item.Properties());
+    public static final DeferredItem<Item> WILD_ROSE_HYDROSOL = ITEMS.registerItem("wild_rose_hydrosol", (properties) -> new PotionIngredient(properties, 7, false, "hanged_man"), new Item.Properties());
     public static final DeferredItem<Item> WITHERED_GRAPEVINE = ITEMS.registerItem("withered_grapevine", (properties) -> new PotionIngredient(properties, 7, false, "door,death"), new Item.Properties());
     public static final DeferredItem<Item> WORM_OF_SPIRIT = ITEMS.registerItem("worm_of_spirit", (properties) -> new PotionIngredient(properties, 6, false, "door,error,darkness"), new Item.Properties());
     public static final DeferredItem<Item> WORM_OF_STAR = ITEMS.registerItem("worm_of_star", (properties) -> new PotionIngredient(properties, 2, false, "fool,door,error,mother"), new Item.Properties());
@@ -294,7 +306,7 @@ public class ModIngredients {
                 .map(DeferredHolder::get)
                 .filter(i -> i instanceof PotionIngredient)
                 .map(i -> ((PotionIngredient) i))
-                .filter(i -> i.getPathways() != null && Arrays.asList(i.getPathways()).contains(pathway))
+                .filter(i -> i.isForPathway(pathway))
                 .toList();
     }
 
@@ -348,7 +360,7 @@ public class ModIngredients {
                 .map(DeferredHolder::get)
                 .filter(i -> i instanceof PotionIngredient)
                 .map(i -> ((PotionIngredient) i))
-                .filter(i -> i.getPathways() != null && Arrays.asList(i.getPathways()).contains(pathway))
+                .filter(i -> i.isForPathway(pathway))
                 .toList();
 
         if (ingredients.isEmpty()) {
@@ -383,7 +395,7 @@ public class ModIngredients {
                 .map(DeferredHolder::get)
                 .filter(i -> i instanceof PotionIngredient)
                 .map(i -> ((PotionIngredient) i))
-                .filter(i -> i.getPathways() != null && Arrays.asList(i.getPathways()).contains(pathway))
+                .filter(i -> i.isForPathway(pathway))
                 .filter(i -> i.getSequence() == sequence)
                 .toList();
 

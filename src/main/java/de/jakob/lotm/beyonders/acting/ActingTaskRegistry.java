@@ -789,6 +789,26 @@ public class ActingTaskRegistry {
         register("justiciar", 1, new EventActingTask("kill_undead", 0.08f, 20 * 5));
         register("justiciar", 1, new EventActingTask("place_banner", 0.06f, 20 * 20));
 
+        // Hanged Man: the Secrets Supplicant prays and seeks secret knowledge, the Listener listens in the
+        // dark, the Shadow Ascetic lives in the shadows and torments itself
+        register("hanged_man", 9, new EventActingTask("use_secret_prayer_ability", 0.2f, 20 * 30));
+        register("hanged_man", 9, new EventActingTask("read_written_book", 0.08f, 20 * 15));
+        register("hanged_man", 9, new EventActingTask("place_candle", 0.05f, 20 * 10));
+        register("hanged_man", 9, new EventActingTask("stay_awake_through_night", 0.15f, 20 * 30));
+        register("hanged_man", 9, new EventActingTask("interact_with_book", 0.05f, 20 * 15));
+
+        register("hanged_man", 8, new EventActingTask("use_listening_ability", 0.2f, 20 * 20));
+        register("hanged_man", 8, new EventActingTask("stand_in_complete_darkness", 0.03f, 20 * 15));
+        register("hanged_man", 8, new EventActingTask("use_note_block", 0.06f, 20 * 10));
+        register("hanged_man", 8, new EventActingTask("use_bell", 0.06f, 20 * 15));
+        register("hanged_man", 8, new EventActingTask("stay_awake_through_night", 0.15f, 20 * 30));
+
+        register("hanged_man", 7, new EventActingTask("use_shadow_hiding_ability", 0.15f, 20 * 30));
+        register("hanged_man", 7, new EventActingTask("sneak_kill", 0.1f, 20 * 5));
+        register("hanged_man", 7, new EventActingTask("kill_in_darkness", 0.1f, 20 * 5));
+        register("hanged_man", 7, new EventActingTask("take_damage", 0.03f, 20 * 10));
+        register("hanged_man", 7, new EventActingTask("stand_in_complete_darkness", 0.03f, 20 * 20));
+
         register("darkness", 9, new EventActingTask("kill_in_darkness", 0.15f, 20 * 2));
         register("darkness", 9, new EventActingTask("use_spyglass", 0.05f, 20 * 8));
         register("darkness", 9, new EventActingTask("kill_untargeted_mob", 0.05f, 20 * 5));

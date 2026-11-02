@@ -62,6 +62,8 @@ public class BeyonderData {
         //implementedRecipes.put("black_emperor", List.of(new Integer[]{9, 8, 7, 6, 5, 4, 3, 2, 1}));
         implementedRecipes.put("death", List.of(new Integer[]{9, 8, 7, 6, 5, 4, 3, 2, 1}));
         implementedRecipes.put("justiciar", List.of(new Integer[]{9, 8, 7, 6, 5, 4, 3, 2, 1}));
+        // Hanged Man: only Sequences 9-7 so far
+        implementedRecipes.put("hanged_man", List.of(new Integer[]{9, 8, 7}));
 
     }
 
@@ -107,9 +109,29 @@ public class BeyonderData {
             "justiciar"
     );
 
+    /**
+     * Pathways whose first sequences already work but that are not complete. They stay out of
+     * implementedPathways (NPCs, rings and quests pick any sequence of those), but their recipes,
+     * potions and ingredients of the finished sequences can be found in chests.
+     */
+    public static final List<String> partiallyImplementedPathways = List.of("hanged_man");
+
+    public static List<String> lootPathways() {
+        List<String> all = new java.util.ArrayList<>(implementedPathways);
+        all.addAll(partiallyImplementedPathways);
+        return all;
+    }
+
+    /** Whether the loot of this sequence exists (for partial pathways only the finished sequences). */
+    public static boolean hasLootFor(String pathway, int sequence) {
+        if (implementedPathways.contains(pathway)) return true;
+        return implementedRecipes.getOrDefault(pathway, List.of()).contains(sequence);
+    }
+
     public static int getHighestImplementedSequence(String pathway) {
         return switch (pathway) {
             case "mother", "darkness", "fool", "wheel_of_fortune", "error", "visionary", "demoness", "red_priest", "sun", "tyrant", "door", "abyss", "death","justiciar" -> 1;
+            case "hanged_man" -> 7;
             default -> 9;
         };
     }

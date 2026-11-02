@@ -20,6 +20,7 @@ import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
 import net.neoforged.neoforge.common.loot.LootModifier;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.Random;
 
 public class DoubleLootModifier extends LootModifier {
@@ -82,10 +83,11 @@ public class DoubleLootModifier extends LootModifier {
                 }
             }
 
-            String pathway = BeyonderData.implementedPathways.get((new Random()).nextInt(BeyonderData.implementedPathways.size()));
+            List<String> pathways = BeyonderData.lootPathways();
+            String pathway = pathways.get((new Random()).nextInt(pathways.size()));
             int sequence = ChestLootModifier.getWeightedHighSequence();
 
-            if(sequence >= 7) {
+            if(sequence >= 7 && BeyonderData.hasLootFor(pathway, sequence)) {
                 // getRandomLoot can return null; a null entry in the loot list crashes chest filling
                 ItemStack bonus = ChestLootModifier.getRandomLoot(pathway, sequence);
                 if (bonus != null && !bonus.isEmpty())

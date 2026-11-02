@@ -118,6 +118,8 @@ public class IngredientSources {
             r("aqua_fern_juice",           0.50f, 20, blocks(Blocks.KELP, Blocks.KELP_PLANT, Blocks.SEAGRASS, Blocks.TALL_SEAGRASS)),
 
             r("daffodil_juice",            0.50f, 20, blocks(Blocks.ORANGE_TULIP)),
+            r("begonia_essential_oil",     0.50f, 20, blocks(Blocks.PINK_TULIP, Blocks.PEONY)),
+            r("wild_rose_hydrosol",        0.50f, 20, blocks(Blocks.ROSE_BUSH)),
             r("de_spiritualized_depraved_breath", 0.50f, 40, and(blocks(Blocks.SOUL_FIRE), biome(Biomes.SOUL_SAND_VALLEY))),
 
             rf("ancient_well_water", 1.0f, 10, and(water(),

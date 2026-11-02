@@ -13,7 +13,8 @@ public class BlasphemyCardItemHandler {
 
     public static void registerCards(IEventBus eventBus) {
         for (String pathway : BeyonderData.pathways) {
-            if (!BeyonderData.implementedRecipes.containsKey(pathway)) continue;
+            // the card is crafted from all nine recipes of the pathway (Sequence 9 to 1)
+            if (BeyonderData.implementedRecipes.getOrDefault(pathway, java.util.List.of()).size() < 9) continue;
             ITEMS.registerItem("blasphemy_card_" + pathway,
                     properties -> new BlasphemyCardItem(properties, pathway),
                     new Item.Properties().stacksTo(1).rarity(Rarity.EPIC).fireResistant());

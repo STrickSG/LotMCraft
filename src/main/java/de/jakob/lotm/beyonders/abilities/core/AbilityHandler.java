@@ -293,6 +293,14 @@ public class AbilityHandler {
         abilities.add(new CalamityAttractionAbility("calamity_attraction_ability"));
         abilities.add(new LuckReleaseAbility("luck_release_ability"));
         abilities.add(new LuckPerceptionAbility("luck_perception_ability"));
+
+        // Hanged Man (Sequences 9-7)
+        abilities.add(new de.jakob.lotm.beyonders.abilities.hanged_man.SecretPrayerAbility("secret_prayer_ability"));
+        abilities.add(new de.jakob.lotm.beyonders.abilities.hanged_man.ListeningAbility("listening_ability"));
+        abilities.add(new de.jakob.lotm.beyonders.abilities.hanged_man.ShadowHidingAbility("shadow_hiding_ability"));
+        abilities.add(new de.jakob.lotm.beyonders.abilities.hanged_man.ShadowShapingAbility("shadow_shaping_ability"));
+        abilities.add(new de.jakob.lotm.beyonders.abilities.hanged_man.BlackCocoonAbility("black_cocoon_ability"));
+        abilities.add(new de.jakob.lotm.beyonders.abilities.hanged_man.ShadowSeizureAbility("shadow_seizure_ability"));
         abilities.add(new MisfortuneGiftingAbility("misfortune_gifting_ability"));
         abilities.add(new MisfortuneFieldAbility("misfortune_field_ability"));
         abilities.add(new BlessingAbility("blessing_ability"));
