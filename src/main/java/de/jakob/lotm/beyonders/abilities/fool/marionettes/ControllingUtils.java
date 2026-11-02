@@ -182,7 +182,8 @@ public class ControllingUtils {
                 controlled.unsetRemoved();
                 controlled.setPos(player.position());
                 level.addFreshEntity(controlled);
-                controlled.setHealth(Math.clamp(player.getHealth(), 1, controlled.getHealth()));
+                // Math.clamp throws when min > max: a marionette with less than 1 health crashed this
+                controlled.setHealth(Math.clamp(player.getHealth(), 1f, Math.max(1f, controlled.getHealth())));
                 if(killPreviousEntity) {
                     controlled.hurt(controlled.damageSources().generic(), Float.MAX_VALUE);
                 }
