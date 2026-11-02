@@ -73,7 +73,7 @@ public class DoorSubstitutionAbility extends Ability {
         else {
             if(figurineNumbers.get(entity.getUUID()) >= getMax(entitySeq)){
                 AbilityUtil.sendActionBar(entity, Component.
-                        translatable("ability.lotmcraft.paper_figure_substitute_ability.out_of_slots")
+                        translatable("ability.lotmcraft.paper_figurine_substitute_ability.out_of_slots")
                         .withColor(getColorForPathway("fool")));
                 return;
             }
