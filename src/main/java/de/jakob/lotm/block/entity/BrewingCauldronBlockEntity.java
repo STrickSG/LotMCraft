@@ -214,12 +214,19 @@ public class BrewingCauldronBlockEntity extends BlockEntity implements MenuProvi
             return false;
 
         ItemStack recipeItem = itemHandler.getStackInSlot(INPUT_SLOT_RECIPE);
-        if(recipeItem.isEmpty() || !(recipeItem.getItem() instanceof PotionRecipeItem recipe)) {
-            return false;
-        }
+        // A Card of Blasphemy works as the recipe of any sequence of its pathway
+        if(recipeItem.getItem() instanceof de.jakob.lotm.beyonders.blasphemy.BlasphemyCardItem card) {
+            if(!card.getPathway().equals(potion.getPathway()) || !card.coversSequence(potion.getSequence())) {
+                return false;
+            }
+        } else {
+            if(recipeItem.isEmpty() || !(recipeItem.getItem() instanceof PotionRecipeItem recipe)) {
+                return false;
+            }
 
-        if(recipe.getRecipe().potion().getSequence() != potion.getSequence() || !recipe.getRecipe().potion().getPathway().equals(potion.getPathway())) {
-            return false;
+            if(recipe.getRecipe() == null || recipe.getRecipe().potion().getSequence() != potion.getSequence() || !recipe.getRecipe().potion().getPathway().equals(potion.getPathway())) {
+                return false;
+            }
         }
 
         if (!itemHandler.getStackInSlot(OUTPUT_SLOT).isEmpty()) return false;

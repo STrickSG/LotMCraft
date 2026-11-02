@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "lotmcraft:bard"
+    },
+    {
+      "item": "lotmcraft:light_supplicant"
+    },
+    {
+      "item": "lotmcraft:solar_high_priest"
+    },
+    {
+      "item": "lotmcraft:notary"
+    },
+    {
+      "item": "lotmcraft:priest_of_light"
+    },
+    {
+      "item": "lotmcraft:unshadowed"
+    },
+    {
+      "item": "lotmcraft:justice_mentor"
+    },
+    {
+      "item": "lotmcraft:lightseeker"
+    },
+    {
+      "item": "lotmcraft:white_angel"
+    }
+  ],
+  "result": {
+    "id": "lotmcraft:blasphemy_card_sun",
+    "count": 1
+  }
+}
