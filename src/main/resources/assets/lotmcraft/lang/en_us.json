@@ -4000,5 +4000,17 @@
   "lotmcraft.honorific_word.discipline": "Discipline",
   "lotmcraft.honorific_word.judgement": "Judgement",
   "lotmcraft.honorific_word.white": "White",
-  "lotmcraft.honorific_word.punishment": "Punishment"
+  "lotmcraft.honorific_word.punishment": "Punishment",
+  "lotmcraft.gui.honorific.title": "Honorific Name",
+  "lotmcraft.gui.recipe.supplementary": "Supplementary Ingredients",
+  "lotmcraft.gui.recipe.main": "Main Ingredient",
+  "contractnotary.screen.offer": "Contract Offer",
+  "lotmcraft.gui.pathway_selection.select": "Select a pathway",
+  "lotmcraft.gui.pathway_selection.begins": "Begins as",
+  "lotmcraft.gui.pathway_selection.ascends": "Ascends to",
+  "lotmcraft.gui.pathway_selection.confirm": "Confirm: %s?",
+  "lotmcraft.gui.pathway_selection.walk": "Walk this Path",
+  "lotmcraft.gui.introspect.sanity.stable": "Stable",
+  "lotmcraft.gui.introspect.sanity.strained": "Strained",
+  "lotmcraft.gui.introspect.sanity.critical": "Critical"
 }

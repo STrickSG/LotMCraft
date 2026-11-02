@@ -1,5 +1,7 @@
 package de.jakob.lotm.gui.custom.honorific_names;
 
+import net.minecraft.client.resources.language.I18n;
+
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
@@ -299,7 +301,7 @@ public class HonorificNamesScreen extends AbstractContainerScreen<HonorificNames
     }
 
     private void renderTitle(GuiGraphics gfx) {
-        String titleStr = "Honorific Name";
+        String titleStr = I18n.get("lotmcraft.gui.honorific.title");
         int cx = (W - font.width(titleStr)) / 2;
         for (int i = 0; i < titleStr.length(); i++) {
             String ch = String.valueOf(titleStr.charAt(i));

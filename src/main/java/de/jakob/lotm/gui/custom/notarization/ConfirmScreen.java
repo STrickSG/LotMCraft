@@ -64,7 +64,7 @@ public class ConfirmScreen extends AbstractContainerScreen<ConfirmMenu> {
         int x = leftPos, y = topPos;
         g.blit(BG, x, y, 0, 0, W, H, 256, 128);
 
-        Component t = Component.literal("Contract Offer");
+        Component t = Component.translatable("contractnotary.screen.offer");
         g.drawString(font, t, x + (W - font.width(t)) / 2, y + 11, 0xFFE9A0, true);
 
         int bx = x + 12, by = y + 28, bw = W - 24, bh = 40;

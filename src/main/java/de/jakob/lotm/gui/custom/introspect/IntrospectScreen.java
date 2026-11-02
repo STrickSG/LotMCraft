@@ -1138,13 +1138,13 @@ public class IntrospectScreen extends AbstractContainerScreen<IntrospectMenu> {
         String state;
         int stateColor;
         if (sanity > 0.66f) {
-            state = "Stable";
+            state = net.minecraft.client.resources.language.I18n.get("lotmcraft.gui.introspect.sanity.stable");
             stateColor = 0xFF8FD694;
         } else if (sanity > 0.33f) {
-            state = "Strained";
+            state = net.minecraft.client.resources.language.I18n.get("lotmcraft.gui.introspect.sanity.strained");
             stateColor = 0xFFE8BB68;
         } else {
-            state = "Critical";
+            state = net.minecraft.client.resources.language.I18n.get("lotmcraft.gui.introspect.sanity.critical");
             stateColor = 0xFFE36C54;
         }
         g.drawString(this.font, state, tx + 36, y + DIAL_Y + 15, stateColor, true);

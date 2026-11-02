@@ -1,5 +1,7 @@
 package de.jakob.lotm.gui.custom.recipe;
 
+import net.minecraft.client.resources.language.I18n;
+
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import de.jakob.lotm.LOTMCraft;
@@ -17,6 +19,7 @@ public class RecipeScreen extends AbstractContainerScreen<RecipeMenu> {
             ResourceLocation.fromNamespaceAndPath(LOTMCraft.MOD_ID, "textures/gui/recipes/recipe_glow.png");
 
     private static final int PANEL_W = 192;
+    private static final int TITLE_MAX_W = 108;
     private static final int PANEL_H = 144;
 
     private static final int CX = 96;
@@ -95,10 +98,16 @@ public class RecipeScreen extends AbstractContainerScreen<RecipeMenu> {
     @Override
     protected void renderLabels(GuiGraphics g, int mouseX, int mouseY) {
         int tw = this.font.width(this.title);
-        g.drawString(this.font, this.title, (PANEL_W - tw) / 2, 9, TITLE_COLOR, true);
+        // Long names ("Secrets Sorcerer Potion Recipe", or longer in other languages) ran past the nameplate: shrink to fit
+        float scale = Math.min(1f, TITLE_MAX_W / (float) tw);
+        g.pose().pushPose();
+        g.pose().translate(PANEL_W / 2f, 9 + (1 - scale) * 4, 0);
+        g.pose().scale(scale, scale, 1);
+        g.drawString(this.font, this.title, -tw / 2, 0, TITLE_COLOR, true);
+        g.pose().popPose();
 
-        drawCentered(g, "Supplementary Ingredients", 28);
-        drawCentered(g, "Main Ingredient", 129);
+        drawCentered(g, I18n.get("lotmcraft.gui.recipe.supplementary"), 28);
+        drawCentered(g, I18n.get("lotmcraft.gui.recipe.main"), 129);
     }
 
     private void drawCentered(GuiGraphics g, String text, int y) {

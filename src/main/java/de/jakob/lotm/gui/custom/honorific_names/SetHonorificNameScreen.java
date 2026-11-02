@@ -1,5 +1,7 @@
 package de.jakob.lotm.gui.custom.honorific_names;
 
+import net.minecraft.client.resources.language.I18n;
+
 import de.jakob.lotm.network.PacketHandler;
 import de.jakob.lotm.network.packets.toServer.SetHonorificNamePacket;
 import de.jakob.lotm.util.BeyonderData;
@@ -123,7 +125,7 @@ public class SetHonorificNameScreen extends Screen {
         gfx.vLine(panelLeft,      panelTop,        panelBottom,     COL_DIVIDER);
         gfx.vLine(panelRight - 1, panelTop,        panelBottom,     COL_DIVIDER);
 
-        gfx.drawCenteredString(font, "Set Honorific Name", centerX, panelTop + 8, COL_TITLE);
+        gfx.drawCenteredString(font, I18n.get("lotmcraft.msg.gui.honorific.set_title"), centerX, panelTop + 8, COL_TITLE);
 
         int divY = panelTop + 20;
         gfx.hLine(centerX - 80, centerX + 80, divY, COL_DIVIDER);

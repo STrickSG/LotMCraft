@@ -1,5 +1,7 @@
 package de.jakob.lotm.gui.custom.pathway_selection;
 
+import net.minecraft.client.resources.language.I18n;
+
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
@@ -344,7 +346,7 @@ public class PathwaySelectionScreen extends AbstractContainerScreen<PathwaySelec
             drawCentered(g, "?", fx + frameSize / 2, fy + frameSize / 2 - 4, TEXT_DIM, true);
 
             g.blitSprite(SPR_NAMEPLATE, LEFT_X, 124, LEFT_W, 18);
-            drawCentered(g, "Select a pathway", LEFT_X + LEFT_W / 2, 129, TEXT_DIM, false);
+            drawCentered(g, I18n.get("lotmcraft.gui.pathway_selection.select"), LEFT_X + LEFT_W / 2, 129, TEXT_DIM, false);
             return;
         }
 
@@ -366,10 +368,10 @@ public class PathwaySelectionScreen extends AbstractContainerScreen<PathwaySelec
 
         if (info == null) return;
 
-        heading(g, "Begins as", LEFT_X + 4, 148);
+        heading(g, I18n.get("lotmcraft.gui.pathway_selection.begins"), LEFT_X + 4, 148);
         g.drawString(this.font, fit(info.getSequenceName(START_SEQUENCE), LEFT_W - 6), LEFT_X + 4, 158, argb, true);
 
-        heading(g, "Ascends to", LEFT_X + 4, 170);
+        heading(g, I18n.get("lotmcraft.gui.pathway_selection.ascends"), LEFT_X + 4, 170);
         g.drawString(this.font, fit(info.getSequenceName(0), LEFT_W - 6), LEFT_X + 4, 180, argb, true);
     }
 
@@ -392,13 +394,13 @@ public class PathwaySelectionScreen extends AbstractContainerScreen<PathwaySelec
         String label;
         int color;
         if (!enabled) {
-            label = "Select a pathway";
+            label = I18n.get("lotmcraft.gui.pathway_selection.select");
             color = 0xFF6E6C78;
         } else if (confirming) {
             PathwayInfos info = BeyonderData.pathwayInfos.get(pathways.get(selected));
             String name = info != null ? info.getName() : pathways.get(selected);
             int rgb = accentOf(pathways.get(selected));
-            label = "Confirm: " + name + "?";
+            label = I18n.get("lotmcraft.gui.pathway_selection.confirm", name);
             color = 0xFF000000 | rgb;
 
             float pulse = 0.6f + 0.2f * Mth.sin(animTicks() * 0.15f);
@@ -406,13 +408,13 @@ public class PathwaySelectionScreen extends AbstractContainerScreen<PathwaySelec
             g.blitSprite(SPR_TAB_GLOW_THIN, CONFIRM_X, CONFIRM_Y, CONFIRM_W, CONFIRM_H);
             resetTint();
         } else {
-            label = "Walk this Path";
+            label = I18n.get("lotmcraft.gui.pathway_selection.walk");
             color = hovered ? 0xFFFFFFFF : TEXT_NORMAL;
         }
 
         drawCentered(g, fit(label, CONFIRM_W - 12), CONFIRM_X + CONFIRM_W / 2, CONFIRM_Y + 6, color, true);
 
-        g.drawString(this.font, "Esc to cancel", 16, CONFIRM_Y + 6, TEXT_DIM, false);
+        g.drawString(this.font, I18n.get("lotmcraft.msg.gui.esc_cancel"), 16, CONFIRM_Y + 6, TEXT_DIM, false);
     }
 
     @Override
