@@ -148,7 +148,7 @@ public class MetaAwarenessAbility extends PassiveAbility {
         // Use reflection-free approach: directly notify target
         target.sendSystemMessage(
                 Component.empty()
-                        .append(Component.literal("[Meta Awareness] ")
+                        .append(Component.translatable("lotmcraft.msg.ability.meta_awareness.prefix")
                                 .withStyle(ChatFormatting.LIGHT_PURPLE))
                         .append(msg.isEmpty()? "" : "Message: " + msg + "\n")
                         .append(HonorificNamesEventHandler.formNotification(sender))

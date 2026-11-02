@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:knight_of_misfortune_potion"
     },
-    "title": "Fortune's Foe",
-    "description": "Consume a Potion and advance to Knight of Misfortune.",
+    "title": {"translate": "advancements.lotmcraft.become_knight_of_misfortune.title", "fallback": "Fortune's Foe"},
+    "description": {"translate": "advancements.lotmcraft.become_knight_of_misfortune.description", "fallback": "Consume a Potion and advance to Knight of Misfortune."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

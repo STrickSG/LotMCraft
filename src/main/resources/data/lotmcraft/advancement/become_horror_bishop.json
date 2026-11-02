@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:horror_bishop_potion"
     },
-    "title": "The Horror Bishop",
-    "description": "Consume a Potion and advance to Horror Bishop.",
+    "title": {"translate": "advancements.lotmcraft.become_horror_bishop.title", "fallback": "The Horror Bishop"},
+    "description": {"translate": "advancements.lotmcraft.become_horror_bishop.description", "fallback": "Consume a Potion and advance to Horror Bishop."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

@@ -54,7 +54,7 @@ public class HelpBeyonderQuest extends Quest {
     @Override
     public void startQuest(ServerPlayer player) {
         spawnEnemies(player);
-        player.sendSystemMessage(net.minecraft.network.chat.Component.literal("Help fend off the enemy wave!"));
+        player.sendSystemMessage(net.minecraft.network.chat.Component.translatable("lotmcraft.msg.quest.help_fend_off"));
     }
 
     @Override

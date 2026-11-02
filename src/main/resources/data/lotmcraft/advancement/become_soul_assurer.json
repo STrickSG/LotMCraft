@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:soul_assurer_potion"
     },
-    "title": "Soul Guaranteed",
-    "description": "Consume a Potion and advance to Soul Assurer.",
+    "title": {"translate": "advancements.lotmcraft.become_soul_assurer.title", "fallback": "Soul Guaranteed"},
+    "description": {"translate": "advancements.lotmcraft.become_soul_assurer.description", "fallback": "Consume a Potion and advance to Soul Assurer."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

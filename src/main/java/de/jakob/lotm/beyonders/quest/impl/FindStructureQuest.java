@@ -35,7 +35,7 @@ public class FindStructureQuest extends Quest {
     @Override
     public void startQuest(ServerPlayer player) {
         String target = selectNewTargetStructure(player);
-        player.sendSystemMessage(Component.literal("Target structure selected: " + toDisplayName(target)));
+        player.sendSystemMessage(Component.translatable("lotmcraft.msg.quest.structure_selected", toDisplayName(target)));
     }
 
     @Override

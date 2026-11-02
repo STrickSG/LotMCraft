@@ -23,7 +23,7 @@ public class SanityCommand {
                             var targetEntity = EntityArgument.getEntity(context, "target");
 
                             if (!(targetEntity instanceof LivingEntity livingEntity)) {
-                                source.sendFailure(Component.literal("Target must be a living entity!"));
+                                source.sendFailure(Component.translatable("lotmcraft.msg.cmd.target_living"));
                                 return 0;
                             }
 
@@ -40,11 +40,11 @@ public class SanityCommand {
         try {
             SanityComponent component = target.getData(ModAttachments.SANITY_COMPONENT);
             component.setSanity(amount);
-            source.sendSuccess(() -> Component.literal("Set sanity of " + target.getName().getString() + " to " + amount), true);
+            source.sendSuccess(() -> Component.translatable("lotmcraft.msg.cmd.set_sanity", target.getName().getString(), amount), true);
             return 1;
 
         } catch (Exception e) {
-            source.sendFailure(Component.literal("Failed to set sanity: " + e.getMessage()));
+            source.sendFailure(Component.translatable("lotmcraft.msg.cmd.set_sanity_failed", e.getMessage()));
             return 0;
         }
     }

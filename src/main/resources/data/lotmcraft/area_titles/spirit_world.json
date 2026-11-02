@@ -1,7 +1,7 @@
 {
   "trigger": "dimension",
   "target": "lotmcraft:spirit_world",
-  "title": { "text": "The Spirit World", "color": "light_purple", "bold": true },
-  "subtitle": { "text": "The Realm of Uncertainty", "color": "aqua", "italic": true },
+  "title": { "translate": "area_title.lotmcraft.spirit_world.title", "fallback": "The Spirit World", "color": "light_purple", "bold": true },
+  "subtitle": { "translate": "area_title.lotmcraft.spirit_world.subtitle", "fallback": "The Realm of Uncertainty", "color": "aqua", "italic": true },
   "frequency": "once"
 }

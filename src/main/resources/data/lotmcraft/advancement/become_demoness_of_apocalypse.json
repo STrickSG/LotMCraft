@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:demoness_of_apocalypse_potion"
     },
-    "title": "The End Begins",
-    "description": "Consume a Potion and advance to Demoness of Apocalypse.",
+    "title": {"translate": "advancements.lotmcraft.become_demoness_of_apocalypse.title", "fallback": "The End Begins"},
+    "description": {"translate": "advancements.lotmcraft.become_demoness_of_apocalypse.description", "fallback": "Consume a Potion and advance to Demoness of Apocalypse."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

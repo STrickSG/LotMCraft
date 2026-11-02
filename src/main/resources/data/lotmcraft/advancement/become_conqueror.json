@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:conqueror_potion"
     },
-    "title": "None Shall Stand",
-    "description": "Consume a Potion and advance to Conqueror.",
+    "title": {"translate": "advancements.lotmcraft.become_conqueror.title", "fallback": "None Shall Stand"},
+    "description": {"translate": "advancements.lotmcraft.become_conqueror.description", "fallback": "Consume a Potion and advance to Conqueror."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

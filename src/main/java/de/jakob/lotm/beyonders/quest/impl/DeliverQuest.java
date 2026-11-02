@@ -32,7 +32,7 @@ public class DeliverQuest extends Quest {
         BlockPos chestPos = createDeliveryChest(player.serverLevel(), player.blockPosition());
         if (chestPos == null) {
             QuestManager.discardQuest(player, id);
-            player.sendSystemMessage(Component.literal("Could not find delivery location for chest."));
+            player.sendSystemMessage(Component.translatable("lotmcraft.msg.quest.no_delivery_location"));
             return;
         }
 

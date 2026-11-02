@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:prometheus_potion"
     },
-    "title": "Stealing Fire",
-    "description": "Consume a Potion and advance to Prometheus.",
+    "title": {"translate": "advancements.lotmcraft.become_prometheus.title", "fallback": "Stealing Fire"},
+    "description": {"translate": "advancements.lotmcraft.become_prometheus.description", "fallback": "Consume a Potion and advance to Prometheus."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

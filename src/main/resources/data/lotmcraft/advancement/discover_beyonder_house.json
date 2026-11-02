@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:guiding_book"
     },
-    "title": "A Familiar Abode",
-    "description": "Discover a Beyonder House.",
+    "title": {"translate": "advancements.lotmcraft.discover_beyonder_house.title", "fallback": "A Familiar Abode"},
+    "description": {"translate": "advancements.lotmcraft.discover_beyonder_house.description", "fallback": "Discover a Beyonder House."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

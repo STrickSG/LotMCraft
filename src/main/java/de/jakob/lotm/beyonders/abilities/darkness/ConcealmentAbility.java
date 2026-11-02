@@ -368,7 +368,7 @@ public class ConcealmentAbility extends SelectableAbility {
 
         if(thoughtconcealedEntities.contains(targetEntity.getUUID())) {
             if(entity instanceof ServerPlayer player) {
-                ClientboundSetActionBarTextPacket packet = new ClientboundSetActionBarTextPacket(Component.literal("Thoughts of the target are already concealed.").withColor(0xFFff124d));
+                ClientboundSetActionBarTextPacket packet = new ClientboundSetActionBarTextPacket(Component.translatable("lotmcraft.msg.ability.concealment.thoughts_already").withColor(0xFFff124d));
                 player.connection.send(packet);
             }
             return;

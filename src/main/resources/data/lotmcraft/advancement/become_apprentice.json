@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:apprentice_potion"
     },
-    "title": "A Door Opens",
-    "description": "Consume a Potion and advance to Apprentice.",
+    "title": {"translate": "advancements.lotmcraft.become_apprentice.title", "fallback": "A Door Opens"},
+    "description": {"translate": "advancements.lotmcraft.become_apprentice.description", "fallback": "Consume a Potion and advance to Apprentice."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:conspirer_potion"
     },
-    "title": "Plotting in the Shadows",
-    "description": "Consume a Potion and advance to Conspirer.",
+    "title": {"translate": "advancements.lotmcraft.become_conspirer.title", "fallback": "Plotting in the Shadows"},
+    "description": {"translate": "advancements.lotmcraft.become_conspirer.description", "fallback": "Consume a Potion and advance to Conspirer."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

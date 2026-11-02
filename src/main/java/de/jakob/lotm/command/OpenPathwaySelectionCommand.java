@@ -24,19 +24,19 @@ public class OpenPathwaySelectionCommand {
                     CommandSourceStack source = context.getSource();
                     ServerPlayer livingEntity = source.getEntity() instanceof ServerPlayer entity ? entity : null;
                     if(livingEntity == null) {
-                        source.sendFailure(Component.literal("This command can only be executed by a player on the server."));
+                        source.sendFailure(Component.translatable("lotmcraft.msg.cmd.player_on_server"));
                         return 0;
                     }
 
                     boolean spawnWithStartingCharacteristic = livingEntity.level().getGameRules().getBoolean(ModGameRules.SPAWN_WITH_STARTING_CHARACTERISTIC);
                     if(!spawnWithStartingCharacteristic) {
-                        source.sendFailure(Component.literal("The game rule 'spawn_with_starting_characteristic' is disabled."));
+                        source.sendFailure(Component.translatable("lotmcraft.msg.cmd.gamerule_disabled"));
                         return 0;
                     }
 
                     NewPlayerComponent component = livingEntity.getData(ModAttachments.BOOK_COMPONENT);
                     if(component.isHasReceivedNewPlayerPerks()) {
-                        source.sendFailure(Component.literal("This player has already selected a Pathway."));
+                        source.sendFailure(Component.translatable("lotmcraft.msg.cmd.already_selected_pathway"));
                         return 0;
                     }
 
@@ -52,7 +52,7 @@ public class OpenPathwaySelectionCommand {
             return 1;
 
         } catch (Exception e) {
-            source.sendFailure(Component.literal("Failed to open the Pathway Selection GUI: " + e.getMessage()));
+            source.sendFailure(Component.translatable("lotmcraft.msg.cmd.open_selection_failed", e.getMessage()));
             return 0;
         }
     }

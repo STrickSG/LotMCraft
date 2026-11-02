@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:psychiatrist_potion"
     },
-    "title": "Mind Games",
-    "description": "Consume a Potion and advance to Psychiatrist.",
+    "title": {"translate": "advancements.lotmcraft.become_psychiatrist.title", "fallback": "Mind Games"},
+    "description": {"translate": "advancements.lotmcraft.become_psychiatrist.description", "fallback": "Consume a Potion and advance to Psychiatrist."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

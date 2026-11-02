@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:provoker_potion"
     },
-    "title": "Picking a Fight",
-    "description": "Consume a Potion and advance to Provoker.",
+    "title": {"translate": "advancements.lotmcraft.become_provoker.title", "fallback": "Picking a Fight"},
+    "description": {"translate": "advancements.lotmcraft.become_provoker.description", "fallback": "Consume a Potion and advance to Provoker."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

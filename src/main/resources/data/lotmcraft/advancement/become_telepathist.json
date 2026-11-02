@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:telepathist_potion"
     },
-    "title": "Reading Your Mind",
-    "description": "Consume a Potion and advance to Telepathist.",
+    "title": {"translate": "advancements.lotmcraft.become_telepathist.title", "fallback": "Reading Your Mind"},
+    "description": {"translate": "advancements.lotmcraft.become_telepathist.description", "fallback": "Consume a Potion and advance to Telepathist."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

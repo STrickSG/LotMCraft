@@ -38,17 +38,17 @@ public class RitualScreen extends AbstractContainerScreen<RitualMenu> {
         int x = (width - imageWidth) / 2;
         int y = (height - imageHeight) / 2 + 12;
 
-        field1 = new EditBox(this.font, x + 20, y + 66, 136, 16, Component.literal("Field 1"));
+        field1 = new EditBox(this.font, x + 20, y + 66, 136, 16, Component.translatable("lotmcraft.msg.gui.ritual.field1"));
         field1.setMaxLength(128);
         field1.setHint(Component.literal("..."));
         this.addRenderableWidget(field1);
 
-        field2 = new EditBox(this.font, x + 20, y + 83, 136, 16, Component.literal("Field 2"));
+        field2 = new EditBox(this.font, x + 20, y + 83, 136, 16, Component.translatable("lotmcraft.msg.gui.ritual.field2"));
         field2.setMaxLength(128);
         field2.setHint(Component.literal("..."));
         this.addRenderableWidget(field2);
 
-        field3 = new EditBox(this.font, x + 20, y + 100, 136, 16, Component.literal("Field 3"));
+        field3 = new EditBox(this.font, x + 20, y + 100, 136, 16, Component.translatable("lotmcraft.msg.gui.ritual.field3"));
         field3.setMaxLength(128);
         field3.setHint(Component.literal("..."));
         this.addRenderableWidget(field3);
@@ -59,7 +59,7 @@ public class RitualScreen extends AbstractContainerScreen<RitualMenu> {
             field3.setValue(menu.blockEntity.getHonorificLine3());
         }
 
-        this.addRenderableWidget(Button.builder(Component.literal("Start Ritual"), button -> {
+        this.addRenderableWidget(Button.builder(Component.translatable("lotmcraft.msg.gui.ritual.start"), button -> {
                     if(menu.blockEntity == null) return;
                     PacketHandler.sendToServer(new RitualStartPacket(
                             menu.blockEntity.getBlockPos(),

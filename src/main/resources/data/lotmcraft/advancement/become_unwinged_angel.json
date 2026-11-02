@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:unwinged_angel_potion"
     },
-    "title": "Fallen from Grace",
-    "description": "Consume a Potion and advance to Unwinged Angel.",
+    "title": {"translate": "advancements.lotmcraft.become_unwinged_angel.title", "fallback": "Fallen from Grace"},
+    "description": {"translate": "advancements.lotmcraft.become_unwinged_angel.description", "fallback": "Consume a Potion and advance to Unwinged Angel."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

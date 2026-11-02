@@ -30,7 +30,7 @@ public class SefirotCommand {
 
                             var id = BeyonderData.playerMap.findBySefirot(target);
                             if (id == null) {
-                                source.sendFailure(Component.literal("Selected sefirot is not claimed"));
+                                source.sendFailure(Component.translatable("lotmcraft.msg.cmd.sefirot_unclaimed"));
                                 return 0;
                             }
 
@@ -54,7 +54,7 @@ public class SefirotCommand {
 
                             for (var obj : targets) {
                                 if (!BeyonderData.playerMap.contains(obj.getId())) {
-                                    source.sendFailure(Component.literal("BeyonderMap doesn't contain this player!"));
+                                    source.sendFailure(Component.translatable("lotmcraft.msg.cmd.map_missing_player"));
                                     continue;
                                 }
 

@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:desolate_matriarch_potion"
     },
-    "title": "Queen of Desolation",
-    "description": "Consume a Potion and advance to Desolate Matriarch.",
+    "title": {"translate": "advancements.lotmcraft.become_desolate_matriarch.title", "fallback": "Queen of Desolation"},
+    "description": {"translate": "advancements.lotmcraft.become_desolate_matriarch.description", "fallback": "Consume a Potion and advance to Desolate Matriarch."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

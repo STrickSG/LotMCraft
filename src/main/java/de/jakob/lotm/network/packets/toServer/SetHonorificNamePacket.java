@@ -59,52 +59,45 @@ public record SetHonorificNamePacket(LinkedList<String> lines) implements Custom
                 int sequence = BeyonderData.getSequence(player);
 
                 if (sequence >= 4) {
-                    player.sendSystemMessage(Component.literal(
-                            "You must be sequence 3 or higher to utilize honorific name!")
+                    player.sendSystemMessage(Component.translatable("lotmcraft.msg.honorific.need_seq3")
                             .withStyle(ChatFormatting.RED));
                     return;
                 }
 
                 if (sequence == 3 && lines.size() != 5) {
-                    player.sendSystemMessage(Component.literal(
-                            "You must have 5 lines in honorific name as sequence 3")
+                    player.sendSystemMessage(Component.translatable("lotmcraft.msg.honorific.five_lines")
                             .withStyle(ChatFormatting.RED));
                     return;
                 }
 
                 if (sequence == 2 && lines.size() < 4) {
-                    player.sendSystemMessage(Component.literal(
-                            "You must have 4 lines in honorific name as sequence 2")
+                    player.sendSystemMessage(Component.translatable("lotmcraft.msg.honorific.four_lines")
                             .withStyle(ChatFormatting.RED));
                     return;
                 }
 
                 if (lines.size() < 3) {
-                    player.sendSystemMessage(Component.literal(
-                            "You must provide at least 3 lines.")
+                    player.sendSystemMessage(Component.translatable("lotmcraft.msg.honorific.min_lines")
                             .withStyle(ChatFormatting.RED));
                     return;
                 }
 
                 if (lines.stream().distinct().count() != lines.size()) {
-                    player.sendSystemMessage(Component.literal(
-                            "Each line must be different!")
+                    player.sendSystemMessage(Component.translatable("lotmcraft.msg.honorific.different_lines")
                             .withStyle(ChatFormatting.RED));
                     return;
                 }
 
                 for (String line : lines) {
                     if (line.length() >= HonorificName.MAX_LENGTH) {
-                        player.sendSystemMessage(Component.literal(
-                                "Maximum length of a line is " + HonorificName.MAX_LENGTH + "!")
+                        player.sendSystemMessage(Component.translatable("lotmcraft.msg.honorific.max_length", HonorificName.MAX_LENGTH)
                                 .withStyle(ChatFormatting.RED));
                         return;
                     }
 
                     var stream = new TokenStream(line);
                     if(stream.getTotalSize() < 3){
-                        player.sendSystemMessage(Component.literal(
-                                        "Honorific name line must contain more than 3 worlds")
+                        player.sendSystemMessage(Component.translatable("lotmcraft.msg.honorific.min_words")
                                 .withStyle(ChatFormatting.RED));
                         return;
                     }
@@ -112,21 +105,17 @@ public record SetHonorificNamePacket(LinkedList<String> lines) implements Custom
 
                 String pathway = BeyonderData.getPathway(player);
                 if (!HonorificName.validate(pathway, lines)) {
-                    player.sendSystemMessage(Component.literal(
-                            "Honorific name must contain these words in each line:\n "
-                                    + HonorificName.getMustHaveWords(pathway))
+                    player.sendSystemMessage(Component.translatable("lotmcraft.msg.honorific.must_have_words", HonorificName.getMustHaveWords(pathway))
                             .withStyle(ChatFormatting.RED));
                     return;
                 }
 
                 BeyonderData.setHonorificName(player, new HonorificName(lines));
-                player.sendSystemMessage(Component.literal(
-                        "Honorific name set successfully!")
+                player.sendSystemMessage(Component.translatable("lotmcraft.msg.honorific.set_success")
                         .withStyle(ChatFormatting.GREEN));
 
             } catch (Exception e) {
-                player.sendSystemMessage(Component.literal(
-                        "Failed to set honorific name: " + e.getMessage())
+                player.sendSystemMessage(Component.translatable("lotmcraft.msg.honorific.set_failed", e.getMessage())
                         .withStyle(ChatFormatting.RED));
             }
         });

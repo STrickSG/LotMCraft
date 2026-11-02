@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:priest_of_light_potion"
     },
-    "title": "Shining Beacon",
-    "description": "Consume a Potion and advance to Priest of Light.",
+    "title": {"translate": "advancements.lotmcraft.become_priest_of_light.title", "fallback": "Shining Beacon"},
+    "description": {"translate": "advancements.lotmcraft.become_priest_of_light.description", "fallback": "Consume a Potion and advance to Priest of Light."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

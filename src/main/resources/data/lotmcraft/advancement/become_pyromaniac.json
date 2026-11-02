@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:pyromaniac_potion"
     },
-    "title": "Light it Up",
-    "description": "Consume a Potion and advance to Pyromaniac.",
+    "title": {"translate": "advancements.lotmcraft.become_pyromaniac.title", "fallback": "Light it Up"},
+    "description": {"translate": "advancements.lotmcraft.become_pyromaniac.description", "fallback": "Consume a Potion and advance to Pyromaniac."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

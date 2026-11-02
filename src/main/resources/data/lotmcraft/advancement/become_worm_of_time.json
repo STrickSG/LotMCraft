@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:worm_of_time_potion"
     },
-    "title": "Through the Hourglass",
-    "description": "Consume a Potion and advance to Worm of Time.",
+    "title": {"translate": "advancements.lotmcraft.become_worm_of_time.title", "fallback": "Through the Hourglass"},
+    "description": {"translate": "advancements.lotmcraft.become_worm_of_time.description", "fallback": "Consume a Potion and advance to Worm of Time."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

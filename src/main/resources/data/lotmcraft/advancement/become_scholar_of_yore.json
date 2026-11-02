@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:scholar_of_yore_potion"
     },
-    "title": "History is boring",
-    "description": "Consume a Potion and advance to Scholar of Yore.",
+    "title": {"translate": "advancements.lotmcraft.become_scholar_of_yore.title", "fallback": "History is boring"},
+    "description": {"translate": "advancements.lotmcraft.become_scholar_of_yore.description", "fallback": "Consume a Potion and advance to Scholar of Yore."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

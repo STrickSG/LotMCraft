@@ -207,9 +207,9 @@ public class InternalUnderworldAbility extends SelectableAbility {
         };
 
         ItemStack releaseAllItem = new ItemStack(Items.NETHER_STAR);
-        releaseAllItem.set(DataComponents.CUSTOM_NAME, Component.literal("Release All").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
+        releaseAllItem.set(DataComponents.CUSTOM_NAME, Component.translatable("lotmcraft.msg.ability.underworld.release_all").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
         releaseAllItem.set(DataComponents.LORE, new ItemLore(List.of(
-                Component.literal("Summons all stored spirits").withStyle(ChatFormatting.GRAY)
+                Component.translatable("lotmcraft.msg.ability.underworld.release_all_desc").withStyle(ChatFormatting.GRAY)
         )));
         CompoundTag releaseAllTag = new CompoundTag();
         releaseAllTag.putBoolean("IsReleaseAll", true);
@@ -217,9 +217,9 @@ public class InternalUnderworldAbility extends SelectableAbility {
         container.setItem(0, releaseAllItem);
 
         ItemStack discardItem = new ItemStack(Items.BARRIER);
-        discardItem.set(DataComponents.CUSTOM_NAME, Component.literal("Discard Mode").withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
+        discardItem.set(DataComponents.CUSTOM_NAME, Component.translatable("lotmcraft.msg.ability.underworld.discard_mode").withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
         discardItem.set(DataComponents.LORE, new ItemLore(List.of(
-                Component.literal("Click a soul to permanently discard it").withStyle(ChatFormatting.GRAY)
+                Component.translatable("lotmcraft.msg.ability.underworld.discard_desc").withStyle(ChatFormatting.GRAY)
         )));
         CompoundTag discardTag = new CompoundTag();
         discardTag.putBoolean("IsDiscardMode", true);

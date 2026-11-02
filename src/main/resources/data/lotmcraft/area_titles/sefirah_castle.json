@@ -1,6 +1,6 @@
 {
   "trigger": "dimension",
   "target": "lotmcraft:sefirah_castle",
-  "title": { "text": "Sefirah Castle", "color": "white", "bold": true },
+  "title": { "translate": "area_title.lotmcraft.sefirah_castle.title", "fallback": "Sefirah Castle", "color": "white", "bold": true },
   "frequency": "once"
 }

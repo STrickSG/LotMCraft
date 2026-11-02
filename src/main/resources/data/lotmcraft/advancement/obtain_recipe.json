@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:guiding_book"
     },
-    "title": "Knowledge of the Ancients",
-    "description": "Obtain a Beyonder Potion Recipe.",
+    "title": {"translate": "advancements.lotmcraft.obtain_recipe.title", "fallback": "Knowledge of the Ancients"},
+    "description": {"translate": "advancements.lotmcraft.obtain_recipe.description", "fallback": "Obtain a Beyonder Potion Recipe."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

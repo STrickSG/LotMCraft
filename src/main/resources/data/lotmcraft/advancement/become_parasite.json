@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:parasite_potion"
     },
-    "title": "Living Off Others",
-    "description": "Consume a Potion and advance to Parasite.",
+    "title": {"translate": "advancements.lotmcraft.become_parasite.title", "fallback": "Living Off Others"},
+    "description": {"translate": "advancements.lotmcraft.become_parasite.description", "fallback": "Consume a Potion and advance to Parasite."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

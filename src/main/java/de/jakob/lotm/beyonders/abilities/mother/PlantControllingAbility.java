@@ -72,7 +72,7 @@ public class PlantControllingAbility extends SelectableAbility {
 
         if(boundEntities.contains(targetEntity.getUUID())) {
             if(entity instanceof ServerPlayer player) {
-                ClientboundSetActionBarTextPacket packet = new ClientboundSetActionBarTextPacket(Component.literal("Entity is already bound by your plants.").withColor(0xFFff124d));
+                ClientboundSetActionBarTextPacket packet = new ClientboundSetActionBarTextPacket(Component.translatable("lotmcraft.msg.ability.plants_already_bound").withColor(0xFFff124d));
                 player.connection.send(packet);
             }
             return;

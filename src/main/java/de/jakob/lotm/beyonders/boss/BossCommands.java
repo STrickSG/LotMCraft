@@ -57,7 +57,7 @@ public final class BossCommands {
                             BossDefinition.Hostility hostility = switch (mode) {
                                 case "always" -> BossDefinition.Hostility.ALWAYS;
                                 case "retaliate" -> BossDefinition.Hostility.RETALIATE;
-                                default -> throw new SimpleCommandExceptionType(Component.literal("Use always or retaliate")).create();
+                                default -> throw new SimpleCommandExceptionType(Component.translatable("lotmcraft.msg.boss.use_hostility")).create();
                             };
                             return definition.toBuilder().hostility(hostility).build();
                         }))))
@@ -71,7 +71,7 @@ public final class BossCommands {
                                 BossDefinition.IdleBehavior behavior = switch (mode) {
                                     case "stay" -> BossDefinition.IdleBehavior.STAY;
                                     case "wander" -> BossDefinition.IdleBehavior.WANDER;
-                                    default -> throw new SimpleCommandExceptionType(Component.literal("Use stay or wander")).create();
+                                    default -> throw new SimpleCommandExceptionType(Component.translatable("lotmcraft.msg.boss.use_idle")).create();
                                 };
                                 return definition.toBuilder().idleBehavior(behavior, DoubleArgumentType.getDouble(context, "radius")).build();
                             }))))))
@@ -86,7 +86,7 @@ public final class BossCommands {
                                 try {
                                     color = BossEvent.BossBarColor.valueOf(StringArgumentType.getString(context, "color").toUpperCase(Locale.ROOT));
                                 } catch (IllegalArgumentException exception) {
-                                    throw new SimpleCommandExceptionType(Component.literal("Unknown boss bar color")).create();
+                                    throw new SimpleCommandExceptionType(Component.translatable("lotmcraft.msg.boss.unknown_color")).create();
                                 }
                                 Component title = ComponentArgument.getComponent(context, "title");
                                 return definition.toBuilder().barColor(color).barTitle(title).build();
@@ -100,7 +100,7 @@ public final class BossCommands {
                                 return definition.toBuilder().noAlert().build();
                             }
                             Component title = definition.alertTitle() == null
-                                ? Component.literal(mob.getName().getString() + " has noticed you!")
+                                ? Component.translatable("lotmcraft.msg.boss.mob_noticed", mob.getName().getString())
                                 : definition.alertTitle();
                             return definition.toBuilder().alert(title, definition.alertSubtitle(), definition.alertFadeIn(), definition.alertStay(), definition.alertFadeOut()).build();
                         })))))
@@ -146,7 +146,7 @@ public final class BossCommands {
             count++;
         }
         final int result = count;
-        context.getSource().sendSuccess(() -> Component.literal("Designated " + result + " mob(s) as boss."), true);
+        context.getSource().sendSuccess(() -> Component.translatable("lotmcraft.msg.boss.designated", result), true);
         return result;
     }
 
@@ -161,7 +161,7 @@ public final class BossCommands {
             }
         }
         final int result = count;
-        context.getSource().sendSuccess(() -> Component.literal("Removed boss behavior from " + result + " mob(s)."), true);
+        context.getSource().sendSuccess(() -> Component.translatable("lotmcraft.msg.boss.removed", result), true);
         return result;
     }
 
@@ -176,7 +176,7 @@ public final class BossCommands {
             }
         }
         final int result = count;
-        context.getSource().sendSuccess(() -> Component.literal("Cleared boss overrides for " + result + " mob(s)."), true);
+        context.getSource().sendSuccess(() -> Component.translatable("lotmcraft.msg.boss.cleared", result), true);
         return result;
     }
 
@@ -195,7 +195,7 @@ public final class BossCommands {
             count++;
         }
         final int result = count;
-        context.getSource().sendSuccess(() -> Component.literal("Updated " + result + " boss mob(s)."), true);
+        context.getSource().sendSuccess(() -> Component.translatable("lotmcraft.msg.boss.updated", result), true);
         return result;
     }
 
@@ -208,7 +208,7 @@ public final class BossCommands {
             }
             BossDefinition definition = BossRegistry.getDefinition(mob).orElse(null);
             if (definition == null) {
-                context.getSource().sendSuccess(() -> Component.literal(mob.getName().getString() + ": not a boss"), false);
+                context.getSource().sendSuccess(() -> Component.translatable("lotmcraft.msg.boss.not_boss", mob.getName().getString()), false);
             } else {
                 String alert = definition.hasAlert() ? definition.alertTitle().getString() : "disabled";
                 String status = mob.getName().getString() + ": hostility=" + definition.hostility().name().toLowerCase(Locale.ROOT)

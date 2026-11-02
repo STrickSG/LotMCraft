@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:devil_potion"
     },
-    "title": "A Deal with the Devil",
-    "description": "Consume a Potion and advance to Devil.",
+    "title": {"translate": "advancements.lotmcraft.become_devil.title", "fallback": "A Deal with the Devil"},
+    "description": {"translate": "advancements.lotmcraft.become_devil.description", "fallback": "Consume a Potion and advance to Devil."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

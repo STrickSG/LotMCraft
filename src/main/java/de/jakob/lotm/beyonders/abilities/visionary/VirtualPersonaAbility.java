@@ -315,7 +315,7 @@ public class VirtualPersonaAbility extends SelectableAbility {
         avatar.setPos(entity.getX(), entity.getY(), entity.getZ());
         avatar.setPersistenceRequired();
 
-        avatar.setCustomName(Component.literal("Avatar"));
+        avatar.setCustomName(Component.translatable("lotmcraft.msg.ability.virtual_persona.avatar"));
 
         serverLevel.addFreshEntity(avatar);
 

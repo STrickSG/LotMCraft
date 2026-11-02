@@ -161,7 +161,7 @@ public final class BossDefinition {
         BossEvent.BossBarOverlay overlay = enumValue(BossEvent.BossBarOverlay.class, tag.getString("barOverlay"), BossEvent.BossBarOverlay.PROGRESS);
         Hostility hostility = enumValue(Hostility.class, tag.getString("hostility"), Hostility.ALWAYS);
         IdleBehavior idleBehavior = enumValue(IdleBehavior.class, tag.getString("idleBehavior"), IdleBehavior.WANDER);
-        Component alertTitle = tag.getBoolean("hasAlert") ? parseComponent(tag.getString("alertTitle"), registries, Component.literal("You have been noticed!")) : null;
+        Component alertTitle = tag.getBoolean("hasAlert") ? parseComponent(tag.getString("alertTitle"), registries, Component.translatable("lotmcraft.msg.boss.noticed")) : null;
         Component alertSubtitle = tag.getBoolean("hasAlert") ? parseComponent(tag.getString("alertSubtitle"), registries, Component.empty()) : Component.empty();
         return builder()
             .barTitle(title)
@@ -197,7 +197,7 @@ public final class BossDefinition {
     }
 
     public static final class Builder {
-        private Component barTitle = Component.literal("Boss");
+        private Component barTitle = Component.translatable("lotmcraft.msg.boss.bar");
         private BossEvent.BossBarColor barColor = BossEvent.BossBarColor.RED;
         private BossEvent.BossBarOverlay barOverlay = BossEvent.BossBarOverlay.PROGRESS;
         private Hostility hostility = Hostility.ALWAYS;
@@ -213,7 +213,7 @@ public final class BossDefinition {
         private int alertFadeOut = 20;
 
         public Builder barTitle(Component title) {
-            this.barTitle = title == null ? Component.literal("Boss") : title;
+            this.barTitle = title == null ? Component.translatable("lotmcraft.msg.boss.bar") : title;
             return this;
         }
 

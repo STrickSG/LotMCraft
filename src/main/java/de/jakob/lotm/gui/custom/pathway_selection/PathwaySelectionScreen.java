@@ -251,7 +251,7 @@ public class PathwaySelectionScreen extends AbstractContainerScreen<PathwaySelec
     private void renderTitle(GuiGraphics g) {
         int plateW = 190;
         g.blitSprite(SPR_NAMEPLATE, (PANEL_W - plateW) / 2, 14, plateW, 20);
-        Component title = Component.literal("Choose Your Path").withStyle(ChatFormatting.BOLD);
+        Component title = Component.translatable("lotmcraft.msg.gui.choose_path").withStyle(ChatFormatting.BOLD);
         g.drawString(this.font, title, (PANEL_W - this.font.width(title)) / 2, 20, TEXT_HEADING, true);
 
         g.blitSprite(SPR_DIVIDER, 14, 37, PANEL_W - 28, 5);

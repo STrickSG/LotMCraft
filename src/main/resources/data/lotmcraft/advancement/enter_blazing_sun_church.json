@@ -4,8 +4,8 @@
     "icon": {
       "id": "minecraft:white_candle"
     },
-    "title": "Bathed in Solar Fire",
-    "description": "Enter the Blazing Sun Church.",
+    "title": {"translate": "advancements.lotmcraft.enter_blazing_sun_church.title", "fallback": "Bathed in Solar Fire"},
+    "description": {"translate": "advancements.lotmcraft.enter_blazing_sun_church.description", "fallback": "Enter the Blazing Sun Church."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": true,

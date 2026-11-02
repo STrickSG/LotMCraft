@@ -78,7 +78,7 @@ public class ShapeShiftingEntityTracker {
     private static void sendSuccessMessage(ServerPlayer player, String entityName) {
         if (BeyonderData.getPathway(player).equals("fool")) {
             String name = entityName.split(":")[1];
-            player.sendSystemMessage(Component.literal("§fYou memorised the shape of §b" + name));
+            player.sendSystemMessage(Component.translatable("lotmcraft.msg.shapeshift.memorised", name));
         }
     }
 }

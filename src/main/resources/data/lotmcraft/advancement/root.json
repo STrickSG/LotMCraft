@@ -3,8 +3,8 @@
     "icon": {
       "id": "lotmcraft:lotm_icon"
     },
-    "title": "A Dangerous World",
-    "description": "Enter the World of Mysticism and Beyonders.",
+    "title": {"translate": "advancements.lotmcraft.root.title", "fallback": "A Dangerous World"},
+    "description": {"translate": "advancements.lotmcraft.root.description", "fallback": "Enter the World of Mysticism and Beyonders."},
     "frame": "task",
     "background": "minecraft:textures/block/obsidian.png",
     "show_toast": true,

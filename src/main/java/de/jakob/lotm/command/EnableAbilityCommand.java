@@ -29,18 +29,18 @@ public class EnableAbilityCommand {
                         Ability ability = abilityHandler.getById(abilityId);
 
                         if (ability == null) {
-                            source.sendFailure(Component.literal("Ability not found: " + abilityId));
+                            source.sendFailure(Component.translatable("lotmcraft.msg.cmd.ability_not_found", abilityId));
                             return 0;
                         }
 
                         if(!abilityHandler.isDisabled(ability)) {
-                            source.sendFailure(Component.literal("Ability is not disabled: " + abilityId));
+                            source.sendFailure(Component.translatable("lotmcraft.msg.cmd.ability_not_disabled", abilityId));
                             return 0;
                         }
 
                         abilityHandler.enableAbility(ability);
 
-                        source.sendSuccess(() -> Component.literal("Re-Enabled ability: " + abilityId), true);
+                        source.sendSuccess(() -> Component.translatable("lotmcraft.msg.cmd.ability_reenabled", abilityId), true);
                         return 1; // Success
                     })
             )
@@ -51,7 +51,7 @@ public class EnableAbilityCommand {
         try {
             // Validate pathway exists in the list
             if (!BeyonderData.pathways.contains(pathway)) {
-                source.sendFailure(Component.literal("Invalid pathway: " + pathway));
+                source.sendFailure(Component.translatable("lotmcraft.msg.cmd.invalid_pathway", pathway));
                 return 0;
             }
             
@@ -75,11 +75,11 @@ public class EnableAbilityCommand {
 
             // Send success message
             String targetName = target instanceof Player player ? player.getGameProfile().getName() : target.getDisplayName().getString();
-            source.sendSuccess(() -> Component.literal("Set " + targetName + " to " + pathway + " sequence " + sequence), true);
+            source.sendSuccess(() -> Component.translatable("lotmcraft.msg.cmd.set_beyonder", targetName, pathway, sequence), true);
             
             return 1; // Success
         } catch (Exception e) {
-            source.sendFailure(Component.literal("Failed to set beyonder data: " + e.getMessage()));
+            source.sendFailure(Component.translatable("lotmcraft.msg.cmd.set_beyonder_failed", e.getMessage()));
             return 0;
         }
     }

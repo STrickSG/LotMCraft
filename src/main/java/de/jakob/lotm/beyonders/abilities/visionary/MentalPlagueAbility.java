@@ -179,9 +179,7 @@ public class MentalPlagueAbility extends SelectableAbility {
             var component = obj.getData(ModAttachments.MENTAL_PLAGUE.get());
 
             if(component.hasMentalPlague() && component.isOwner(player)){
-                player.sendSystemMessage(Component.literal(obj.getName().getString() +
-                        " has mental plague of stage " +
-                        component.getStage()).withColor(0xFFff124d));
+                player.sendSystemMessage(Component.translatable("lotmcraft.msg.ability.mental_plague.stage", obj.getName().getString(), component.getStage()).withColor(0xFFff124d));
             }
         }
     }
