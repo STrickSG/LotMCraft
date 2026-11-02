@@ -98,7 +98,7 @@ public class BlasphemyCardItem extends Item {
         }
         if (holder instanceof Player player) {
             player.displayClientMessage(Component.translatable("item.lotmcraft.blasphemy_card.already_exists", getName(stack))
-                    .withStyle(ChatFormatting.DARK_PURPLE), false);
+                    .withStyle(ChatFormatting.DARK_PURPLE), true); // action bar, not chat
         }
         stack.setCount(0);
         return false;
