@@ -8,6 +8,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.tick.LevelTickEvent;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
 
 @EventBusSubscriber(modid = LOTMCraft.MOD_ID)
 public class GlobalTickHandler {
@@ -18,14 +19,22 @@ public class GlobalTickHandler {
             return;
         }
 
-        InteractionHandler.cleanupInteractions();
+        // Stored in each level's own data storage, so every level ticks its own copy
         DoorAuthorityData doorData = DoorAuthorityData.get((ServerLevel) event.getLevel());
 
         if (doorData.isActive()) {
             doorData.tick();
         }
+    }
 
-        SealedDimensionData sealedDimensionData = SealedDimensionData.get((ServerLevel) event.getLevel());
+    @SubscribeEvent
+    public static void onServerTick(ServerTickEvent.Post event) {
+        // Once per server tick instead of once per loaded level
+        InteractionHandler.cleanupInteractions();
+
+        // A single instance stored in the overworld and shared by all levels. It used to be ticked from the
+        // level tick, i.e. once per loaded dimension (15 of them), so a 5 minute seal ran out after ~20 seconds.
+        SealedDimensionData sealedDimensionData = SealedDimensionData.get(event.getServer().overworld());
 
         if (sealedDimensionData.isActive()) {
             sealedDimensionData.tick();

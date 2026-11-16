@@ -24,9 +24,14 @@ public class AbilityHandler {
 
     private final HashSet<Ability> abilities = new HashSet<>();
     private final HashSet<Ability> disabledAbilities = new HashSet<>();
+    // getById is called from tick handlers, packet handlers and renderers; avoid scanning ~300 abilities each time
+    private final Map<String, Ability> abilitiesById = new HashMap<>();
 
     public AbilityHandler() {
         registerAbilities();
+        for (Ability ability : abilities) {
+            abilitiesById.putIfAbsent(ability.getId(), ability);
+        }
     }
 
     private void registerAbilities() {
@@ -103,6 +108,8 @@ public class AbilityHandler {
         abilities.add(new RagingBlowsAbility("raging_blows_ability"));
         abilities.add(new WaterManipulationAbility("water_manipulation_ability"));
         abilities.add(new WindManipulationAbility("wind_manipulation_ability"));
+        // Hidden flight toggle of Wind Manipulation (sequence 4 and up); WindManipulationAbility looks it up by this id
+        abilities.add(new de.jakob.lotm.beyonders.abilities.tyrant.WindManipulationFlightAbility("wind_manipulation_flight"));
         abilities.add(new BlessingsOfWIndAbility("blessings_of_wind_ability"));
         abilities.add(new LightningAbility("lightning_ability"));
         abilities.add(new SirenSongAbility("siren_song_ability"));
@@ -286,6 +293,14 @@ public class AbilityHandler {
         abilities.add(new CalamityAttractionAbility("calamity_attraction_ability"));
         abilities.add(new LuckReleaseAbility("luck_release_ability"));
         abilities.add(new LuckPerceptionAbility("luck_perception_ability"));
+
+        // Hanged Man (Sequences 9-7)
+        abilities.add(new de.jakob.lotm.beyonders.abilities.hanged_man.SecretPrayerAbility("secret_prayer_ability"));
+        abilities.add(new de.jakob.lotm.beyonders.abilities.hanged_man.ListeningAbility("listening_ability"));
+        abilities.add(new de.jakob.lotm.beyonders.abilities.hanged_man.ShadowHidingAbility("shadow_hiding_ability"));
+        abilities.add(new de.jakob.lotm.beyonders.abilities.hanged_man.ShadowShapingAbility("shadow_shaping_ability"));
+        abilities.add(new de.jakob.lotm.beyonders.abilities.hanged_man.BlackCocoonAbility("black_cocoon_ability"));
+        abilities.add(new de.jakob.lotm.beyonders.abilities.hanged_man.ShadowSeizureAbility("shadow_seizure_ability"));
         abilities.add(new MisfortuneGiftingAbility("misfortune_gifting_ability"));
         abilities.add(new MisfortuneFieldAbility("misfortune_field_ability"));
         abilities.add(new BlessingAbility("blessing_ability"));
@@ -367,7 +382,7 @@ public class AbilityHandler {
     }
 
     public Ability getById(String id) {
-        return abilities.stream().filter(ability -> ability.getId().equals(id)).findFirst().orElse(null);
+        return id == null ? null : abilitiesById.get(id);
     }
 
     public HashSet<Ability> getByPathwayAndSequenceExact(String pathway, int sequence) {

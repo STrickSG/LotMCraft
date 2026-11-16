@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:instigator_potion"
     },
-    "title": "Chaos Begins",
-    "description": "Consume a Potion and advance to Instigator.",
+    "title": {"translate": "advancements.lotmcraft.become_instigator.title", "fallback": "Chaos Begins"},
+    "description": {"translate": "advancements.lotmcraft.become_instigator.description", "fallback": "Consume a Potion and advance to Instigator."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

@@ -107,12 +107,12 @@ public class MindWorldAuthorityAbility extends SelectableAbility {
         }
 
         if(!structures.containsKey(entity.getUUID())){
-            entity.sendSystemMessage(Component.literal("You don't have any saved structure!").withColor(0xf5c56c));
+            entity.sendSystemMessage(Component.translatable("lotmcraft.msg.ability.mind_world.no_structure").withColor(0xf5c56c));
             return;
         }
 
         if(!envisioning.contains(entity.getUUID())){
-            entity.sendSystemMessage(Component.literal("You must be in state of envisioning!").withColor(0xf5c56c));
+            entity.sendSystemMessage(Component.translatable("lotmcraft.msg.ability.mind_world.not_envisioning").withColor(0xf5c56c));
             return;
         }
 
@@ -139,7 +139,7 @@ public class MindWorldAuthorityAbility extends SelectableAbility {
         posBuffer.remove(entity.getUUID());
         structures.remove(entity.getUUID());
 
-        entity.sendSystemMessage(Component.literal("Cleaned structures and locations").withColor(0xf5c56c));
+        entity.sendSystemMessage(Component.translatable("lotmcraft.msg.ability.mind_world.cleaned_all").withColor(0xf5c56c));
     }
 
     private void copy(Level level, LivingEntity entity){
@@ -155,7 +155,7 @@ public class MindWorldAuthorityAbility extends SelectableAbility {
             if(loc1.equals(loc)){
                 posBuffer.remove(entity.getUUID());
 
-                entity.sendSystemMessage(Component.literal("Cleaned saved location").withColor(0xf5c56c));
+                entity.sendSystemMessage(Component.translatable("lotmcraft.msg.ability.mind_world.cleaned_location").withColor(0xf5c56c));
 
                 return;
             }
@@ -189,14 +189,13 @@ public class MindWorldAuthorityAbility extends SelectableAbility {
 
             structures.put(entity.getUUID(), template);
 
-            entity.sendSystemMessage(Component.literal("Saved structure").withColor(0xf5c56c));
+            entity.sendSystemMessage(Component.translatable("lotmcraft.msg.ability.mind_world.saved_structure").withColor(0xf5c56c));
 
             return;
         }
 
         posBuffer.put(entity.getUUID(), loc);
-        entity.sendSystemMessage(Component.literal("Saved block pos: x = " + loc.getX()
-         + ", y = " + loc.getY() + ", z = " + loc.getZ() + "\n").withColor(0xf5c56c));
+        entity.sendSystemMessage(Component.translatable("lotmcraft.msg.ability.mind_world.saved_pos", loc.getX(), loc.getY(), loc.getZ()).withColor(0xf5c56c));
     }
 
 
@@ -213,8 +212,7 @@ public class MindWorldAuthorityAbility extends SelectableAbility {
             }
             var result = resultBuilder.toString();
 
-            entity.sendSystemMessage(Component.literal("\n\n" + result + "\nAmount of granted avatars: "
-                            + component.avatars.size())
+            entity.sendSystemMessage(Component.translatable("lotmcraft.msg.ability.mind_world.avatars", result, component.avatars.size())
                     .withColor(0xf5c56c));
 
             return;

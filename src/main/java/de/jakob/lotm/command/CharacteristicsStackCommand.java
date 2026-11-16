@@ -29,17 +29,17 @@ public class CharacteristicsStackCommand {
 
                                                     if (!(targetEntity instanceof LivingEntity livingEntity)
                                                             || !(BeyonderData.isBeyonder(livingEntity))) {
-                                                        source.sendFailure(Component.literal("Target must be a living beyonder entity!"));
+                                                        source.sendFailure(Component.translatable("lotmcraft.msg.cmd.target_living_beyonder"));
                                                         return 0;
                                                     }
 
                                                     if(seq >= LOTMCraft.NON_BEYONDER_SEQ || seq < 1){
-                                                        source.sendFailure(Component.literal("Invalid sequence!"));
+                                                        source.sendFailure(Component.translatable("lotmcraft.msg.cmd.invalid_sequence"));
                                                         return 0;
                                                     }
 
                                                     if(stack < 0){
-                                                        source.sendFailure(Component.literal("Invalid stack value!"));
+                                                        source.sendFailure(Component.translatable("lotmcraft.msg.cmd.invalid_stack"));
                                                         return 0;
                                                     }
 
@@ -64,12 +64,12 @@ public class CharacteristicsStackCommand {
 
                             if (!(targetEntity instanceof LivingEntity livingEntity)
                                     || !(BeyonderData.isBeyonder(livingEntity))) {
-                                source.sendFailure(Component.literal("Target must be a living beyonder entity!"));
+                                source.sendFailure(Component.translatable("lotmcraft.msg.cmd.target_living_beyonder"));
                                 return 0;
                             }
 
                             if(seq >= LOTMCraft.NON_BEYONDER_SEQ || seq < 1){
-                                source.sendFailure(Component.literal("Invalid sequence!"));
+                                source.sendFailure(Component.translatable("lotmcraft.msg.cmd.invalid_sequence"));
                                 return 0;
                             }
 
@@ -84,7 +84,7 @@ public class CharacteristicsStackCommand {
 
                                     if (!(targetEntity instanceof LivingEntity livingEntity)
                                             || !(BeyonderData.isBeyonder(livingEntity))) {
-                                        source.sendFailure(Component.literal("Target must be a living beyonder entity!"));
+                                        source.sendFailure(Component.translatable("lotmcraft.msg.cmd.target_living_beyonder"));
                                         return 0;
                                     }
 
@@ -102,7 +102,7 @@ public class CharacteristicsStackCommand {
 
                                     if (!(targetEntity instanceof LivingEntity livingEntity)
                                             || !(BeyonderData.isBeyonder(livingEntity))) {
-                                        source.sendFailure(Component.literal("Target must be a living beyonder entity!"));
+                                        source.sendFailure(Component.translatable("lotmcraft.msg.cmd.target_living_beyonder"));
                                         return 0;
                                     }
 
@@ -124,7 +124,7 @@ public class CharacteristicsStackCommand {
 
                             if (!(targetEntity instanceof LivingEntity livingEntity)
                                     || !(BeyonderData.isBeyonder(livingEntity))) {
-                                source.sendFailure(Component.literal("Target must be a living beyonder entity!"));
+                                source.sendFailure(Component.translatable("lotmcraft.msg.cmd.target_living_beyonder"));
                                 return 0;
                             }
 

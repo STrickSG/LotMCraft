@@ -2,7 +2,6 @@ package de.jakob.lotm.beyonders.potions;
 
 import de.jakob.lotm.network.PacketHandler;
 import de.jakob.lotm.network.packets.toServer.OpenRecipeMenuPacket;
-import de.jakob.lotm.util.data.PathwayInfos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -38,7 +37,9 @@ public class PotionRecipeItem extends Item {
 
     @Override
     public @NotNull Component getName(ItemStack stack) {
-        return Component.literal(PathwayInfos.getSequenceNameByRegisteredItemName(BuiltInRegistries.ITEM.getKey(stack.getItem()).getPath()) + " ").append(Component.translatable("lotm.potion_recipe")).append(
+        // The item id is the sequence name; one translatable format keeps the word order right in every language
+        String sequenceName = BuiltInRegistries.ITEM.getKey(stack.getItem()).getPath();
+        return Component.translatable("lotm.potion_recipe.named", Component.translatable("lotm.sequence." + sequenceName)).append(
                 recipe == null ? Component.literal("") : Component.literal(" (").append(Component.translatable("lotm.sequence")).append(Component.literal(" " + recipe.potion().getSequence() + ")")));
     }
 }

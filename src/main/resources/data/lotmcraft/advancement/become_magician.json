@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:magician_potion"
     },
-    "title": "Always prepared",
-    "description": "Consume a Potion and advance to Magician.",
+    "title": {"translate": "advancements.lotmcraft.become_magician.title", "fallback": "Always prepared"},
+    "description": {"translate": "advancements.lotmcraft.become_magician.description", "fallback": "Consume a Potion and advance to Magician."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

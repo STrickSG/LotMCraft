@@ -68,9 +68,7 @@ public class DamageTrackerEntity extends PathfinderMob {
             regenCountdown = getRegenDelayTicks();
 
         // Print individual hit damage to all players on the server
-        broadcastMessage(Component.literal(
-                "[DamageTracker] Hit! Damage: " + String.format("%.2f", actualDamage)
-        ));
+        broadcastMessage(Component.translatable("lotmcraft.msg.damage_tracker.hit", String.format("%.2f", actualDamage)));
 
         return true;
     }
@@ -92,10 +90,7 @@ public class DamageTrackerEntity extends PathfinderMob {
                 float regenDelaySeconds = getRegenDelayTicks() / 20.0f;
                 float dps = accumulatedDamage / regenDelaySeconds;
 
-                broadcastMessage(Component.literal(
-                        "[DamageTracker] Session over! Total damage: " + String.format("%.2f", accumulatedDamage)
-                                + " | DPS: " + String.format("%.2f", dps) + " (over " + String.format("%.1f", regenDelaySeconds) + "s)"
-                ));
+                broadcastMessage(Component.translatable("lotmcraft.msg.damage_tracker.session", String.format("%.2f", accumulatedDamage), String.format("%.2f", dps), String.format("%.1f", regenDelaySeconds)));
 
                 // Regenerate all health
                 this.setHealth(MAX_HEALTH);

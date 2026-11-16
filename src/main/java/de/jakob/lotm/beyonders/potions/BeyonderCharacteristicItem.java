@@ -2,7 +2,6 @@ package de.jakob.lotm.beyonders.potions;
 
 import de.jakob.lotm.beyonders.abilities.fool.marionettes.ControllingUtils;
 import de.jakob.lotm.util.BeyonderData;
-import de.jakob.lotm.util.data.PathwayInfos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -36,7 +35,9 @@ public class BeyonderCharacteristicItem extends Item {
 
     @Override
     public @NotNull Component getName(ItemStack stack) {
-        return Component.literal(PathwayInfos.getSequenceNameByRegisteredItemName(BuiltInRegistries.ITEM.getKey(stack.getItem()).getPath().replace("_characteristic", "")) + " ").append(Component.translatable("lotm.beyonder_characteristic")).append(
+        // One translatable format keeps the word order right in every language ("Seer Beyonder Characteristic")
+        String sequenceName = BuiltInRegistries.ITEM.getKey(stack.getItem()).getPath().replace("_characteristic", "");
+        return Component.translatable("lotm.beyonder_characteristic.named", Component.translatable("lotm.sequence." + sequenceName)).append(
                 Component.literal(" (").append(Component.translatable("lotm.sequence")).append(Component.literal(" " + getSequence() + ")")));
     }
 

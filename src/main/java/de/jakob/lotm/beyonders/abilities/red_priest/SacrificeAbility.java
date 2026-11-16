@@ -72,7 +72,7 @@ public class SacrificeAbility extends Ability {
 
         if (ControllingUtils.isControlling(player)) {
             player.connection.send(new net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket(
-                    Component.literal("Sacrifice cannot be used while controlling a puppet")
+                    Component.translatable("lotmcraft.msg.ability.sacrifice.puppet")
                             .withStyle(ChatFormatting.RED)
             ));
             return;
@@ -86,7 +86,7 @@ public class SacrificeAbility extends Ability {
 
         if (kills < KILLS_PER_SECOND) {
             player.connection.send(new net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket(
-                    Component.literal("Not enough kill count to use Sacrifice (need at least " + KILLS_PER_SECOND + " kills)")
+                    Component.translatable("lotmcraft.msg.ability.sacrifice.kills", KILLS_PER_SECOND)
                             .withStyle(ChatFormatting.RED)
             ));
             return;

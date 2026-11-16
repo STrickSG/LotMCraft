@@ -40,17 +40,17 @@ public class QuestCommand {
                                             String questId = StringArgumentType.getString(context, "quest_id");
 
                                             if (QuestRegistry.getQuest(questId) == null) {
-                                                source.sendFailure(Component.literal("Unknown quest id: " + questId));
+                                                source.sendFailure(Component.translatable("lotmcraft.msg.cmd.unknown_quest", questId));
                                                 return 0;
                                             }
 
                                             boolean accepted = QuestManager.acceptQuestInternal(target, questId);
                                             if (!accepted) {
-                                                source.sendFailure(Component.literal("Failed to assign quest to player."));
+                                                source.sendFailure(Component.translatable("lotmcraft.msg.cmd.assign_quest_failed"));
                                                 return 0;
                                             }
 
-                                            source.sendSuccess(() -> Component.literal("Assigned quest '" + questId + "' to " + target.getName().getString()), true);
+                                            source.sendSuccess(() -> Component.translatable("lotmcraft.msg.cmd.assigned_quest", questId, target.getName().getString()), true);
                                             return 1;
                                         })))));
 
@@ -60,24 +60,24 @@ public class QuestCommand {
 private static int discardFor(CommandSourceStack source, ServerPlayer target) {
     String activeQuestId = getActiveQuestId(target);
     if (activeQuestId == null) {
-        source.sendFailure(Component.literal(target.getName().getString() + " has no active quest."));
+        source.sendFailure(Component.translatable("lotmcraft.msg.cmd.no_active_quest", target.getName().getString()));
         return 0;
     }
 
     QuestManager.discardQuest(target, activeQuestId);
-    source.sendSuccess(() -> Component.literal("Discarded active quest for " + target.getName().getString()), true);
+    source.sendSuccess(() -> Component.translatable("lotmcraft.msg.cmd.discarded_quest", target.getName().getString()), true);
     return 1;
 }
 
 private static int finishFor(CommandSourceStack source, ServerPlayer target) {
     String activeQuestId = getActiveQuestId(target);
     if (activeQuestId == null) {
-        source.sendFailure(Component.literal(target.getName().getString() + " has no active quest."));
+        source.sendFailure(Component.translatable("lotmcraft.msg.cmd.no_active_quest", target.getName().getString()));
         return 0;
     }
 
     QuestManager.completeQuest(target, activeQuestId);
-    source.sendSuccess(() -> Component.literal("Finished active quest for " + target.getName().getString()), true);
+    source.sendSuccess(() -> Component.translatable("lotmcraft.msg.cmd.finished_quest", target.getName().getString()), true);
     return 1;
 }
 

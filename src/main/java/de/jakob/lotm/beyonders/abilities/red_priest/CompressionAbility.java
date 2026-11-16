@@ -75,14 +75,14 @@ public class CompressionAbility extends SelectableAbility {
         level.playSound(null, startPos.x,startPos.y,startPos.z, SoundEvents.BLAZE_HURT, entity.getSoundSource(), 1.0f, 1.0f);
 
         if(CHARGES >= MAX) {
-            entity.sendSystemMessage(Component.literal("You have the maximum amount of charges").withStyle(ChatFormatting.RED));
+            entity.sendSystemMessage(Component.translatable("lotmcraft.msg.ability.compression.max").withStyle(ChatFormatting.RED));
             return;
         }
         CHARGES++;
-        if(CHARGES == 3) entity.sendSystemMessage(Component.literal("You have unlocked the giant fireball").withStyle(ChatFormatting.YELLOW));
-        if(CHARGES == 6) entity.sendSystemMessage(Component.literal("Giant fireball have been enhanced").withStyle(ChatFormatting.GOLD));
-        if(CHARGES == 9) entity.sendSystemMessage(Component.literal("Giant fireball is getting greater").withStyle(ChatFormatting.RED));
-        if(CHARGES == 12) entity.sendSystemMessage(Component.literal("Giant fireball has reached its max potential").withStyle(ChatFormatting.DARK_RED));
+        if(CHARGES == 3) entity.sendSystemMessage(Component.translatable("lotmcraft.msg.ability.compression.unlocked").withStyle(ChatFormatting.YELLOW));
+        if(CHARGES == 6) entity.sendSystemMessage(Component.translatable("lotmcraft.msg.ability.compression.enhanced").withStyle(ChatFormatting.GOLD));
+        if(CHARGES == 9) entity.sendSystemMessage(Component.translatable("lotmcraft.msg.ability.compression.greater").withStyle(ChatFormatting.RED));
+        if(CHARGES == 12) entity.sendSystemMessage(Component.translatable("lotmcraft.msg.ability.compression.max_potential").withStyle(ChatFormatting.DARK_RED));
         BeyonderData.reduceSpirituality(entity, 20);
 
     }
@@ -93,7 +93,7 @@ public class CompressionAbility extends SelectableAbility {
         int Seq = BeyonderData.getSequence(entity);
         MAX = (Seq < 1) ? LIMITS[3] : (Seq < 3) ? LIMITS[2] : (Seq < 5) ? LIMITS[1] : LIMITS[0];
         if( CHARGES == 0 ) {
-            entity.sendSystemMessage(Component.literal("You have no charges").withStyle(ChatFormatting.RED));
+            entity.sendSystemMessage(Component.translatable("lotmcraft.msg.ability.compression.none").withStyle(ChatFormatting.RED));
             return;
         }
 

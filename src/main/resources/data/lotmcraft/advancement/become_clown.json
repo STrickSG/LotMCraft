@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:clown_potion"
     },
-    "title": "This isn't a circus",
-    "description": "Consume a Potion and advance to Clown.",
+    "title": {"translate": "advancements.lotmcraft.become_clown.title", "fallback": "This isn't a circus"},
+    "description": {"translate": "advancements.lotmcraft.become_clown.description", "fallback": "Consume a Potion and advance to Clown."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

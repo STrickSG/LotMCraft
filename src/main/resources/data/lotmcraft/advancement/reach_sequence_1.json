@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:lotm_icon"
     },
-    "title": "Archangel",
-    "description": "Advance to Sequence 1 on any pathway.",
+    "title": {"translate": "advancements.lotmcraft.reach_sequence_1.title", "fallback": "Archangel"},
+    "description": {"translate": "advancements.lotmcraft.reach_sequence_1.description", "fallback": "Advance to Sequence 1 on any pathway."},
     "frame": "challenge",
     "show_toast": true,
     "announce_to_chat": true,

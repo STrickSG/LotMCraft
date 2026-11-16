@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:misfortune_mage_potion"
     },
-    "title": "Cursed Touch",
-    "description": "Consume a Potion and advance to Misfortune Mage.",
+    "title": {"translate": "advancements.lotmcraft.become_misfortune_mage.title", "fallback": "Cursed Touch"},
+    "description": {"translate": "advancements.lotmcraft.become_misfortune_mage.description", "fallback": "Consume a Potion and advance to Misfortune Mage."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

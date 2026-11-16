@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:justice_mentor_potion"
     },
-    "title": "The Law is Absolute",
-    "description": "Consume a Potion and advance to Justice Mentor.",
+    "title": {"translate": "advancements.lotmcraft.become_justice_mentor.title", "fallback": "The Law is Absolute"},
+    "description": {"translate": "advancements.lotmcraft.become_justice_mentor.description", "fallback": "Consume a Potion and advance to Justice Mentor."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:doctor_potion"
     },
-    "title": "The Healer",
-    "description": "Consume a Potion and advance to Doctor.",
+    "title": {"translate": "advancements.lotmcraft.become_doctor.title", "fallback": "The Healer"},
+    "description": {"translate": "advancements.lotmcraft.become_doctor.description", "fallback": "Consume a Potion and advance to Doctor."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

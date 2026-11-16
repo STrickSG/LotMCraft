@@ -8,7 +8,7 @@ import java.util.List;
 
 public class StructureSelectionGui extends ButtonListGui<String> {
     public StructureSelectionGui(List<String> structureIds) {
-        super(Component.literal("Select a Structure"), structureIds);
+        super(Component.translatable("lotmcraft.msg.gui.select.structure"), structureIds);
     }
 
     @Override

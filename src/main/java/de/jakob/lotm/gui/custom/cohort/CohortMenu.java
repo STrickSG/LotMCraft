@@ -189,7 +189,7 @@ public class CohortMenu extends AbstractContainerMenu {
 
     private void handlePlayerRemoval(ServerPlayer sender, UUID memberUuid) {
         ServerPlayer player = sender.getServer().getPlayerList().getPlayer(memberUuid);
-        if(player == null) sender.sendSystemMessage(Component.literal("Player is not online.").withStyle(ChatFormatting.RED), false);
+        if(player == null) sender.sendSystemMessage(Component.translatable("lotmcraft.msg.gui.cohort.offline_player").withStyle(ChatFormatting.RED), false);
         else CohortUtil.removeMember(sender, player);
 
         sender.closeContainer();
@@ -206,7 +206,7 @@ public class CohortMenu extends AbstractContainerMenu {
     private void handleNpcObtainController(Player player, int realIndex) {
         if (realIndex >= allNpcs.size()) return;
         CohortUtil.obtainController(player, realIndex);
-        player.sendSystemMessage(Component.literal("Obtained controller of #" + realIndex));
+        player.sendSystemMessage(Component.translatable("lotmcraft.msg.gui.cohort.obtained", realIndex));
     }
 
     // Head construction
@@ -247,22 +247,22 @@ public class CohortMenu extends AbstractContainerMenu {
         if (member.length >= 4) {
             // Pathway + sequence present
             String pathwayName = getPathwayName(member[2]);
-            lore.add(Component.literal("Pathway: " + pathwayName + " Sequence: " + member[3])
+            lore.add(Component.translatable("lotmcraft.msg.gui.cohort.pathway_sequence", pathwayName, member[3])
                     .withStyle(style -> style.withColor(ChatFormatting.GRAY).withItalic(false)));
             if (npc) {
-                lore.add(Component.literal("Click to obtain controller")
+                lore.add(Component.translatable("lotmcraft.msg.gui.cohort.click")
                         .withStyle(style -> style.withColor(ChatFormatting.AQUA).withItalic(false)));
             }
         } else {
             if (!leader) {
-                lore.add(Component.literal("Currently offline...")
+                lore.add(Component.translatable("lotmcraft.msg.gui.cohort.currently_offline")
                         .withStyle(style -> style.withColor(ChatFormatting.DARK_GRAY).withItalic(true)));
             }
         }
 
         // Everyone except the leader can be removed
         if (!leader) {
-            lore.add(Component.literal("Drop: remove from the team")
+            lore.add(Component.translatable("lotmcraft.msg.gui.cohort.drop")
                     .withStyle(style -> style.withColor(ChatFormatting.RED).withItalic(false)));
         }
 

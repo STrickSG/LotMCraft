@@ -77,7 +77,7 @@ public class FateSiphoningAbility extends Ability {
                     if(targetComponent.getApotheosisTicksLeft() > 0){
                         targetComponent.setApotheosisTicksLeftAndSync(0, serverLevel, targetPlayer);
                         RitualEffectHandlerEvent.removeRitual(targetPlayer);
-                        targetPlayer.sendSystemMessage(Component.literal("Your apotheosis was stolen!").withStyle(ChatFormatting.DARK_RED));
+                        targetPlayer.sendSystemMessage(Component.translatable("lotmcraft.msg.ability.apotheosis_stolen").withStyle(ChatFormatting.DARK_RED));
 
                         player.getData(ModAttachments.RITUALS.get()).setStage(1);
                     }

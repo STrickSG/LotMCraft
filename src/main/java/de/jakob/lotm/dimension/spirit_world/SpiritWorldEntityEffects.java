@@ -49,8 +49,10 @@ public class SpiritWorldEntityEffects {
         }
 
         Holder<Biome> biome = entity.level().getBiome(entity.blockPosition());
-        if(biome.is(ModDimensions.SPIRIT_BIOME_UNDERWORLD_PATCH) && entity.level().getBlockState(entity.blockPosition()).is(Blocks.WATER)) {
-            travelThroughGate((ServerLevel) entity.level(), (ServerPlayer) entity);
+        // The portal is for players only: the (ServerPlayer) cast used to run for any living entity
+        // in this biome's water (a mob or a fish), and the ClassCastException in the tick crashed the server
+        if(entity instanceof ServerPlayer player && biome.is(ModDimensions.SPIRIT_BIOME_UNDERWORLD_PATCH) && entity.level().getBlockState(entity.blockPosition()).is(Blocks.WATER)) {
+            travelThroughGate((ServerLevel) entity.level(), player);
         }
 
 

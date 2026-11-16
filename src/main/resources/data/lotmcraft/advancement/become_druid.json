@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:druid_potion"
     },
-    "title": "Nature's Chosen",
-    "description": "Consume a Potion and advance to Druid.",
+    "title": {"translate": "advancements.lotmcraft.become_druid.title", "fallback": "Nature's Chosen"},
+    "description": {"translate": "advancements.lotmcraft.become_druid.description", "fallback": "Consume a Potion and advance to Druid."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

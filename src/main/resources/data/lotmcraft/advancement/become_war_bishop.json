@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:war_bishop_potion"
     },
-    "title": "Holy War",
-    "description": "Consume a Potion and advance to War Bishop.",
+    "title": {"translate": "advancements.lotmcraft.become_war_bishop.title", "fallback": "Holy War"},
+    "description": {"translate": "advancements.lotmcraft.become_war_bishop.description", "fallback": "Consume a Potion and advance to War Bishop."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

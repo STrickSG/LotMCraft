@@ -191,8 +191,7 @@ public class AncientCourtEntity extends Entity {
     }
 
     private void broadcastProhibition(ServerLevel serverLevel) {
-        Component msg = Component.literal(
-                "[Ancient Court of Judgment] " + currentProhibition.displayName + " is Prohibited here.")
+        Component msg = Component.translatable("lotmcraft.msg.ancient_court.prohibited", currentProhibition.displayName)
                 .withStyle(ChatFormatting.GOLD);
         serverLevel.getServer().getPlayerList().getPlayers().forEach(p -> {
             if (p.level().equals(serverLevel) && p.distanceTo(this) <= RADIUS) {

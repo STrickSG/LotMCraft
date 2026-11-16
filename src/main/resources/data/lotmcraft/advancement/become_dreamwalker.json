@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:dreamwalker_potion"
     },
-    "title": "Walking Between Dreams",
-    "description": "Consume a Potion and advance to Dreamwalker.",
+    "title": {"translate": "advancements.lotmcraft.become_dreamwalker.title", "fallback": "Walking Between Dreams"},
+    "description": {"translate": "advancements.lotmcraft.become_dreamwalker.description", "fallback": "Consume a Potion and advance to Dreamwalker."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

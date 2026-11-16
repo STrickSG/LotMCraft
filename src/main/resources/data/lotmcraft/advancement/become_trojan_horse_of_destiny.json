@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:trojan_horse_of_destiny_potion"
     },
-    "title": "Hidden Agenda",
-    "description": "Consume a Potion and advance to Trojan Horse of Destiny.",
+    "title": {"translate": "advancements.lotmcraft.become_trojan_horse_of_destiny.title", "fallback": "Hidden Agenda"},
+    "description": {"translate": "advancements.lotmcraft.become_trojan_horse_of_destiny.description", "fallback": "Consume a Potion and advance to Trojan Horse of Destiny."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

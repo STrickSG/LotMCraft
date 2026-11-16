@@ -345,7 +345,7 @@ public class HistoricalVoidBorrowingAbility extends SelectableAbility {
                         }
                     }
                 },
-                Component.literal("select your strongest marked version")
+                Component.translatable("lotmcraft.msg.ability.borrowing.select_strongest")
         ));
     }
 

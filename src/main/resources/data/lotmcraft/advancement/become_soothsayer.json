@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:soothsayer_potion"
     },
-    "title": "Fortune Foretold",
-    "description": "Consume a Potion and advance to Soothsayer.",
+    "title": {"translate": "advancements.lotmcraft.become_soothsayer.title", "fallback": "Fortune Foretold"},
+    "description": {"translate": "advancements.lotmcraft.become_soothsayer.description", "fallback": "Consume a Potion and advance to Soothsayer."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

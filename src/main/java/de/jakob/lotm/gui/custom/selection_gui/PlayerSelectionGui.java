@@ -12,7 +12,7 @@ public class PlayerSelectionGui extends ButtonListGui<PlayerInfo> {
     private final PlayerSelectionWorkType type;
 
     public PlayerSelectionGui(List<PlayerInfo> players, PlayerSelectionWorkType type) {
-        super(Component.literal("Select a Player"), players);
+        super(Component.translatable("lotmcraft.msg.gui.select.player"), players);
         this.type = type;
     }
 

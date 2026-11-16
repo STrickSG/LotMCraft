@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "lotmcraft:hunter"
+    },
+    {
+      "item": "lotmcraft:provoker"
+    },
+    {
+      "item": "lotmcraft:pyromaniac"
+    },
+    {
+      "item": "lotmcraft:conspirer"
+    },
+    {
+      "item": "lotmcraft:reaper"
+    },
+    {
+      "item": "lotmcraft:iron_blooded_knight"
+    },
+    {
+      "item": "lotmcraft:war_bishop"
+    },
+    {
+      "item": "lotmcraft:weather_warlock"
+    },
+    {
+      "item": "lotmcraft:conqueror"
+    }
+  ],
+  "result": {
+    "id": "lotmcraft:blasphemy_card_red_priest",
+    "count": 1
+  }
+}

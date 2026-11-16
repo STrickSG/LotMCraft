@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:solar_high_priest_potion"
     },
-    "title": "Servant of the Sun",
-    "description": "Consume a Potion and advance to Solar High Priest.",
+    "title": {"translate": "advancements.lotmcraft.become_solar_high_priest.title", "fallback": "Servant of the Sun"},
+    "description": {"translate": "advancements.lotmcraft.become_solar_high_priest.description", "fallback": "Consume a Potion and advance to Solar High Priest."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

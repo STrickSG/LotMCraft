@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:dream_stealer_potion"
     },
-    "title": "Sweet Dreams are Mine",
-    "description": "Consume a Potion and advance to Dream Stealer.",
+    "title": {"translate": "advancements.lotmcraft.become_dream_stealer.title", "fallback": "Sweet Dreams are Mine"},
+    "description": {"translate": "advancements.lotmcraft.become_dream_stealer.description", "fallback": "Consume a Potion and advance to Dream Stealer."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

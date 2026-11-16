@@ -82,6 +82,7 @@ public class ModCreativeModTabs {
                         PotionRecipeItemHandler.ITEMS.getEntries().forEach(itemHolder -> {
                             output.accept(itemHolder.get());
                         });
+                        de.jakob.lotm.beyonders.blasphemy.BlasphemyCardItemHandler.ITEMS.getEntries().forEach(itemHolder -> output.accept(itemHolder.get()));
                     })
                     .build());
 

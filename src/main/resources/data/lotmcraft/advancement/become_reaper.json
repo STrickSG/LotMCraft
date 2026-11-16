@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:reaper_potion"
     },
-    "title": "Death Comes for You",
-    "description": "Consume a Potion and advance to Reaper.",
+    "title": {"translate": "advancements.lotmcraft.become_reaper.title", "fallback": "Death Comes for You"},
+    "description": {"translate": "advancements.lotmcraft.become_reaper.description", "fallback": "Consume a Potion and advance to Reaper."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

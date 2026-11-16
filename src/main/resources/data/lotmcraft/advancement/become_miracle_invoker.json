@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:miracle_invoker_potion"
     },
-    "title": "I can do miracles",
-    "description": "Consume a Potion and advance to Miracle Invoker.",
+    "title": {"translate": "advancements.lotmcraft.become_miracle_invoker.title", "fallback": "I can do miracles"},
+    "description": {"translate": "advancements.lotmcraft.become_miracle_invoker.description", "fallback": "Consume a Potion and advance to Miracle Invoker."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

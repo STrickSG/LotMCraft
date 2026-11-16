@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:lotm_icon"
     },
-    "title": "Transcending Mortality",
-    "description": "Advance to Sequence 4 on any pathway.",
+    "title": {"translate": "advancements.lotmcraft.reach_sequence_4.title", "fallback": "Transcending Mortality"},
+    "description": {"translate": "advancements.lotmcraft.reach_sequence_4.description", "fallback": "Advance to Sequence 4 on any pathway."},
     "frame": "goal",
     "show_toast": true,
     "announce_to_chat": true,

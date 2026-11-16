@@ -55,7 +55,7 @@ public class BrewingCauldronBlock extends BaseEntityBlock {
         if (!pLevel.isClientSide()) {
             BlockEntity entity = pLevel.getBlockEntity(pPos);
             if(entity instanceof BrewingCauldronBlockEntity brewingCauldronBlockEntity) {
-                pPlayer.openMenu(new SimpleMenuProvider(brewingCauldronBlockEntity, Component.literal("Brewing Cauldron")), pPos);
+                pPlayer.openMenu(new SimpleMenuProvider(brewingCauldronBlockEntity, Component.translatable("block.lotmcraft.brewing_cauldron")), pPos);
             } else {
                 throw new IllegalStateException("Our Container provider is missing!");
             }

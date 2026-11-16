@@ -7,9 +7,11 @@ import de.jakob.lotm.beyonders.artifacts.SealedArtifactData;
 import de.jakob.lotm.data.ModDataComponents;
 import de.jakob.lotm.item.ModItems;
 import de.jakob.lotm.network.PacketHandler;
+import de.jakob.lotm.network.packets.toClient.ResetClientEffectsPacket;
 import de.jakob.lotm.network.packets.toServer.InventoryOpenedPacket;
 import de.jakob.lotm.util.BeyonderData;
 import de.jakob.lotm.util.data.PathwayInfos;
+import de.jakob.lotm.util.scheduling.ClientScheduler;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -184,5 +186,12 @@ public class ClientEvents {
         if (multiplier != 1.0f) {
             event.setFOV(event.getFOV() * multiplier);
         }
+    }
+
+    @SubscribeEvent
+    public static void onLoggingOut(ClientPlayerNetworkEvent.LoggingOut event) {
+        // Don't carry cached beyonder data / overlay states into the next world or server
+        ResetClientEffectsPacket.resetClientCaches();
+        ClientScheduler.clearAll();
     }
 }

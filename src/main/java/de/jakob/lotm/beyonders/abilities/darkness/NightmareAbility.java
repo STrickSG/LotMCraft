@@ -107,7 +107,7 @@ public class NightmareAbility extends SelectableAbility {
 
         if(!activeNightmaresServer.containsKey(entity.getUUID())) {
             if(entity instanceof ServerPlayer player) {
-                ClientboundSetActionBarTextPacket packet = new ClientboundSetActionBarTextPacket(Component.literal("You need to create a Nightmare first.").withColor(0xFFff124d));
+                ClientboundSetActionBarTextPacket packet = new ClientboundSetActionBarTextPacket(Component.translatable("lotmcraft.msg.ability.nightmare.create_first").withColor(0xFFff124d));
                 player.connection.send(packet);
             }
             return;
@@ -128,7 +128,7 @@ public class NightmareAbility extends SelectableAbility {
 
         if(!activeNightmaresServer.containsKey(entity.getUUID())) {
             if(entity instanceof ServerPlayer player) {
-                ClientboundSetActionBarTextPacket packet = new ClientboundSetActionBarTextPacket(Component.literal("You need to create a Nightmare first.").withColor(0xFFff124d));
+                ClientboundSetActionBarTextPacket packet = new ClientboundSetActionBarTextPacket(Component.translatable("lotmcraft.msg.ability.nightmare.create_first").withColor(0xFFff124d));
                 player.connection.send(packet);
             }
             return;
@@ -137,7 +137,7 @@ public class NightmareAbility extends SelectableAbility {
         Vec3 targetLoc = AbilityUtil.getTargetLocation(entity, baseDistance, 2);
         if(!isBlockInRadius(targetLoc, entity.getUUID())) {
             if(entity instanceof ServerPlayer player) {
-                ClientboundSetActionBarTextPacket packet = new ClientboundSetActionBarTextPacket(Component.literal("You cant attack outside the nightmare.").withColor(0xFFff124d));
+                ClientboundSetActionBarTextPacket packet = new ClientboundSetActionBarTextPacket(Component.translatable("lotmcraft.msg.ability.nightmare.attack_outside").withColor(0xFFff124d));
                 player.connection.send(packet);
             }
             return;
@@ -174,7 +174,7 @@ public class NightmareAbility extends SelectableAbility {
 
         if(!activeNightmaresServer.containsKey(entity.getUUID())) {
             if(entity instanceof ServerPlayer player) {
-                ClientboundSetActionBarTextPacket packet = new ClientboundSetActionBarTextPacket(Component.literal("You need to create a Nightmare first.").withColor(0xFFff124d));
+                ClientboundSetActionBarTextPacket packet = new ClientboundSetActionBarTextPacket(Component.translatable("lotmcraft.msg.ability.nightmare.create_first").withColor(0xFFff124d));
                 player.connection.send(packet);
             }
             return;
@@ -224,7 +224,7 @@ public class NightmareAbility extends SelectableAbility {
 
         if(!activeNightmaresServer.containsKey(entity.getUUID())) {
             if(entity instanceof ServerPlayer player) {
-                ClientboundSetActionBarTextPacket packet = new ClientboundSetActionBarTextPacket(Component.literal("You need to create a Nightmare first.").withColor(0xFFff124d));
+                ClientboundSetActionBarTextPacket packet = new ClientboundSetActionBarTextPacket(Component.translatable("lotmcraft.msg.ability.nightmare.create_first").withColor(0xFFff124d));
                 player.connection.send(packet);
             }
             return;
@@ -234,7 +234,7 @@ public class NightmareAbility extends SelectableAbility {
         BlockState state = level.getBlockState(targetLoc);
         if(!isBlockInRadius(targetLoc.getCenter(), entity.getUUID()) || state.getCollisionShape(level, targetLoc).isEmpty()) {
             if(entity instanceof ServerPlayer player) {
-                ClientboundSetActionBarTextPacket packet = new ClientboundSetActionBarTextPacket(Component.literal("Select a solid block inside the nightmare.").withColor(0xFFff124d));
+                ClientboundSetActionBarTextPacket packet = new ClientboundSetActionBarTextPacket(Component.translatable("lotmcraft.msg.ability.nightmare.solid_block").withColor(0xFFff124d));
                 player.connection.send(packet);
             }
             return;
@@ -313,7 +313,7 @@ public class NightmareAbility extends SelectableAbility {
             double maxRadius = Math.max(center.radiusSquared(), c.radiusSquared());
             if(c.pos().distanceToSqr(center.pos()) <= maxRadius) {
                 if(entity instanceof ServerPlayer player) {
-                    ClientboundSetActionBarTextPacket packet = new ClientboundSetActionBarTextPacket(Component.literal("You are already near another Nightmare.").withColor(0xFFff124d));
+                    ClientboundSetActionBarTextPacket packet = new ClientboundSetActionBarTextPacket(Component.translatable("lotmcraft.msg.ability.nightmare.near_other").withColor(0xFFff124d));
                     player.connection.send(packet);
                 }
                 return;
@@ -368,16 +368,18 @@ public class NightmareAbility extends SelectableAbility {
         PacketHandler.sendToAllPlayers(new SyncNightmareAbilityPacket(0, 0, 0, 0, false));
     }
 
+    // These pick the map by logical side (the entity's level). FMLEnvironment.dist is the physical side,
+    // which is CLIENT in singleplayer, so the integrated server used to read the client map.
     public static boolean hasActiveNightmare(LivingEntity entity) {
-        if(FMLEnvironment.dist == Dist.CLIENT)
+        if(entity.level().isClientSide)
             return activeNightmaresClient.containsKey(entity.getUUID());
         return activeNightmaresServer.containsKey(entity.getUUID());
     }
 
     public static boolean isAffectedByNightmare(LivingEntity entity) {
-        if(FMLEnvironment.dist == Dist.CLIENT) {
+        if(entity.level().isClientSide) {
             for(Map.Entry<UUID, NightmareCenter> entry : activeNightmaresClient.entrySet()) {
-                if(entity.getUUID() == entry.getKey())
+                if(entity.getUUID().equals(entry.getKey()))
                     continue;
 
                 if(entity.position().distanceToSqr(entry.getValue().pos()) <= entry.getValue().radiusSquared())
@@ -387,7 +389,7 @@ public class NightmareAbility extends SelectableAbility {
         }
         else {
             for(Map.Entry<UUID, NightmareCenter> entry : activeNightmaresServer.entrySet()) {
-                if(entity.getUUID() == entry.getKey())
+                if(entity.getUUID().equals(entry.getKey()))
                     continue;
 
                 if(entity.position().distanceToSqr(entry.getValue().pos()) <= entry.getValue().radiusSquared())

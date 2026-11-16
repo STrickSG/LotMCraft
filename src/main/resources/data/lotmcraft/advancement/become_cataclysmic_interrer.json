@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:cataclysmic_interrer_potion"
     },
-    "title": "Buried by Catastrophe",
-    "description": "Consume a Potion and advance to Cataclysmic Interrer.",
+    "title": {"translate": "advancements.lotmcraft.become_cataclysmic_interrer.title", "fallback": "Buried by Catastrophe"},
+    "description": {"translate": "advancements.lotmcraft.become_cataclysmic_interrer.description", "fallback": "Consume a Potion and advance to Cataclysmic Interrer."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

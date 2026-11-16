@@ -154,7 +154,7 @@ public class SpawnBeyonderSpawnerCommand {
     ) {
         try {
             if (hasQuest && hasTrades) {
-                source.sendFailure(Component.literal("Cannot have both hasQuest and hasTrades set to true!"));
+                source.sendFailure(Component.translatable("lotmcraft.msg.cmd.hasquest_hastrades"));
                 return 0;
             }
 
@@ -211,7 +211,7 @@ public class SpawnBeyonderSpawnerCommand {
 
             return 1;
         } catch (Exception e) {
-            source.sendFailure(Component.literal("Failed to place BeyonderSpawner: " + e.getMessage()));
+            source.sendFailure(Component.translatable("lotmcraft.msg.cmd.place_spawner_failed", e.getMessage()));
             return 0;
         }
     }

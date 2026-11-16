@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:light_supplicant_potion"
     },
-    "title": "Bathed in Radiance",
-    "description": "Consume a Potion and advance to Light Supplicant.",
+    "title": {"translate": "advancements.lotmcraft.become_light_supplicant.title", "fallback": "Bathed in Radiance"},
+    "description": {"translate": "advancements.lotmcraft.become_light_supplicant.description", "fallback": "Consume a Potion and advance to Light Supplicant."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

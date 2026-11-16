@@ -73,7 +73,7 @@ public class FxWarmup {
         private int settle = 0;
         private boolean closed = false;
 
-        public WarmupScreen() { super(Component.literal("Loading effects")); }
+        public WarmupScreen() { super(Component.translatable("lotmcraft.msg.fx.loading")); }
 
         @Override
         public void tick() {

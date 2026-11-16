@@ -195,7 +195,7 @@ public class AncientCourtHandler {
 
         if (prohibition == CourtProhibitionType.CONCEALMENT && (
                 id.equals("concealment_ability") || id.equals("invisibility_ability")
-                || id.equals("lesser_concealment_ability") || id.equals("shadow_concealment_ability")
+                || id.equals("lesser_concealment_ability") || id.equals("shadow_concealment_ability") || id.equals("shadow_hiding_ability")
                 || id.equals("identity_concealment_ability"))) {
             event.setCanceled(true);
             WorldJudgmentHandler.escalate(le);

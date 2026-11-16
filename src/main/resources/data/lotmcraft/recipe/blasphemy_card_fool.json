@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "lotmcraft:seer"
+    },
+    {
+      "item": "lotmcraft:clown"
+    },
+    {
+      "item": "lotmcraft:magician"
+    },
+    {
+      "item": "lotmcraft:faceless"
+    },
+    {
+      "item": "lotmcraft:marionettist"
+    },
+    {
+      "item": "lotmcraft:bizarro_sorcerer"
+    },
+    {
+      "item": "lotmcraft:scholar_of_yore"
+    },
+    {
+      "item": "lotmcraft:miracle_invoker"
+    },
+    {
+      "item": "lotmcraft:attendant_of_mysteries"
+    }
+  ],
+  "result": {
+    "id": "lotmcraft:blasphemy_card_fool",
+    "count": 1
+  }
+}

@@ -468,8 +468,8 @@ public class HistoricalVoidSummoningAbility extends SelectableAbility {
         };
 
         ItemStack deleteItem = new ItemStack(Items.BARRIER);
-        deleteItem.set(DataComponents.CUSTOM_NAME, Component.literal("Clear Entity Mode").withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
-        deleteItem.set(DataComponents.LORE, new ItemLore(List.of(Component.literal("Click an entity after this to remove it from your records").withStyle(ChatFormatting.GRAY))));
+        deleteItem.set(DataComponents.CUSTOM_NAME, Component.translatable("lotmcraft.msg.ability.void_summoning.clear_mode").withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
+        deleteItem.set(DataComponents.LORE, new ItemLore(List.of(Component.translatable("lotmcraft.msg.ability.void_summoning.clear_mode_desc").withStyle(ChatFormatting.GRAY))));
 
         CompoundTag deleteTag = new CompoundTag();
         deleteTag.putBoolean("isDeleteMode", true);
@@ -987,7 +987,7 @@ public class HistoricalVoidSummoningAbility extends SelectableAbility {
         CustomData Data = stack.get(DataComponents.CUSTOM_DATA);
         if (BeyonderData.getSequence(player) <= 2 || (BeyonderData.getSequence(player) <= 3 && BeyonderData.getPathway(player).equals("fool"))) {
             if (Data != null && Data.contains("VoidSummonTime")) {
-                event.getToolTip().add(Component.literal("§7[Void Summoned]§r").withStyle(ChatFormatting.GRAY));
+                event.getToolTip().add(Component.translatable("lotmcraft.msg.ability.void_summoning.tag").withStyle(ChatFormatting.GRAY));
             }
         }
 

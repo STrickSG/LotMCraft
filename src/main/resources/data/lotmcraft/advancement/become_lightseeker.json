@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:lightseeker_potion"
     },
-    "title": "Chasing the Sun",
-    "description": "Consume a Potion and advance to Lightseeker.",
+    "title": {"translate": "advancements.lotmcraft.become_lightseeker.title", "fallback": "Chasing the Sun"},
+    "description": {"translate": "advancements.lotmcraft.become_lightseeker.description", "fallback": "Consume a Potion and advance to Lightseeker."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:lotm_icon"
     },
-    "title": "The Start of a Journey",
-    "description": "Consume a Potion and become a Beyonder.",
+    "title": {"translate": "advancements.lotmcraft.become_beyonder.title", "fallback": "The Start of a Journey"},
+    "description": {"translate": "advancements.lotmcraft.become_beyonder.description", "fallback": "Consume a Potion and become a Beyonder."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": true,

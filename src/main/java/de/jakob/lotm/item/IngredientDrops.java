@@ -115,7 +115,15 @@ public class IngredientDrops {
                 (v, k) -> v instanceof Slime s && s.getSize() >= 4),
         m (EntityType.ZOMBIE_VILLAGER, "human_skined_shadow_characteristic",0.08f),
         m (EntityType.POLAR_BEAR,      "silver_war_bear_right_palm",        0.25f),
-        m (EntityType.BEE,             "soul_bewitching_insect_colony_adult_insect", 0.08f)
+        m (EntityType.BEE,             "soul_bewitching_insect_colony_adult_insect", 0.08f),
+        // Hanged Man
+        mc(EntityType.BAT,             "darkness_bat",                      0.35f,
+                (v, k) -> v.level().getMaxLocalRawBrightness(v.blockPosition()) <= 4),
+        m (EntityType.ARMADILLO,       "burrow_crawler_heart",              0.25f),
+        mc(EntityType.CAT,             "black_cat_of_misfortune_heart",     0.50f,
+                (v, k) -> v instanceof net.minecraft.world.entity.animal.Cat cat && cat.getVariant().is(net.minecraft.world.entity.animal.CatVariant.ALL_BLACK)),
+        mc(EntityType.GOAT,            "red_eyed_black_goat_tail",          0.30f, (v, k) -> isNight(v.level())),
+        m (EntityType.WITCH,           "church_desecrating_item",           0.12f)
     );
 
     @SubscribeEvent
@@ -189,7 +197,10 @@ public class IngredientDrops {
         bd("amethyst",                         0.20f, ANY,    true,  NONE, Blocks.AMETHYST_CLUSTER),
         bd("wandering_asteroid_core",          0.03f, ANY,    true,  NONE, Blocks.OBSIDIAN),
         bd("worm_of_spirit",                   0.12f, SHOVEL, true,  NONE, Blocks.MYCELIUM),
-        bd("soul_bewitching_insect_colony_larvae", 0.30f, ANY, false, NONE, Blocks.FROGSPAWN)
+        bd("soul_bewitching_insect_colony_larvae", 0.30f, ANY, false, NONE, Blocks.FROGSPAWN),
+        bd("shadow_worm",                      0.05f, ANY,    true,  NONE, Blocks.SCULK),
+        bd("poisonous_mushroom",               0.25f, ANY,    true,  biome(Biomes.SWAMP, Biomes.MANGROVE_SWAMP, Biomes.DARK_FOREST),
+                Blocks.RED_MUSHROOM, Blocks.BROWN_MUSHROOM)
     );
 
     private static final Set<Block> TRACKED = new HashSet<>();
@@ -272,6 +283,7 @@ public class IngredientDrops {
         ld("hornacis_gray_mountain_goat_horn",      0.12f, "chests/pillager_outpost"),
         ld("divine_blessed_crystal",                0.20f, "chests/ancient_city", "chests/ancient_city_ice_box"),
         ld("sphinx_brain",                          0.25f, "chests/desert_pyramid"),
+        ld("church_blessed_candle",                 0.35f, "chests/village/village_temple"),
         // suspicious sand / gravel (chance is per brushed block)
         ld("ancient_wraith_artifact",               0.10f, "archaeology/trail_ruins_common"),
         ld("ancient_wraith_artifact",               0.25f, "archaeology/trail_ruins_rare"),

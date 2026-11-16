@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:spirit_warlock_potion"
     },
-    "title": "Pact with Shadows",
-    "description": "Consume a Potion and advance to Spirit Warlock.",
+    "title": {"translate": "advancements.lotmcraft.become_spirit_warlock.title", "fallback": "Pact with Shadows"},
+    "description": {"translate": "advancements.lotmcraft.become_spirit_warlock.description", "fallback": "Consume a Potion and advance to Spirit Warlock."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

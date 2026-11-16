@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "lotmcraft:assassin"
+    },
+    {
+      "item": "lotmcraft:instigator"
+    },
+    {
+      "item": "lotmcraft:witch"
+    },
+    {
+      "item": "lotmcraft:demoness_of_pleasure"
+    },
+    {
+      "item": "lotmcraft:demoness_of_affliction"
+    },
+    {
+      "item": "lotmcraft:demoness_of_despair"
+    },
+    {
+      "item": "lotmcraft:demoness_of_unaging"
+    },
+    {
+      "item": "lotmcraft:demoness_of_catastrophe"
+    },
+    {
+      "item": "lotmcraft:demoness_of_apocalypse"
+    }
+  ],
+  "result": {
+    "id": "lotmcraft:blasphemy_card_demoness",
+    "count": 1
+  }
+}

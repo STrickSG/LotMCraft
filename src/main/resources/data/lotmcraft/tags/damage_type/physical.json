@@ -17,7 +17,7 @@
     "lotmcraft:life_deprivation",
     "lotmcraft:chaos",
     "lotmcraft:thread",
-    "lotmcraft:corrosion",
-    "lotmcraft:filth"
+    { "id": "lotmcraft:corrosion", "required": false },
+    { "id": "lotmcraft:filth", "required": false }
   ]
 }

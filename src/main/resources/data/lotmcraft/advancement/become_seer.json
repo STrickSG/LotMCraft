@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:seer_potion"
     },
-    "title": "I See everything",
-    "description": "Consume a Potion and advance to Seer.",
+    "title": {"translate": "advancements.lotmcraft.become_seer.title", "fallback": "I See everything"},
+    "description": {"translate": "advancements.lotmcraft.become_seer.description", "fallback": "Consume a Potion and advance to Seer."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

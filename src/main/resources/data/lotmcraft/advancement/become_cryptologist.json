@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:cryptologist_potion"
     },
-    "title": "Decoding the Universe",
-    "description": "Consume a Potion and advance to Cryptologist.",
+    "title": {"translate": "advancements.lotmcraft.become_cryptologist.title", "fallback": "Decoding the Universe"},
+    "description": {"translate": "advancements.lotmcraft.become_cryptologist.description", "fallback": "Consume a Potion and advance to Cryptologist."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

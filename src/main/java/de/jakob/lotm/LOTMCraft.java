@@ -238,6 +238,7 @@ public class LOTMCraft
         ModDataComponents.register(modEventBus);
         PotionRecipeItemHandler.registerRecipes(modEventBus);
         BeyonderCharacteristicItemHandler.registerCharacteristics(modEventBus);
+        de.jakob.lotm.beyonders.blasphemy.BlasphemyCardItemHandler.registerCards(modEventBus);
         ModAttachments.register(modEventBus);
         ModDimensions.register(modEventBus);
         ModGameRules.register();
@@ -267,6 +268,10 @@ public class LOTMCraft
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
+        // Runs on both physical sides; it used to live in ClientModEvents (Dist.CLIENT only),
+        // so dedicated servers never initialized the recipes at startup.
+        event.enqueueWork(PotionRecipes::initPotionRecipes);
+        event.enqueueWork(PotionRecipeItemHandler::initializeRecipes);
     }
 
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
@@ -383,12 +388,6 @@ public class LOTMCraft
 
                 BossRegistry.registerBosses();
             });
-        }
-
-        @SubscribeEvent
-        public static void onCommonSetup(FMLCommonSetupEvent event) {
-            event.enqueueWork(PotionRecipes::initPotionRecipes);
-            event.enqueueWork(PotionRecipeItemHandler::initializeRecipes);
         }
 
         @SubscribeEvent

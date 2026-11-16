@@ -28,7 +28,9 @@ public class RecipeMenuProvider implements MenuProvider {
 
     @Override
     public @NotNull Component getDisplayName() {
-        return Component.literal(BeyonderData.pathwayInfos.get(pathway).getSequenceName(sequence)).append(" ").append(Component.translatable("lotm.potion_recipe")).withStyle(ChatFormatting.BOLD, ChatFormatting.WHITE);
+        return Component.translatable("lotm.potion_recipe.named",
+                Component.translatable("lotm.sequence." + BeyonderData.pathwayInfos.get(pathway).getRawSequenceName(sequence)))
+                .withStyle(ChatFormatting.BOLD, ChatFormatting.WHITE);
     }
 
     @Override

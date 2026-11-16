@@ -22,7 +22,7 @@ public class CoordinateInputScreen extends Screen {
     private final String use;
     
     public CoordinateInputScreen(LivingEntity entity, String use) {
-        super(Component.literal("Enter Coordinates"));
+        super(Component.translatable("lotmcraft.msg.gui.coord.title"));
 
         this.entity = entity;
         this.use = use;
@@ -34,22 +34,22 @@ public class CoordinateInputScreen extends Screen {
         int centerY = this.height / 2;
 
         // X coordinate input
-        this.xBox = new EditBox(this.font, centerX - 60, centerY - 30, 120, 20, Component.literal("X - Coordinate"));
+        this.xBox = new EditBox(this.font, centerX - 60, centerY - 30, 120, 20, Component.translatable("lotmcraft.msg.gui.coord.x"));
         this.xBox.setMaxLength(10);
         this.addRenderableWidget(this.xBox);
 
         // Y coordinate input
-        this.yBox = new EditBox(this.font, centerX - 60, centerY - 5, 120, 20, Component.literal("Y - Coordinate"));
+        this.yBox = new EditBox(this.font, centerX - 60, centerY - 5, 120, 20, Component.translatable("lotmcraft.msg.gui.coord.y"));
         this.yBox.setMaxLength(10);
         this.addRenderableWidget(this.yBox);
 
         // Z coordinate input
-        this.zBox = new EditBox(this.font, centerX - 60, centerY + 20, 120, 20, Component.literal("Z - Coordinate"));
+        this.zBox = new EditBox(this.font, centerX - 60, centerY + 20, 120, 20, Component.translatable("lotmcraft.msg.gui.coord.z"));
         this.zBox.setMaxLength(10);
         this.addRenderableWidget(this.zBox);
 
         // Confirm button
-        Button confirmButton = Button.builder(Component.literal("Confirm"), this::onConfirm)
+        Button confirmButton = Button.builder(Component.translatable("lotmcraft.msg.gui.confirm"), this::onConfirm)
                 .bounds(centerX - 50, centerY + 50, 100, 20)
                 .build();
         this.addRenderableWidget(confirmButton);

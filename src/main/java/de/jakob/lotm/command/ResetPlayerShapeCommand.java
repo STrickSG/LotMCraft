@@ -21,7 +21,7 @@ public class ResetPlayerShapeCommand {
                             var targetEntity = EntityArgument.getEntity(context, "target");
 
                             if (!(targetEntity instanceof Player player)) {
-                                source.sendFailure(Component.literal("Target must be a player!"));
+                                source.sendFailure(Component.translatable("lotmcraft.msg.cmd.target_player"));
                                 return 0;
                             }
 

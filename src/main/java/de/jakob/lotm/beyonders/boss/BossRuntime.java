@@ -51,6 +51,11 @@ public final class BossRuntime {
         }
     }
 
+    /** Is any boss with active goals or a bar around (otherwise there is nothing to undo on other mobs) */
+    static boolean hasAnyState() {
+        return !BARS.isEmpty() || !APPLIED.isEmpty();
+    }
+
     static void unapplyGoals(Mob mob) {
         BossAiGoals.Installed installed;
         synchronized (APPLIED) {

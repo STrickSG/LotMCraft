@@ -81,8 +81,7 @@ public class SubordinateUtils {
         tag.putString("SubordinateUUID", marionette.getStringUUID());
         tag.putString("SubordinateType", marionette.getType().getDescription().getString());
         controller.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
-        controller.set(DataComponents.CUSTOM_NAME, Component.literal("Subordinate Controller (" +
-                marionette.getType().getDescription().getString() + ")"));
+        controller.set(DataComponents.CUSTOM_NAME, Component.translatable("lotmcraft.msg.subordinate.controller_name", marionette.getType().getDescription().getString()));
 
         if(BeyonderData.isBeyonder(marionette)) {
             if (BeyonderData.isBeyonder(marionette)) {

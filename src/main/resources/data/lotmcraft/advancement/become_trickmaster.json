@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:trickmaster_potion"
     },
-    "title": "Now You See Me...",
-    "description": "Consume a Potion and advance to Trickmaster.",
+    "title": {"translate": "advancements.lotmcraft.become_trickmaster.title", "fallback": "Now You See Me..."},
+    "description": {"translate": "advancements.lotmcraft.become_trickmaster.description", "fallback": "Consume a Potion and advance to Trickmaster."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

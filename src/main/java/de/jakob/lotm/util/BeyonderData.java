@@ -6,6 +6,7 @@ import de.jakob.lotm.beyonders.abilities.fool.marionettes.ControllingUtils;
 import de.jakob.lotm.beyonders.acting.ActingCapHelper;
 import de.jakob.lotm.beyonders.abilities.core.PassiveAbilityHandler;
 import de.jakob.lotm.beyonders.abilities.core.PassiveAbility;
+import de.jakob.lotm.beyonders.abilities.core.PhysicalEnhancementsAbility;
 import de.jakob.lotm.attachments.LuckComponent;
 import de.jakob.lotm.attachments.ModAttachments;
 import de.jakob.lotm.attachments.MultiplierModifierComponent;
@@ -61,6 +62,8 @@ public class BeyonderData {
         //implementedRecipes.put("black_emperor", List.of(new Integer[]{9, 8, 7, 6, 5, 4, 3, 2, 1}));
         implementedRecipes.put("death", List.of(new Integer[]{9, 8, 7, 6, 5, 4, 3, 2, 1}));
         implementedRecipes.put("justiciar", List.of(new Integer[]{9, 8, 7, 6, 5, 4, 3, 2, 1}));
+        // Hanged Man: only Sequences 9-7 so far
+        implementedRecipes.put("hanged_man", List.of(new Integer[]{9, 8, 7}));
 
     }
 
@@ -106,9 +109,29 @@ public class BeyonderData {
             "justiciar"
     );
 
+    /**
+     * Pathways whose first sequences already work but that are not complete. They stay out of
+     * implementedPathways (NPCs, rings and quests pick any sequence of those), but their recipes,
+     * potions and ingredients of the finished sequences can be found in chests.
+     */
+    public static final List<String> partiallyImplementedPathways = List.of("hanged_man");
+
+    public static List<String> lootPathways() {
+        List<String> all = new java.util.ArrayList<>(implementedPathways);
+        all.addAll(partiallyImplementedPathways);
+        return all;
+    }
+
+    /** Whether the loot of this sequence exists (for partial pathways only the finished sequences). */
+    public static boolean hasLootFor(String pathway, int sequence) {
+        if (implementedPathways.contains(pathway)) return true;
+        return implementedRecipes.getOrDefault(pathway, List.of()).contains(sequence);
+    }
+
     public static int getHighestImplementedSequence(String pathway) {
         return switch (pathway) {
             case "mother", "darkness", "fool", "wheel_of_fortune", "error", "visionary", "demoness", "red_priest", "sun", "tyrant", "door", "abyss", "death","justiciar" -> 1;
+            case "hanged_man" -> 7;
             default -> 9;
         };
     }
@@ -269,6 +292,7 @@ public class BeyonderData {
         }
 
         BeyonderDataTickHandler.invalidateCache(entity);
+        resetPhysicalEnhancements(entity);
 
         if(clearPathwayHistory) {
             component.setPathwayHistory(new String[10]);
@@ -377,6 +401,10 @@ public class BeyonderData {
             PacketHandler.requestBeyonderSync();
             return ClientBeyonderCache.getPathway(entity.getUUID());
         }
+        // Same answer as a default component, without attaching one to every entity that gets queried
+        if(!entity.hasData(ModAttachments.BEYONDER_COMPONENT)) {
+            return LOTMCraft.NON_BEYONDER_PATHWAY;
+        }
         BeyonderComponent component = entity.getData(ModAttachments.BEYONDER_COMPONENT);
         String pathway = component.getPathway();
         return pathway == null || pathway.isEmpty() ? LOTMCraft.NON_BEYONDER_PATHWAY : pathway;
@@ -421,6 +449,9 @@ public class BeyonderData {
 //            }
 //        }
 
+        if(!entity.hasData(ModAttachments.BEYONDER_COMPONENT)) {
+            return LOTMCraft.NON_BEYONDER_SEQ;
+        }
         BeyonderComponent component = entity.getData(ModAttachments.BEYONDER_COMPONENT);
         if(component.getSequence() != LOTMCraft.NON_BEYONDER_SEQ)
             return component.getSequence();
@@ -510,12 +541,13 @@ public class BeyonderData {
     }
 
 
+    // Callers pass the sequence of any entity, including non-beyonders (sequence 10), so clamp the index
     public static double getMultiplierForSequence(int sequence) {
-        return multiplier[sequence];
+        return multiplier[Math.clamp(sequence, 0, multiplier.length - 1)];
     }
 
     public static double getSanityDecreaseMultiplierForSequence(int sequence) {
-        return sanityDecreaseMultiplier[sequence];
+        return sanityDecreaseMultiplier[Math.clamp(sequence, 0, sanityDecreaseMultiplier.length - 1)];
     }
 
     public static void incrementSpirituality(LivingEntity entity, float amount) {
@@ -524,10 +556,14 @@ public class BeyonderData {
 
         float current = getSpirituality(player);
         float newAmount = Math.min(getMaxSpirituality(getPathway(player, true), getSequence(player, false, true), player), current + amount);
-        player.getData(ModAttachments.BEYONDER_COMPONENT).setSpirituality(newAmount);
+        BeyonderComponent component = player.getData(ModAttachments.BEYONDER_COMPONENT);
+        float previous = component.getSpirituality();
+        component.setSpirituality(newAmount);
 
-        // Sync to client if this is server-side
-        if (!player.level().isClientSide() && player instanceof ServerPlayer serverPlayer) {
+        // Sync to client if this is server-side. This runs every tick for spirituality regen, so only send
+        // the packet when the value actually changed (e.g. not when already full); BeyonderDataTickHandler
+        // still sends the full data to the player once per second.
+        if (newAmount != previous && !player.level().isClientSide() && player instanceof ServerPlayer serverPlayer) {
             PacketHandler.syncBeyonderDataToPlayer(serverPlayer);
         }
     }
@@ -570,10 +606,22 @@ public class BeyonderData {
         return spiritualityLookup[sequence] * mult;
     }
 
+    /**
+     * The physical enhancements of the previous pathway/sequence are cached and were only recomputed
+     * every 10 seconds; drop them so the new ones apply right away.
+     */
+    private static void resetPhysicalEnhancements(LivingEntity entity) {
+        if (entity.level() instanceof ServerLevel) {
+            PhysicalEnhancementsAbility.resetEnhancements(entity.getUUID(), entity, false);
+        }
+    }
+
     public static void clearBeyonderData(LivingEntity entity) {
         BeyonderComponent component = entity.getData(ModAttachments.BEYONDER_COMPONENT);
         component.setPathway("none");
         component.setSequence(LOTMCraft.NON_BEYONDER_SEQ);
+        BeyonderDataTickHandler.invalidateCache(entity);
+        resetPhysicalEnhancements(entity);
         component.setSpirituality(0);
         component.setGriefingEnabled(true);
         component.setDigestionProgress(0);
@@ -600,6 +648,11 @@ public class BeyonderData {
     public static boolean isBeyonder(LivingEntity entity) {
         if (entity.level().isClientSide) {
             return ClientBeyonderCache.isBeyonder(entity.getUUID());
+        }
+
+        // Called for every living entity every tick; a missing component means "not a beyonder"
+        if (!entity.hasData(ModAttachments.BEYONDER_COMPONENT)) {
+            return false;
         }
 
         BeyonderComponent component = entity.getData(ModAttachments.BEYONDER_COMPONENT);

@@ -44,6 +44,40 @@ public class JusticePrincipleScreen extends AbstractContainerScreen<JusticePrinc
         imageHeight = 256;
     }
 
+    private boolean scaleChanged = false;
+
+    /**
+     * The menu is 236 x 256 GUI pixels; with the automatic GUI scale small windows (720p, 1366x768, 854x480)
+     * only have 240-256 of height and the top and the button were cut off. While it is open the GUI scale goes
+     * down as needed (always a whole number) and goes back when it closes, like the Introspect screen.
+     */
+    @Override
+    protected void init() {
+        if (this.minecraft != null) {
+            com.mojang.blaze3d.platform.Window window = this.minecraft.getWindow();
+            int wanted = window.calculateScale(this.minecraft.options.guiScale().get(), this.minecraft.isEnforceUnicode());
+            int fits = (int) Math.floor(Math.min(window.getWidth() / (double) (imageWidth + 8), window.getHeight() / (double) (imageHeight + 8)));
+            int scale = Math.max(1, Math.min(wanted, fits));
+            if (scale != (int) window.getGuiScale()) {
+                window.setGuiScale(scale);
+                scaleChanged = true;
+            }
+            this.width = window.getGuiScaledWidth();
+            this.height = window.getGuiScaledHeight();
+        }
+        super.init();
+    }
+
+    @Override
+    public void removed() {
+        super.removed();
+        if (scaleChanged && this.minecraft != null) {
+            com.mojang.blaze3d.platform.Window window = this.minecraft.getWindow();
+            window.setGuiScale(window.calculateScale(this.minecraft.options.guiScale().get(), this.minecraft.isEnforceUnicode()));
+            scaleChanged = false;
+        }
+    }
+
     private static ResourceLocation tex(String name) {
         return ResourceLocation.fromNamespaceAndPath(LOTMCraft.MOD_ID, DIR + name);
     }

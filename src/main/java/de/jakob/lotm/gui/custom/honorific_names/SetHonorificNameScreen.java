@@ -1,5 +1,7 @@
 package de.jakob.lotm.gui.custom.honorific_names;
 
+import net.minecraft.client.resources.language.I18n;
+
 import de.jakob.lotm.network.PacketHandler;
 import de.jakob.lotm.network.packets.toServer.SetHonorificNamePacket;
 import de.jakob.lotm.util.BeyonderData;
@@ -30,7 +32,7 @@ public class SetHonorificNameScreen extends Screen {
     private String errorMessage = "";
 
     public SetHonorificNameScreen(String pathway, int sequence) {
-        super(Component.literal("Set Honorific Name"));
+        super(Component.translatable("lotmcraft.msg.gui.honorific.set_title"));
         this.pathway = pathway;
         this.sequence = sequence;
         this.lineCount = requiredLineCount(sequence);
@@ -54,22 +56,22 @@ public class SetHonorificNameScreen extends Screen {
             EditBox box = new EditBox(this.font,
                     centerX - 130, startY + i * 30,
                     260, 20,
-                    Component.literal("Line " + (i + 1)));
+                    Component.translatable("lotmcraft.msg.gui.honorific.line", (i + 1)));
             box.setMaxLength(HonorificName.MAX_LENGTH - 1);
-            box.setHint(Component.literal("Line " + (i + 1)));
+            box.setHint(Component.translatable("lotmcraft.msg.gui.honorific.line", (i + 1)));
             this.addRenderableWidget(box);
             lineBoxes.add(box);
         }
 
         int confirmY = startY + lineCount * 30 + 8;
         this.addRenderableWidget(
-                Button.builder(Component.literal("Confirm"), btn -> onConfirm())
+                Button.builder(Component.translatable("lotmcraft.msg.gui.confirm"), btn -> onConfirm())
                         .bounds(centerX - 58, confirmY, 112, 20)
                         .build()
         );
 
         this.addRenderableWidget(
-                Button.builder(Component.literal("Cancel"), btn -> onClose())
+                Button.builder(Component.translatable("lotmcraft.msg.gui.cancel"), btn -> onClose())
                         .bounds(centerX - 58, confirmY + 26, 112, 20)
                         .build()
         );
@@ -123,7 +125,7 @@ public class SetHonorificNameScreen extends Screen {
         gfx.vLine(panelLeft,      panelTop,        panelBottom,     COL_DIVIDER);
         gfx.vLine(panelRight - 1, panelTop,        panelBottom,     COL_DIVIDER);
 
-        gfx.drawCenteredString(font, "Set Honorific Name", centerX, panelTop + 8, COL_TITLE);
+        gfx.drawCenteredString(font, I18n.get("lotmcraft.msg.gui.honorific.set_title"), centerX, panelTop + 8, COL_TITLE);
 
         int divY = panelTop + 20;
         gfx.hLine(centerX - 80, centerX + 80, divY, COL_DIVIDER);

@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "lotmcraft:monster"
+    },
+    {
+      "item": "lotmcraft:robot"
+    },
+    {
+      "item": "lotmcraft:lucky_one"
+    },
+    {
+      "item": "lotmcraft:calamity_priest"
+    },
+    {
+      "item": "lotmcraft:winner"
+    },
+    {
+      "item": "lotmcraft:misfortune_mage"
+    },
+    {
+      "item": "lotmcraft:chaoswalker"
+    },
+    {
+      "item": "lotmcraft:soothsayer"
+    },
+    {
+      "item": "lotmcraft:snake_of_mercury"
+    }
+  ],
+  "result": {
+    "id": "lotmcraft:blasphemy_card_wheel_of_fortune",
+    "count": 1
+  }
+}

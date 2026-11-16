@@ -22,6 +22,20 @@ public class PotionIngredient extends Item {
         return pathways;
     }
 
+    /**
+     * Most ingredients list their pathways as one comma separated string ("red_priest,death,sun"), so
+     * Arrays.asList(getPathways()).contains(pathway) never matched an ingredient shared by several pathways.
+     */
+    public boolean isForPathway(String pathway) {
+        if (pathways == null) return false;
+        for (String entry : pathways) {
+            for (String p : entry.split(",")) {
+                if (p.trim().equals(pathway)) return true;
+            }
+        }
+        return false;
+    }
+
     public boolean isMainIngredient() {
         return isMainIngredient;
     }

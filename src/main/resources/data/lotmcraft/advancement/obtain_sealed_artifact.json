@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:sealed_artifact"
     },
-    "title": "Sealed Power",
-    "description": "Obtain a Sealed Artifact.",
+    "title": {"translate": "advancements.lotmcraft.obtain_sealed_artifact.title", "fallback": "Sealed Power"},
+    "description": {"translate": "advancements.lotmcraft.obtain_sealed_artifact.description", "fallback": "Obtain a Sealed Artifact."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

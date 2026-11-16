@@ -53,7 +53,7 @@ Available commands:
                 .toList();
 
         if (data.isEmpty()) {
-            source.sendFailure(Component.literal("No entries found."));
+            source.sendFailure(Component.translatable("lotmcraft.msg.cmd.no_entries"));
             return 0;
         }
 
@@ -81,7 +81,7 @@ Available commands:
 
                     if (!(targetEntity instanceof LivingEntity livingEntity)
                             || !(BeyonderData.isBeyonder(livingEntity))) {
-                        source.sendFailure(Component.literal("Target must be a living beyonder entity!"));
+                        source.sendFailure(Component.translatable("lotmcraft.msg.cmd.target_living_beyonder"));
                         return 0;
                     }
 
@@ -109,7 +109,7 @@ Available commands:
                             CommandSourceStack source = context.getSource();
 
                             if(BeyonderData.playerMap.isEmpty()) {
-                                source.sendFailure(Component.literal("BeyonderMap must contain any target!"));
+                                source.sendFailure(Component.translatable("lotmcraft.msg.cmd.map_needs_target"));
                                 return 0;
                             }
 
@@ -126,11 +126,11 @@ Available commands:
                 .executes(context -> {
                     CommandSourceStack source = context.getSource();
                     if (!(source.getEntity() instanceof ServerPlayer player)) {
-                        source.sendFailure(Component.literal("Must be a player!"));
+                        source.sendFailure(Component.translatable("lotmcraft.msg.cmd.must_be_player_short"));
                         return 0;
                     }
                     if (!BeyonderData.playerMap.contains(player.getUUID())) {
-                        source.sendFailure(Component.literal("You are not in the BeyonderMap!"));
+                        source.sendFailure(Component.translatable("lotmcraft.msg.cmd.not_in_map"));
                         return 0;
                     }
                     source.sendSystemMessage(Component.literal(
@@ -145,7 +145,7 @@ Available commands:
 
                     for (var obj : targets) {
                         if (!BeyonderData.playerMap.contains(obj.getId())) {
-                            source.sendFailure(Component.literal("BeyonderMap doesn't contain this player!"));
+                            source.sendFailure(Component.translatable("lotmcraft.msg.cmd.map_missing_player"));
                             continue;
                         }
                         source.sendSystemMessage(Component.literal(
@@ -173,17 +173,17 @@ Available commands:
                                 var id = BeyonderData.playerMap.getKeyByName(name);
 
                                 if(id == null){
-                                    source.sendFailure(Component.literal("BeyonderMap doesn't contain passed target!"));
+                                    source.sendFailure(Component.translatable("lotmcraft.msg.cmd.map_missing_target"));
                                     return 0;
                                 }
 
                                 if(!BeyonderData.implementedPathways.contains(path)){
-                                    source.sendFailure(Component.literal("Unimplemented or unknown pathway!"));
+                                    source.sendFailure(Component.translatable("lotmcraft.msg.cmd.unknown_pathway_short"));
                                     return 0;
                                 }
 
                                 if(BeyonderData.getHighestImplementedSequence(path) > seq || seq >= LOTMCraft.NON_BEYONDER_SEQ) {
-                                    source.sendFailure(Component.literal("Unimplemented or unknown sequence!"));
+                                    source.sendFailure(Component.translatable("lotmcraft.msg.cmd.unknown_sequence"));
                                     return 0;
                                 }
 
@@ -198,7 +198,7 @@ Available commands:
 
                                 return 1;
                             } catch (Exception e) {
-                                source.sendFailure(Component.literal("Invalid json format!"));
+                                source.sendFailure(Component.translatable("lotmcraft.msg.cmd.invalid_json"));
                                 return 0;
                             }
                         })

@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:scribe_potion"
     },
-    "title": "Keeper of Secrets",
-    "description": "Consume a Potion and advance to Scribe.",
+    "title": {"translate": "advancements.lotmcraft.become_scribe.title", "fallback": "Keeper of Secrets"},
+    "description": {"translate": "advancements.lotmcraft.become_scribe.description", "fallback": "Consume a Potion and advance to Scribe."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

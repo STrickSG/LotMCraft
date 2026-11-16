@@ -213,7 +213,8 @@ public class AbilityUtil {
         }
 
         // Avatar cannot damage original owner
-        if (source instanceof AvatarEntity avatar && target.getUUID() == avatar.getOriginalOwner()) {
+        // equals, not ==: the owner UUID comes from synched entity data and is never the same instance
+        if (source instanceof AvatarEntity avatar && target.getUUID().equals(avatar.getOriginalOwner())) {
             return false;
         }
 

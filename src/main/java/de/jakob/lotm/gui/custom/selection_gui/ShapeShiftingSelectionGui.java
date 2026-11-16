@@ -8,7 +8,7 @@ import java.util.List;
 
 public class ShapeShiftingSelectionGui extends ButtonListGui<String> {
     public ShapeShiftingSelectionGui(List<String> entityTypes) {
-        super(Component.literal("Select Entity"), entityTypes);
+        super(Component.translatable("lotmcraft.msg.gui.select.entity"), entityTypes);
     }
 
     @Override
@@ -18,7 +18,7 @@ public class ShapeShiftingSelectionGui extends ButtonListGui<String> {
 
         // to remove the uuid from player names, im not responsible for cracked minecraft players tho.. (they can have the same name)
         if (shape.contains("player")) {
-            return Component.literal("Player : " + parts[1]);
+            return Component.translatable("lotmcraft.msg.gui.select.player_entry", parts[1]);
         }
 
         // to remove the "mod_id:" from other names

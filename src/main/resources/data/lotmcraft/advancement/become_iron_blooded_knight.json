@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:iron_blooded_knight_potion"
     },
-    "title": "Iron Will",
-    "description": "Consume a Potion and advance to Iron Blooded Knight.",
+    "title": {"translate": "advancements.lotmcraft.become_iron_blooded_knight.title", "fallback": "Iron Will"},
+    "description": {"translate": "advancements.lotmcraft.become_iron_blooded_knight.description", "fallback": "Consume a Potion and advance to Iron Blooded Knight."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

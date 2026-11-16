@@ -175,7 +175,7 @@ public class RitualisticTableBlock extends BaseEntityBlock {
         if (!pLevel.isClientSide()) {
             BlockEntity entity = pLevel.getBlockEntity(pPos);
             if (entity instanceof RitualisticTableBlockEntity ritualisticTableBlockEntity) {
-                pPlayer.openMenu(new SimpleMenuProvider(ritualisticTableBlockEntity, Component.literal("Ritualistic Table")), pPos);
+                pPlayer.openMenu(new SimpleMenuProvider(ritualisticTableBlockEntity, Component.translatable("block.lotmcraft.ritualistic_table")), pPos);
             } else {
                 throw new IllegalStateException("Our Container provider is missing!");
             }

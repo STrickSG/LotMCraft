@@ -1,7 +1,7 @@
 {
   "trigger": "structure",
   "target": "lotmcraft:uniqueness_temple",
-  "title": { "text": "Uniqueness Temple", "color": "blue", "bold": true },
+  "title": { "translate": "area_title.lotmcraft.uniqueness_temple.title", "fallback": "Uniqueness Temple", "color": "blue", "bold": true },
   "frequency": "once",
   "fade_in": 5,
   "stay": 15,

@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:dream_weaver_potion"
     },
-    "title": "Weaving Reality",
-    "description": "Consume a Potion and advance to Dream Weaver.",
+    "title": {"translate": "advancements.lotmcraft.become_dream_weaver.title", "fallback": "Weaving Reality"},
+    "description": {"translate": "advancements.lotmcraft.become_dream_weaver.description", "fallback": "Consume a Potion and advance to Dream Weaver."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

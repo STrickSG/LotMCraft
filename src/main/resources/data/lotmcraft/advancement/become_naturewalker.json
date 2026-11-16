@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:naturewalker_potion"
     },
-    "title": "One with Nature",
-    "description": "Consume a Potion and advance to Naturewalker.",
+    "title": {"translate": "advancements.lotmcraft.become_naturewalker.title", "fallback": "One with Nature"},
+    "description": {"translate": "advancements.lotmcraft.become_naturewalker.description", "fallback": "Consume a Potion and advance to Naturewalker."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

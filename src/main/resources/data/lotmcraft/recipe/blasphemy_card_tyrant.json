@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "lotmcraft:sailor"
+    },
+    {
+      "item": "lotmcraft:folk_of_rage"
+    },
+    {
+      "item": "lotmcraft:seafarer"
+    },
+    {
+      "item": "lotmcraft:wind_blessed"
+    },
+    {
+      "item": "lotmcraft:ocean_songster"
+    },
+    {
+      "item": "lotmcraft:cataclysmic_interrer"
+    },
+    {
+      "item": "lotmcraft:sea_king"
+    },
+    {
+      "item": "lotmcraft:calamity"
+    },
+    {
+      "item": "lotmcraft:thunder_god"
+    }
+  ],
+  "result": {
+    "id": "lotmcraft:blasphemy_card_tyrant",
+    "count": 1
+  }
+}

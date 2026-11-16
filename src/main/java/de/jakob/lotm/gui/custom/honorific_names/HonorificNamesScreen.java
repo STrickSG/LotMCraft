@@ -1,5 +1,7 @@
 package de.jakob.lotm.gui.custom.honorific_names;
 
+import net.minecraft.client.resources.language.I18n;
+
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
@@ -112,7 +114,7 @@ public class HonorificNamesScreen extends AbstractContainerScreen<HonorificNames
         if (menu.getSequence() < 4) {
             this.addRenderableWidget(new MysticButton(
                     leftPos + W - PADDING - 80, topPos + TITLE_H + OWN_NAME_H - 20, 80, 16,
-                    Component.literal("Set Name"),
+                    Component.translatable("lotmcraft.msg.gui.honorific.set_name"),
                     btn -> Minecraft.getInstance().setScreen(
                             new SetHonorificNameScreen(menu.getPathway(), menu.getSequence()))));
         }
@@ -130,12 +132,12 @@ public class HonorificNamesScreen extends AbstractContainerScreen<HonorificNames
 
             this.addRenderableWidget(new MysticButton(
                     leftPos + PADDING + 8, entryY + 22, 108, 16,
-                    Component.literal("Send Message"),
+                    Component.translatable("lotmcraft.msg.gui.honorific.send_message"),
                     btn -> respondToPrayer(btnIdx, false)));
 
             this.addRenderableWidget(new MysticButton(
                     leftPos + PADDING + 8 + 112, entryY + 22, 108, 16,
-                    Component.literal("Teleport"),
+                    Component.translatable("lotmcraft.msg.gui.teleport"),
                     btn -> respondToPrayer(btnIdx, true)));
         }
 
@@ -299,7 +301,7 @@ public class HonorificNamesScreen extends AbstractContainerScreen<HonorificNames
     }
 
     private void renderTitle(GuiGraphics gfx) {
-        String titleStr = "Honorific Name";
+        String titleStr = I18n.get("lotmcraft.gui.honorific.title");
         int cx = (W - font.width(titleStr)) / 2;
         for (int i = 0; i < titleStr.length(); i++) {
             String ch = String.valueOf(titleStr.charAt(i));

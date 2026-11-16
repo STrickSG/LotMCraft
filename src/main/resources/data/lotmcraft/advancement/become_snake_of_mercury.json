@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:snake_of_mercury_potion"
     },
-    "title": "The Wheel Completes",
-    "description": "Consume a Potion and advance to Snake of Mercury.",
+    "title": {"translate": "advancements.lotmcraft.become_snake_of_mercury.title", "fallback": "The Wheel Completes"},
+    "description": {"translate": "advancements.lotmcraft.become_snake_of_mercury.description", "fallback": "Consume a Potion and advance to Snake of Mercury."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

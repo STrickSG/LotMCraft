@@ -25,7 +25,7 @@ public class DigestionCommand {
                             var targetEntity = EntityArgument.getEntity(context, "target");
 
                             if (!(targetEntity instanceof Player player)) {
-                                source.sendFailure(Component.literal("Target must be a player!"));
+                                source.sendFailure(Component.translatable("lotmcraft.msg.cmd.target_player"));
                                 return 0;
                             }
 
@@ -41,11 +41,11 @@ public class DigestionCommand {
     private static int executeSanityCommand(CommandSourceStack source, Player target, float amount) {
         try {
             BeyonderData.setDigestionProgress(target, amount);
-            source.sendSuccess(() -> Component.literal("Digested potion " + target.getName().getString() + " with " + amount), true);
+            source.sendSuccess(() -> Component.translatable("lotmcraft.msg.cmd.digested", target.getName().getString(), amount), true);
             return 1;
 
         } catch (Exception e) {
-            source.sendFailure(Component.literal("Failed to set digest: " + e.getMessage()));
+            source.sendFailure(Component.translatable("lotmcraft.msg.cmd.digest_failed", e.getMessage()));
             return 0;
         }
     }

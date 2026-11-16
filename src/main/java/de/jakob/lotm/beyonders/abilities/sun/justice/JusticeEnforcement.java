@@ -42,6 +42,19 @@ public final class JusticeEnforcement {
 
     private JusticeEnforcement() {}
 
+    /**
+     * Called when the server stops. Halos and edicts end at a game time of the old world, so in the next
+     * singleplayer world (lower game time) they would keep enforcing for hours, and the penalty cooldown
+     * (now - last) would be negative and block every penalty.
+     */
+    public static void reset() {
+        halos.clear();
+        enhancedUntil.clear();
+        edicts.clear();
+        strikes.clear();
+        lastPenalty.clear();
+    }
+
     public static void startHalo(ServerPlayer owner, ServerLevel level, Vec3 center, double radius, long durationTicks) {
         long end = level.getGameTime() + durationTicks;
         halos.put(owner.getUUID(), new Halo(owner.getUUID(), level.dimension(), center, radius, end));

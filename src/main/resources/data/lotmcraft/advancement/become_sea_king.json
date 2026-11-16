@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:sea_king_potion"
     },
-    "title": "Ruler of the Seas",
-    "description": "Consume a Potion and advance to Sea King.",
+    "title": {"translate": "advancements.lotmcraft.become_sea_king.title", "fallback": "Ruler of the Seas"},
+    "description": {"translate": "advancements.lotmcraft.become_sea_king.description", "fallback": "Consume a Potion and advance to Sea King."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

@@ -14,6 +14,6 @@
     "lotmcraft:return_to_earth",
     "lotmcraft:life_deprivation",
     "lotmcraft:plague",
-    "lotmcraft:corrosion"
+    { "id": "lotmcraft:corrosion", "required": false }
   ]
 }

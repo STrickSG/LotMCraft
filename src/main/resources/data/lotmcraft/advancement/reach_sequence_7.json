@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:lotm_icon"
     },
-    "title": "Power Incarnate",
-    "description": "Advance to Sequence 7 on any pathway.",
+    "title": {"translate": "advancements.lotmcraft.reach_sequence_7.title", "fallback": "Power Incarnate"},
+    "description": {"translate": "advancements.lotmcraft.reach_sequence_7.description", "fallback": "Advance to Sequence 7 on any pathway."},
     "frame": "goal",
     "show_toast": true,
     "announce_to_chat": true,

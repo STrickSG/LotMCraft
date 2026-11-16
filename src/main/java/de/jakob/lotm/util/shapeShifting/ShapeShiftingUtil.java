@@ -62,11 +62,11 @@ public class ShapeShiftingUtil {
             float widthDifference = Math.abs(entityWidth - playerWidth) / playerWidth;
 
             if (sequence >= 6 && (!isPlayerModel)) {
-                player.sendSystemMessage(Component.literal("§fYou Can't Change Your Shape To This Entity §b"));
+                player.sendSystemMessage(Component.translatable("lotmcraft.msg.shapeshift.cannot"));
                 return;
             } else if (sequence >= 5) {
                 if (heightDifference > 0.25 || widthDifference > 0.25) {
-                    player.sendSystemMessage(Component.literal("§fYou Can't Change Your Shape To This Entity §b"));
+                    player.sendSystemMessage(Component.translatable("lotmcraft.msg.shapeshift.cannot"));
                     return;
                 }
             }

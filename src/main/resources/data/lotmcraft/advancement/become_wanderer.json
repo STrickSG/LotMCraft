@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:wanderer_potion"
     },
-    "title": "Lost Between Worlds",
-    "description": "Consume a Potion and advance to Wanderer.",
+    "title": {"translate": "advancements.lotmcraft.become_wanderer.title", "fallback": "Lost Between Worlds"},
+    "description": {"translate": "advancements.lotmcraft.become_wanderer.description", "fallback": "Consume a Potion and advance to Wanderer."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

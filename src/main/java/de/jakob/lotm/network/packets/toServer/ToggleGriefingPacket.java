@@ -31,7 +31,7 @@ public record ToggleGriefingPacket() implements CustomPacketPayload {
 
             if(!player.level().getGameRules().getBoolean(ModGameRules.ALLOW_GRIEFING)) {
                 if(!isGriefingEnabled) {
-                    Component message = Component.literal("Griefing is disabled globally").withStyle(ChatFormatting.RED);
+                    Component message = Component.translatable("lotmcraft.msg.griefing.disabled_globally").withStyle(ChatFormatting.RED);
 
                     player.displayClientMessage(message, true);
                     return;
@@ -42,8 +42,8 @@ public record ToggleGriefingPacket() implements CustomPacketPayload {
 
 
             Component message = isGriefingEnabled ?
-                    Component.literal("Griefing disabled").withStyle(ChatFormatting.RED) :
-                    Component.literal("Griefing enabled").withStyle(ChatFormatting.GREEN);
+                    Component.translatable("lotmcraft.msg.griefing.disabled").withStyle(ChatFormatting.RED) :
+                    Component.translatable("lotmcraft.msg.griefing.enabled").withStyle(ChatFormatting.GREEN);
 
             player.displayClientMessage(message, true);
         });

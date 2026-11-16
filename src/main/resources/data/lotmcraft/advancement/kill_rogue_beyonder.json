@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:blood"
     },
-    "title": "Rogue Slayer",
-    "description": "Kill a Rogue Beyonder.",
+    "title": {"translate": "advancements.lotmcraft.kill_rogue_beyonder.title", "fallback": "Rogue Slayer"},
+    "description": {"translate": "advancements.lotmcraft.kill_rogue_beyonder.description", "fallback": "Kill a Rogue Beyonder."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": true,

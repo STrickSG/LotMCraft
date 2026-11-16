@@ -50,6 +50,10 @@ public record UseKeyboundAbilityPacket(int selectedAbility) implements CustomPac
                 return;
             }
             Ability ability = LOTMCraft.abilityHandler.getById(abilityBarComponent.getAbilities().get(packet.selectedAbility()).split(":")[0]);
+            // The bar can hold ids that no longer resolve (same check as UseSelectedAbilityPacket)
+            if(ability == null) {
+                return;
+            }
 
             if(ability instanceof SelectableAbility && getIndex(abilityBarComponent.getAbilities().get(packet.selectedAbility())) != -1) {
                 ((SelectableAbility) ability).addSubAbilityOverride(player, getIndex(abilityBarComponent.getAbilities().get(packet.selectedAbility())));

@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:midnight_poet_potion"
     },
-    "title": "Verses in the Dark",
-    "description": "Consume a Potion and advance to Midnight Poet.",
+    "title": {"translate": "advancements.lotmcraft.become_midnight_poet.title", "fallback": "Verses in the Dark"},
+    "description": {"translate": "advancements.lotmcraft.become_midnight_poet.description", "fallback": "Consume a Potion and advance to Midnight Poet."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

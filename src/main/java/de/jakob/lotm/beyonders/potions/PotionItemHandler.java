@@ -398,6 +398,19 @@ public class PotionItemHandler {
             new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
 
 
+    // ===== Hanged Man (Sequences 9-7) =====
+    public static DeferredItem<Item> SECRETS_SUPPLICANT_POTION = ITEMS.registerItem("secrets_supplicant_potion", properties ->
+                    new BeyonderPotion(properties, 9, "hanged_man"),
+            new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
+
+    public static DeferredItem<Item> LISTENER_POTION = ITEMS.registerItem("listener_potion", properties ->
+                    new BeyonderPotion(properties, 8, "hanged_man"),
+            new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
+
+    public static DeferredItem<Item> SHADOW_ASCETIC_POTION = ITEMS.registerItem("shadow_ascetic_potion", properties ->
+                    new BeyonderPotion(properties, 7, "hanged_man"),
+            new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
+
     public static DeferredItem<Item> SPECTATOR_POTION = ITEMS.registerItem("spectator_potion", properties ->
                     new BeyonderPotion(properties, 9, "visionary"),
             new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));

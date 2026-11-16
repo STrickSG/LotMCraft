@@ -18,6 +18,7 @@ import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
 import net.neoforged.neoforge.common.loot.LootModifier;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.Random;
 import java.util.function.Supplier;
 
@@ -36,9 +37,10 @@ public class ChestLootModifier extends LootModifier {
     protected @NotNull ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
         if (context.getQueriedLootTableId().getPath().contains("chests/")) {
             if (context.getRandom().nextFloat() < 0.45f) {
-                String pathway = BeyonderData.implementedPathways.get(random.nextInt(BeyonderData.implementedPathways.size()));
+                List<String> pathways = BeyonderData.lootPathways();
+                String pathway = pathways.get(random.nextInt(pathways.size()));
                 int sequence = getWeightedHighSequence();
-                ItemStack item = getRandomLoot(pathway, sequence);
+                ItemStack item = BeyonderData.hasLootFor(pathway, sequence) ? getRandomLoot(pathway, sequence) : null;
 
                 if (item != null && (sequence >= 5)) {
                     generatedLoot.add(item);

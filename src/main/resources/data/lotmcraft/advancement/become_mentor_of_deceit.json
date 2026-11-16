@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:mentor_of_deceit_potion"
     },
-    "title": "Lies are Truth",
-    "description": "Consume a Potion and advance to Mentor of Deceit.",
+    "title": {"translate": "advancements.lotmcraft.become_mentor_of_deceit.title", "fallback": "Lies are Truth"},
+    "description": {"translate": "advancements.lotmcraft.become_mentor_of_deceit.description", "fallback": "Consume a Potion and advance to Mentor of Deceit."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

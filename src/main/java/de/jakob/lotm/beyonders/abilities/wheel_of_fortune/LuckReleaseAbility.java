@@ -68,7 +68,7 @@ public class LuckReleaseAbility extends Ability {
 
         mins *= getLuckPerSeq(seq);
 
-        return Math.clamp(mins, 1, getMaxPerSeq(seq));
+        return Math.clamp(mins, 1, Math.max(1, getMaxPerSeq(seq))); // max 0 for other sequences (e.g. from an artifact) made clamp throw
     }
 
     private int getLuckPerSeq(int seq){

@@ -25,6 +25,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingHealEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
+import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -652,6 +653,17 @@ public abstract class PhysicalEnhancementsAbility extends PassiveAbility {
 
     @EventBusSubscriber(modid = LOTMCraft.MOD_ID)
     public static class EnhancementEventHandler {
+        @SubscribeEvent
+        public static void onServerStopped(ServerStoppedEvent event) {
+            // These maps are keyed by UUID and outlive the integrated server. Without this, boosts whose
+            // scheduled removal died with the old server (e.g. resistance) carried over into the next world.
+            entityEnhancements.clear();
+            temporaryEnhancements.clear();
+            enhancementBoosts.clear();
+            reducedRegen.clear();
+            lastKnownSequence.clear();
+        }
+
         @SubscribeEvent(priority = EventPriority.LOWEST)
         public static void onLivingDamage(LivingIncomingDamageEvent event) {
             if (event.getEntity() instanceof LivingEntity entity) {

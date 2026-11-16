@@ -4,8 +4,8 @@
     "icon": {
       "id": "lotmcraft:attendant_of_mysteries_potion"
     },
-    "title": "A Fraud?",
-    "description": "Consume a Potion and advance to Attendant of Mysteries.",
+    "title": {"translate": "advancements.lotmcraft.become_attendant_of_mysteries.title", "fallback": "A Fraud?"},
+    "description": {"translate": "advancements.lotmcraft.become_attendant_of_mysteries.description", "fallback": "Consume a Potion and advance to Attendant of Mysteries."},
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,

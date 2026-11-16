@@ -17,6 +17,7 @@ import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 @EventBusSubscriber(modid = LOTMCraft.MOD_ID)
@@ -72,6 +73,14 @@ public class JusticeEvents {
     @SubscribeEvent
     public static void onFoodEaten(LivingEntityUseItemEvent.Finish event) {
         if (event.getEntity() instanceof ServerPlayer player) JusticeManager.onFoodEaten(player, event.getItem());
+    }
+
+    // Same as ContractEvents: runtime state must not carry over to the next world in singleplayer
+    @SubscribeEvent
+    public static void onServerStopped(ServerStoppedEvent event) {
+        JusticeManager.reset();
+        JusticeEnforcement.reset();
+        JusticeProvocation.reset();
     }
 
     @SubscribeEvent

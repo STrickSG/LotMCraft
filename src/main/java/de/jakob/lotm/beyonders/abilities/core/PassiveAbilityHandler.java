@@ -45,6 +45,8 @@ import net.minecraft.world.entity.LivingEntity;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class PassiveAbilityHandler {
 
@@ -94,6 +96,8 @@ public class PassiveAbilityHandler {
 
         // Wheel of fortune
         passiveAbilities.add(new PassiveLuckAbility("passive_luck_ability"));
+        passiveAbilities.add(new de.jakob.lotm.beyonders.abilities.hanged_man.passives.PhysicalEnhancementsHangedManAbility("physical_enhancements_hanged_man_ability"));
+        passiveAbilities.add(new de.jakob.lotm.beyonders.abilities.hanged_man.passives.WhispersAbility("whispers_ability"));
         passiveAbilities.add(new PassiveCalamityAttraction("passive_calamity_attraction_ability"));
         passiveAbilities.add(new PassiveLuckAccumulationAbility("passive_luck_accumulation_ability"));
 
@@ -130,9 +134,18 @@ public class PassiveAbilityHandler {
         passiveAbilities.add(new PureIdealism("pure_idealism_ability"));
     }
 
+    // Several passives look themselves up through getById from damage/tick event handlers
+    private static final Map<String, PassiveAbility> passiveAbilitiesById = new ConcurrentHashMap<>();
+
     public static PassiveAbility getById(String id) {
+        if (id == null) return null;
+        PassiveAbility indexed = passiveAbilitiesById.get(id);
+        if (indexed != null) {
+            return indexed;
+        }
         for (PassiveAbility ability : passiveAbilities) {
             if (ability.getId().equals(id)) {
+                passiveAbilitiesById.put(id, ability);
                 return ability;
             }
         }
